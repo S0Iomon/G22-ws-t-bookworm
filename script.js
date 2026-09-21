@@ -2,9 +2,31 @@ let sideNavbar = document.querySelector('.side-nav');
 let selectedSection = document.querySelector('.selected-section');
 let backLink = document.querySelector('.back-link');
 
+//ADDING A NEW BOOK
+let addBookButton = document.querySelector('.add-book');
+let addTile = document.querySelector('.add-tile');
+let addFormCard = document.querySelector('.add-form-card');
+
+let showAddFormCard = () => {
+  addFormCard.classList.remove('invisible-page');
+  addFormCard.classList.add('visible-page');
+}
+
+addBookButton.addEventListener('click', showAddFormCard);
+addTile.addEventListener('click', showAddFormCard);
+
+//SAVE OPTIONS FOR A BOOK
+let discardButton = document.querySelector('#discard-btn');
+
+let discardAddFormCard = () => {
+  addFormCard.classList.add('invisible-page');
+  addFormCard.classList.remove('visible-page');
+}
+discardButton.addEventListener('click', discardAddFormCard); 
+
+
 backLink.addEventListener('click', function() {
   let dashboard = backLink.getAttribute('href');
-  console.log(dashboard);
   for (let i = 0; i < sideNavbar.children.length; i++) {
     if  (sideNavbar.children[i].getAttribute('href') === dashboard) {
       sideNavbar.children[i].classList.add('selected-section');
@@ -40,4 +62,6 @@ let sectionVisibility = () => {
 }
 
 sectionVisibility();
+
+
 

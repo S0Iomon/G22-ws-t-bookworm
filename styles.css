@@ -293,6 +293,35 @@ h2 {
   background: #d9d9d9;
 }
 
+.card:hover {
+  border: 1px solid #aaa;
+  background: #e0e0e0;
+}
+
+.stat-card:hover {
+  border: 1px solid #aaa;
+  background: #e0e0e0;
+}
+
+.book-tile:hover {
+  border: 1px solid #aaa;
+  background: #e0e0e0;
+}
+
+.reading-card:hover {
+  border: 1px solid #aaa;
+  background: #e0e0e0;
+}
+
+.want-card:hover {
+  border: 1px solid #aaa;
+  background: #e0e0e0;
+  
+}
+.finished-card:hover {
+  border: 1px solid #aaa;
+  background: #e0e0e0;
+}
 
 .dashboard-grid {
   display: grid;
@@ -673,4 +702,83 @@ h2 {
 }
 
 
+/* ADD BOOK FORM */
+.add-form-card {
+  position: fixed;  
+  width: 90%;
+  height: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background: #292929;
+  border: 1px solid #454545;
+  color: #ddd;
+}
 
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+.form-group input::placeholder {
+  color: #aaa;
+}
+
+.form-group input, .form-group select{
+  font-size: 13px;
+  padding: 12px 13px;
+  border: none;
+  border-radius: 4px;
+  background: #555;
+  color: white;
+}
+
+.form-group input:focus, .form-group select:focus {
+  outline: none;
+}
+
+.form-actions {
+  text-align: center;
+  
+}
+
+.form-actions button {
+  padding: 12px 13px;
+  background: #555;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 13px;
+}
+
+.form-actions #save-btn {
+  border: 1px solid white;
+  background: white;
+  color: #555;
+}
+
+.form-actions #save-btn:hover {
+  border: 1px solid white;
+  background: rgb(239, 239, 239);
+  color: #555;
+}
+
+.form-actions #discard-btn {
+  border: 1px solid white;
+  background: transparent;
+  color: white;
+}
+
+.form-actions #discard-btn:hover {
+  border: 1px solid white;
+  background: #313131;
+  color: white;
+}
