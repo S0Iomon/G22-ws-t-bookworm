@@ -21,6 +21,7 @@ let discardButton = document.querySelector('#discard-btn');
 let discardAddFormCard = () => {
   addFormCard.classList.add('invisible-page');
   addFormCard.classList.remove('visible-page');
+  addFormCard.children[0].reset();
 }
 discardButton.addEventListener('click', discardAddFormCard); 
 
