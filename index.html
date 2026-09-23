@@ -37,37 +37,49 @@
     <main class="content">
 
       <div class="add-form-card invisible-page">
-        <form>
-          <div class="form-group">
-            <label for="book-title">Book Title</label>
-            <input type="text" id="book-title" placeholder="Enter book title">
-          </div>
-          <div class="form-group">
-            <label for="book-author">Author</label>
-            <input type="text" id="book-author" placeholder="Enter author name">
-          </div>
-          <div class="form-group">
-            <label for="book-genre">Genre</label>
-            <input type="text" id="book-genre" placeholder="Enter genre">
-          </div>
-          <div class="form-group">
-            <label for="book-status" id="book-status">Status</label>
-            <select id="book-status">
-              <option value="current">Currently Reading</option>
-              <option value="want">Want to Read</option>
-              <option value="finished">Finished</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="book-cover">Cover Image</label>
-            <input type="text" id="book-cover" placeholder="Enter cover image URL">
-          </div>
-          <div class="form-actions">
-            <button id="discard-btn" type="submit">DISCARD</button>
-            <button id="save-btn" type="submit">SAVE</button>
-          </div>
-        </form>
-      </div>
+          <form>
+            <div class="form-group">
+              <label for="book-title">Book Title</label>
+              <input type="text" id="book-title" placeholder="Enter book title">
+            </div>
+            <div class="form-group">
+              <label for="book-author">Author</label>
+              <input type="text" id="book-author" placeholder="Enter author name">
+            </div>
+            <div class="form-group">
+              <label for="book-genre">Genre</label>
+              <input type="text" id="book-genre" placeholder="Enter genre">
+            </div>
+            <div class="form-group">
+              <label for="book-status">Status</label>
+
+              <div class="status-options">
+                <label class="status-option">
+                  <input type="radio" name="book-status" value="current">
+                  <span>Currently Reading</span>
+                </label>
+
+                <label class="status-option">
+                  <input type="radio" name="book-status" value="want">
+                  <span>Want to Read</span>
+                </label>
+
+                <label class="status-option">
+                  <input type="radio" name="book-status" value="finished">
+                  <span>Finished</span>
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="book-cover">Cover Image</label>
+              <input type="text" id="book-cover" placeholder="Enter cover image URL">
+            </div>
+            <div class="form-actions">
+              <button id="discard-btn" type="submit">DISCARD</button>
+              <button id="save-btn" type="submit">SAVE</button>
+            </div>
+          </form>
+        </div>
 
       <section id="home" class="page">
         <div class="welcome-row">

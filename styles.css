@@ -732,7 +732,7 @@ h2 {
   color: #aaa;
 }
 
-.form-group input, .form-group select{
+.form-group input{
   font-size: 13px;
   padding: 12px 13px;
   border: none;
@@ -741,7 +741,7 @@ h2 {
   color: white;
 }
 
-.form-group input:focus, .form-group select:focus {
+.form-group input:focus{
   outline: none;
 }
 
@@ -781,4 +781,37 @@ h2 {
   border: 1px solid white;
   background: #313131;
   color: white;
+}
+
+
+.status-options {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.status-option {
+  cursor: pointer;
+}
+
+.status-option input {
+  display: none;
+}
+
+.status-option span {
+  display: block;
+  padding: 12px 13px;
+  border-radius: 8px;
+  background: #555;
+}
+
+/* Hover */
+.status-option span:hover {
+  background: #888;
+}
+
+/* Selected */
+.status-option input:checked + span {
+  background: white;
+  color: #292929;
 }

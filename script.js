@@ -25,6 +25,7 @@ let discardAddFormCard = () => {
 }
 discardButton.addEventListener('click', discardAddFormCard); 
 
+//HOVERING OPTIONS FOR SELECTING STATUS
 
 backLink.addEventListener('click', function() {
   let dashboard = backLink.getAttribute('href');
