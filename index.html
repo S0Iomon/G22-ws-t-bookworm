@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -6,292 +7,840 @@
   <title>My Book Reader</title>
   <link rel="stylesheet" href="./styles.css">
 </head>
+
 <body>
 
+  <!-- ==============================
+       ADD BOOK MODAL
+  ================================= -->
+
+  <div class="modal-overlay invisible-page">
+
+```
+<div class="add-form-card">
+
+  <form id="add-book-form">
+
+    <div class="form-group">
+      <label for="book-title">Book Title</label>
+
+      <input
+        type="text"
+        id="book-title"
+        placeholder="Enter book title"
+        required
+      >
+    </div>
+
+
+    <div class="form-group">
+      <label for="book-author">Author</label>
+
+      <input
+        type="text"
+        id="book-author"
+        placeholder="Enter author name"
+        required
+      >
+    </div>
+
+
+    <div class="form-group">
+      <label for="book-genre">Genre</label>
+
+      <input
+        type="text"
+        id="book-genre"
+        placeholder="Enter genre"
+        required
+      >
+    </div>
+
+
+    <div class="form-group">
+      <label for="book-pages">Pages</label>
+
+      <input
+        type="number"
+        id="book-pages"
+        placeholder="Enter number of pages"
+        min="1"
+        required
+      >
+    </div>
+
+
+    <fieldset class="form-group">
+
+      <legend>Status</legend>
+
+      <div class="status-options">
+
+        <label class="status-option">
+
+          <input
+            type="radio"
+            name="book-status"
+            value="current"
+            required
+          >
+
+          <span>Currently Reading</span>
+
+        </label>
+
+
+        <label class="status-option">
+
+          <input
+            type="radio"
+            name="book-status"
+            value="want"
+          >
+
+          <span>Want to Read</span>
+
+        </label>
+
+
+        <label class="status-option">
+
+          <input
+            type="radio"
+            name="book-status"
+            value="finished"
+          >
+
+          <span>Finished</span>
+
+        </label>
+
+      </div>
+
+    </fieldset>
+
+
+    <div class="form-group">
+
+      <label for="book-cover">Cover Image</label>
+
+      <input
+        type="url"
+        id="book-cover"
+        placeholder="Optional cover image URL"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="book-description">Description</label>
+
+      <textarea
+        id="book-description"
+        placeholder="Enter book description"
+        rows="4"
+      ></textarea>
+
+    </div>
+
+
+    <div class="form-actions">
+
+      <button
+        id="discard-btn"
+        type="button"
+      >
+        Discard
+      </button>
+
+
+      <button
+        id="save-btn"
+        type="submit"
+      >
+        Save
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
+```
+
+  </div>
+
+  <!-- ==============================
+       TOP NAVIGATION
+  ================================= -->
+
   <header class="topbar">
-    <a class="logo" href="#home">BOOKS</a>
-    <div class="site-name">My Book Reader</div>
-    <a class="user-btn" href="#profile">User</a>
+
+<a href="#dashboard" class="logo" id="logo-btn">
+  <img src="./resources/bws2.jpg" alt="Book Reader Logo">
+</a>
+
+
+<div class="site-name">
+</div>
+
+
+<a class="user-btn" href="#profile">
+  User
+</a>
+
   </header>
 
   <div class="layout">
 
-    <aside class="sidebar">
-      <h2>My Library</h2>
+<!-- ==============================
+     SIDEBAR
+================================= -->
 
-      <nav class="side-nav">
-        <a href="#home" class="selected-section">⌂ Dashboard</a>
-        <a href="#bookshelf">▦ My Bookshelf</a>
-        <a href="#current">▸ Current Reads</a>
-        <a href="#want">♡ Want to Read</a>
-        <a href="#finished">✓ Finished Books</a>
-      </nav>
+<aside class="sidebar">
 
-      <div class="sidebar-card">
-        <p class="small-label">READING GOAL</p>
-        <strong>7 / 25</strong>
-        <div class="goal-bar"><span></span></div>
+  <h2>My Library</h2>
+
+
+  <nav class="side-nav">
+
+    <a
+      href="#home"
+      class="selected-section"
+    >
+      ⌂ Dashboard
+    </a>
+
+
+    <a href="#bookshelf">
+      ▦ My Bookshelf
+    </a>
+
+
+    <a href="#current">
+      ▸ Current Reads
+    </a>
+
+
+    <a href="#want">
+      ♡ Want to Read
+    </a>
+
+
+    <a href="#finished">
+      ✓ Finished Books
+    </a>
+
+  </nav>
+
+
+  <div class="sidebar-card">
+
+    <p class="small-label">
+      READING GOAL
+    </p>
+
+
+    <strong>
+      7 / 25
+    </strong>
+
+
+    <div class="goal-bar">
+
+      <span style="width: 28%;"></span>
+
+    </div>
+
+  </div>
+
+</aside>
+
+
+
+<!-- ==============================
+     MAIN CONTENT
+================================= -->
+
+<main class="content">
+
+
+  <!-- ==============================
+       DASHBOARD
+  ================================= -->
+
+  <section id="home" class="page">
+
+    <div class="welcome-row">
+
+      <div>
+
+        <p class="eyebrow">
+          WELCOME BACK
+        </p>
+
+
+        <h1>
+          Good morning, Reader!
+        </h1>
+
+
+        <p class="muted">
+          Keep reading and discover your next favorite book.
+        </p>
+
       </div>
-    </aside>
 
-    <main class="content">
+    </div>
 
-      <div class="add-form-card invisible-page">
-          <form>
-            <div class="form-group">
-              <label for="book-title">Book Title</label>
-              <input type="text" id="book-title" placeholder="Enter book title">
-            </div>
-            <div class="form-group">
-              <label for="book-author">Author</label>
-              <input type="text" id="book-author" placeholder="Enter author name">
-            </div>
-            <div class="form-group">
-              <label for="book-genre">Genre</label>
-              <input type="text" id="book-genre" placeholder="Enter genre">
-            </div>
-            <div class="form-group">
-              <label for="book-status">Status</label>
 
-              <div class="status-options">
-                <label class="status-option">
-                  <input type="radio" name="book-status" value="current">
-                  <span>Currently Reading</span>
-                </label>
 
-                <label class="status-option">
-                  <input type="radio" name="book-status" value="want">
-                  <span>Want to Read</span>
-                </label>
+    <div class="dashboard-grid">
 
-                <label class="status-option">
-                  <input type="radio" name="book-status" value="finished">
-                  <span>Finished</span>
-                </label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="book-cover">Cover Image</label>
-              <input type="text" id="book-cover" placeholder="Enter cover image URL">
-            </div>
-            <div class="form-actions">
-              <button id="discard-btn" type="submit">DISCARD</button>
-              <button id="save-btn" type="submit">SAVE</button>
-            </div>
-          </form>
-        </div>
 
-      <section id="home" class="page">
-        <div class="welcome-row">
+      <!-- ADD BOOK -->
+
+      <article class="card add-card">
+
+        <button class="add-book" type="button">
+
+          <span>
+            +
+          </span>
+
+
+          <strong>
+            Add Book
+          </strong>
+
+        </button>
+
+      </article>
+
+
+
+      <!-- CURRENT READING SUMMARY -->
+
+      <article class="card current-card">
+
+        <div class="section-title">
+
           <div>
-            <p class="eyebrow">WELCOME BACK</p>
-            <h1>Good morning, Reader!</h1>
-            <p class="muted">Keep reading and discover your next favorite book.</p>
+
+            <span class="eyebrow">
+              CURRENTLY READING
+            </span>
+
+
+            <h2>
+              Book Title
+            </h2>
+
           </div>
+
+
+          <span class="pages">
+            150 / 300 pages
+          </span>
+
         </div>
 
-      <!-- DASHBOARD -->
-        <div class="dashboard-grid">
-          <article class="card add-card">
-            <a href="#bookshelf" class="add-book">
-              <span>+</span>
-              <strong>Add Book</strong>
-            </a>
-          </article>
 
-          <article class="card current-card">
-            <div class="section-title">
-              <div>
-                <span class="eyebrow">CURRENTLY READING</span>
-                <h2>Book Title</h2>
-              </div>
-              <span class="pages">150 / 300 pages</span>
+
+        <div class="book-summary">
+
+          <div class="cover placeholder"></div>
+
+
+          <div class="book-info">
+
+            <p class="book-author">
+              Author Name
+            </p>
+
+
+            <p class="book-genre">
+              Genre
+            </p>
+
+
+            <p class="description">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              Vestibulum sed nisi vitae metus hendrerit euismod quis feugiat augue.
+            </p>
+
+
+            <div class="progress">
+
+              <span style="width: 50%;"></span>
+
             </div>
 
-            <div class="book-summary">
-              <div class="cover placeholder"></div>
-              <div class="book-info">
-                <p class="book-author">Author Name</p>
-                <p class="book-genre">Genre</p>
-                <p class="description">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Vestibulum sed nisi vitae metus hendrerit euismod quis feugiat augue.
-                </p>
-                <div class="progress"><span style="width:50%"></span></div>
-                <div class="progress-labels"><span>50%</span><span>150/300 pages</span></div>
-              </div>
+
+            <div class="progress-labels">
+
+              <span>
+                50%
+              </span>
+
+
+              <span>
+                150 / 300 pages
+              </span>
+
             </div>
 
-            <div class="rating">Rate this book: ☆ ☆ ☆ ☆ ☆</div>
-          </article>
-        </div>
-
-        <div class="stats-grid">
-          <div class="stat-card">
-            <span>BOOKS READ</span>
-            <strong>7</strong>
           </div>
-          <div class="stat-card">
-            <span>MY BOOKS</span>
-            <strong>35</strong>
+
+        </div>
+
+      </article>
+
+    </div>
+
+
+
+    <!-- STATISTICS -->
+
+    <div class="stats-grid">
+
+      <div class="stat-card">
+
+        <span>
+          BOOKS READ
+        </span>
+
+       <strong id="books-read-stat">0</strong>
+
+      </div>
+
+
+      <div class="stat-card">
+
+        <span>
+          MY BOOKS
+        </span>
+
+        <strong id="total-books-stat">0</strong>
+
+      </div>
+
+
+      <div class="stat-card">
+
+        <span>
+          CURRENT READS
+        </span>
+
+        <strong id="current-reads-stat">0</strong>
+
+      </div>
+
+
+      <div class="stat-card">
+
+        <span>
+          WANT TO READ
+        </span>
+
+        <strong id="want-to-read-stat">0</strong>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- ==============================
+       MY BOOKSHELF
+  ================================= -->
+
+  <section
+    id="bookshelf"
+    class="page invisible-page"
+  >
+
+    <div class="page-heading">
+
+      <div>
+
+        <p class="eyebrow">
+          YOUR LIBRARY
+        </p>
+
+
+        <h1>
+          My Bookshelf
+        </h1>
+
+
+        <p class="muted">
+          Browse all the books in your library.
+        </p>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="bookshelf-grid">
+
+
+      <!-- ADD BOOK TILE -->
+
+      <button
+        class="book-tile add-tile"
+        type="button"
+      >
+
+        <span>
+          +
+        </span>
+
+
+        <strong>
+          Add Book
+        </strong>
+
+      </button>
+
+
+
+      <!-- EXISTING BOOKS -->
+
+      <div class="book-tile">
+
+        <div
+          class="cover"
+          style="background-image: url('https://covers.openlibrary.org/b/isbn/9780525559474-L.jpg');"
+        ></div>
+
+
+        <b>
+          The Midnight Library
+        </b>
+
+      </div>
+
+
+      <div class="book-tile">
+
+        <div
+          class="cover"
+          style="background-image: url('https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg');"
+        ></div>
+
+
+        <b>
+          Atomic Habits
+        </b>
+
+      </div>
+
+
+      <div class="book-tile">
+
+        <div
+          class="cover"
+          style="background-image: url('https://covers.openlibrary.org/b/isbn/9780441172719-L.jpg');"
+        ></div>
+
+
+        <b>
+          Dune
+        </b>
+
+      </div>
+
+
+      <div class="book-tile">
+
+        <div
+          class="cover"
+          style="background-image: url('https://covers.openlibrary.org/b/isbn/9780547928227-L.jpg');"
+        ></div>
+
+
+        <b>
+          The Hobbit
+        </b>
+
+      </div>
+
+
+      <div class="book-tile">
+
+        <div
+          class="cover"
+          style="background-image: url('https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg');"
+        ></div>
+
+
+        <b>
+          1984
+        </b>
+
+      </div>
+
+
+      <div class="book-tile">
+
+        <div
+          class="cover"
+          style="background-image: url('https://covers.openlibrary.org/b/isbn/9780062315007-L.jpg');"
+        ></div>
+
+
+        <b>
+          The Alchemist
+        </b>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- ==============================
+       CURRENT READS
+  ================================= -->
+
+  <section
+    id="current"
+    class="page invisible-page"
+  >
+
+    <div class="page-heading">
+
+      <div>
+
+        <p class="eyebrow">
+          READING NOW
+        </p>
+
+
+        <h1>
+          Current Reads
+          <small id="current-count">0</small>
+        </h1>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="reading-list">
+
+      <article class="reading-card">
+
+        <div class="cover large-cover"></div>
+
+
+        <div class="reading-info">
+
+          <h2>
+            Book Title
+          </h2>
+
+
+          <p>
+            Author Name
+          </p>
+
+
+          <p>
+            Genre
+          </p>
+
+
+          <p class="description">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Vestibulum sed nisi vitae metus hendrerit euismod quis feugiat augue.
+          </p>
+
+
+          <div class="progress">
+
+            <span style="width: 50%;"></span>
+
           </div>
-          <div class="stat-card">
-            <span>CURRENT READS</span>
-            <strong>5</strong>
+
+
+          <div class="progress-labels">
+
+            <span>
+              150 / 300 pages
+            </span>
+
+
+            <span>
+              50%
+            </span>
+
           </div>
-          <div class="stat-card">
-            <span>WANT TO READ</span>
-            <strong>23</strong>
-          </div>
-        </div>
-      </section>
 
-      <!-- BOOKSHELF -->
-      <section id="bookshelf" class="page">
-        <div class="page-heading">
-          <div>
-            <p class="eyebrow">LIBRARY</p>
-            <h1>My Bookshelf <small>35 Books</small></h1>
-          </div>
-          <a href="#home" class="back-link">← Dashboard</a>
         </div>
 
-        <div class="bookshelf-grid">
-          <a class="book-tile add-tile" href="#home">
-            <span>+</span>
-            <strong>Add Book</strong>
-          </a>
+      </article>
 
-          <div class="book-tile"><div class="cover"></div><b>Book One</b></div>
-          <div class="book-tile"><div class="cover"></div><b>Book Two</b></div>
-          <div class="book-tile"><div class="cover"></div><b>Book Three</b></div>
-          <div class="book-tile"><div class="cover"></div><b>Book Four</b></div>
-          <div class="book-tile"><div class="cover"></div><b>Book Five</b></div>
-          <div class="book-tile"><div class="cover"></div><b>Book Six</b></div>
-          <div class="book-tile"><div class="cover"></div><b>Book Seven</b></div>
-          <div class="book-tile"><div class="cover"></div><b>Book Eight</b></div>
-          <div class="book-tile"><div class="cover"></div><b>Book Nine</b></div>
-          <div class="book-tile"><div class="cover"></div><b>Book Ten</b></div>
-          <div class="book-tile"><div class="cover"></div><b>Book Eleven</b></div>
-        </div>
-      </section>
+    </div>
 
-      <!-- CURRENT READS -->
-      <section id="current" class="page">
-        <div class="page-heading">
-          <div>
-            <p class="eyebrow">READING NOW</p>
-            <h1>Current Reads <small>5 Books</small></h1>
-          </div>
-        </div>
+  </section>
 
-        <div class="reading-list">
-          <article class="reading-card">
-            <div class="cover large-cover"></div>
-            <div class="reading-info">
-              <h2>Book Title</h2>
-              <p>Author Name</p>
-              <p>Genre</p>
-              <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed nisi vitae metus hendrerit euismod quis feugiat augue.</p>
-              <div class="progress"><span style="width:50%"></span></div>
-              <div class="progress-labels"><span>150 / 300 pages</span><span>50%</span></div>
-            </div>
-          </article>
 
-          <article class="reading-card">
-            <div class="cover large-cover"></div>
-            <div class="reading-info">
-              <h2>Another Book</h2>
-              <p>Author Name</p>
-              <p>Genre</p>
-              <p class="description">Continue your reading progress and keep your favorite books organized in one place.</p>
-              <div class="progress"><span style="width:10%"></span></div>
-              <div class="progress-labels"><span>30 / 300 pages</span><span>10%</span></div>
-            </div>
-          </article>
-        </div>
-      </section>
 
-      <!-- WANT TO READ -->
-      <section id="want" class="page">
-        <div class="page-heading">
-          <div>
-            <p class="eyebrow">YOUR READING LIST</p>
-            <h1>Want to Read <small>23 Books</small></h1>
-          </div>
-        </div>
+  <!-- ==============================
+       WANT TO READ
+  ================================= -->
 
-        <div class="want-list">
-          <article class="want-card">
-            <div class="cover medium-cover"></div>
-            <div>
-              <h2>Book Title</h2>
-              <p>Author Name</p>
-              <p>Genre</p>
-              <p class="description">A short description of the book goes here. Add books you would like to read later.</p>
-              <span class="page-count">250 pages</span>
-            </div>
-          </article>
+  <section
+    id="want"
+    class="page invisible-page"
+  >
 
-          <article class="want-card">
-            <div class="cover medium-cover"></div>
-            <div>
-              <h2>Another Book</h2>
-              <p>Author Name</p>
-              <p>Genre</p>
-              <p class="description">Keep your future reading list organized and easy to browse.</p>
-              <span class="page-count">320 pages</span>
-            </div>
-          </article>
-        </div>
-      </section>
+    <div class="page-heading">
 
-      <!-- FINISHED -->
-      <section id="finished" class="page">
-        <div class="page-heading">
-          <div>
-            <p class="eyebrow">READING HISTORY</p>
-            <h1>Finished Books <small>7 Books</small></h1>
-          </div>
+      <div>
+
+        <p class="eyebrow">
+          YOUR READING LIST
+        </p>
+
+
+        <h1>
+          Want to Read
+          <small id="want-count">0</small>
+        </h1>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="want-list">
+
+      <article class="want-card">
+
+        <div class="cover medium-cover"></div>
+
+
+        <div>
+
+          <h2>
+            Book Title
+          </h2>
+
+
+          <p>
+            Author Name
+          </p>
+
+
+          <p>
+            Genre
+          </p>
+
+
+          <p class="description">
+            A short description of the book goes here.
+          </p>
+
+
+          <span class="page-count">
+            250 pages
+          </span>
+
         </div>
 
-        <div class="finished-grid">
-          <article class="finished-card">
-            <div class="cover finished-cover"></div>
-            <h2>Book Title</h2>
-            <p>Author Name</p>
-            <p>Genre</p>
-            <p>198 pages</p>
-            <p class="stars">★★★★★</p>
-            <p class="description">A short review or description about this finished book.</p>
-          </article>
+      </article>
 
-          <article class="finished-card">
-            <div class="cover finished-cover"></div>
-            <h2>Another Book</h2>
-            <p>Author Name</p>
-            <p>Genre</p>
-            <p>268 pages</p>
-            <p class="stars">★★★★☆</p>
-            <p class="description">A short review or description about this finished book.</p>
-          </article>
+    </div>
 
-          <article class="finished-card">
-            <div class="cover finished-cover"></div>
-            <h2>Book Three</h2>
-            <p>Author Name</p>
-            <p>Genre</p>
-            <p>367 pages</p>
-            <p class="stars">★★★★★</p>
-            <p class="description">A short review or description about this finished book.</p>
-          </article>
-        </div>
-      </section>
+  </section>
 
-    </main>
+
+
+  <!-- ==============================
+       FINISHED BOOKS
+  ================================= -->
+
+  <section
+    id="finished"
+    class="page invisible-page"
+  >
+
+    <div class="page-heading">
+
+      <div>
+
+        <p class="eyebrow">
+          READING HISTORY
+        </p>
+
+
+        <h1>
+          Finished Books
+          <small id="finished-count">0</small>
+        </h1>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="finished-grid">
+
+      <article class="finished-card">
+
+        <div class="cover finished-cover"></div>
+
+
+        <h2>
+          Book Title
+        </h2>
+
+
+        <p>
+          Author Name
+        </p>
+
+
+        <p>
+          Genre
+        </p>
+
+
+        <p>
+          198 pages
+        </p>
+
+
+        <p class="description">
+          A short review or description about this finished book.
+        </p>
+
+      </article>
+
+    </div>
+
+  </section>
+
+</main>
+
+
   </div>
 
   <script src="./script.js"></script>
+
 </body>
 </html>
-
