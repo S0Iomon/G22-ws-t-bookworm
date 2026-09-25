@@ -295,6 +295,7 @@ const defaultBooks = [
     author: "Matt Haig",
     genre: "Fiction",
     pages: 304,
+    currentPage: 134,
     cover: "https://covers.openlibrary.org/b/isbn/9780525559474-L.jpg",
     description: "A story about choices, possibilities, and the lives we might have lived.",
     status: "current",
@@ -307,6 +308,7 @@ const defaultBooks = [
     author: "James Clear",
     genre: "Self-Help",
     pages: 320,
+    currentPage: 70,
     cover: "https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg",
     description: "A practical guide to building good habits and breaking bad ones.",
     status: "want",
@@ -319,6 +321,7 @@ const defaultBooks = [
     author: "Frank Herbert",
     genre: "Science Fiction",
     pages: 688,
+    currentPage: 435,
     cover: "https://covers.openlibrary.org/b/isbn/9780441172719-L.jpg",
     description: "An epic science-fiction story about power, politics, and survival on Arrakis.",
     status: "finished",
@@ -331,6 +334,7 @@ const defaultBooks = [
     author: "J.R.R. Tolkien",
     genre: "Fantasy",
     pages: 310,
+    currentPage: 201,
     cover: "https://covers.openlibrary.org/b/isbn/9780547928227-L.jpg",
     description: "Bilbo Baggins leaves his quiet life behind and joins an unexpected adventure.",
     status: "current",
@@ -343,6 +347,7 @@ const defaultBooks = [
     author: "George Orwell",
     genre: "Dystopian",
     pages: 328,
+    currentPage: 23,
     cover: "https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg",
     description: "A dystopian novel exploring surveillance, control, and individual freedom.",
     status: "want",
@@ -355,6 +360,7 @@ const defaultBooks = [
     author: "Paulo Coelho",
     genre: "Adventure",
     pages: 208,
+    currentPage: 57,
     cover: "https://covers.openlibrary.org/b/isbn/9780062315007-L.jpg",
     description: "A young shepherd travels in search of treasure while discovering his purpose.",
     status: "finished",
@@ -367,6 +373,7 @@ const defaultBooks = [
     author: "J.K. Rowling",
     genre: "Fantasy",
     pages: 309,
+    currentPage: 82,
     cover: "https://covers.openlibrary.org/b/isbn/9780590353427-L.jpg",
     description: "A young boy discovers that he is a wizard and begins his magical education.",
     status: "want",
@@ -379,6 +386,7 @@ const defaultBooks = [
     author: "Harper Lee",
     genre: "Classic",
     pages: 281,
+    currentPage: 234,
     cover: "https://covers.openlibrary.org/b/isbn/9780061120084-L.jpg",
     description: "A coming-of-age story centered on justice, morality, and prejudice.",
     status: "finished",
@@ -391,6 +399,7 @@ const defaultBooks = [
     author: "F. Scott Fitzgerald",
     genre: "Classic",
     pages: 180,
+    currentPage: 122,
     cover: "https://covers.openlibrary.org/b/isbn/9780743273565-L.jpg",
     description: "A story of wealth, love, ambition, and the American Dream.",
     status: "finished",
@@ -403,6 +412,7 @@ const defaultBooks = [
     author: "Jane Austen",
     genre: "Romance",
     pages: 432,
+    currentPage: 372,
     cover: "https://covers.openlibrary.org/b/isbn/9780141439518-L.jpg",
     description: "Elizabeth Bennet navigates love, family expectations, and social class.",
     status: "want",
@@ -415,6 +425,7 @@ const defaultBooks = [
     author: "J.D. Salinger",
     genre: "Classic",
     pages: 277,
+    currentPage: 100,
     cover: "https://covers.openlibrary.org/b/isbn/9780316769488-L.jpg",
     description: "A teenage boy struggles with identity, adulthood, and alienation.",
     status: "current",
@@ -427,6 +438,7 @@ const defaultBooks = [
     author: "J.R.R. Tolkien",
     genre: "Fantasy",
     pages: 1178,
+    currentPage: 10,
     cover: "https://covers.openlibrary.org/b/isbn/9780618640157-L.jpg",
     description: "An epic journey to destroy a powerful ring and defeat an ancient evil.",
     status: "want",
@@ -439,6 +451,7 @@ const defaultBooks = [
     author: "Ray Bradbury",
     genre: "Dystopian",
     pages: 249,
+    currentPage: 70,
     cover: "https://covers.openlibrary.org/b/isbn/9781451678189-L.jpg",
     description: "A society where books are forbidden forces one fireman to question his world.",
     status: "finished",
@@ -451,6 +464,7 @@ const defaultBooks = [
     author: "Markus Zusak",
     genre: "Historical Fiction",
     pages: 584,
+    currentPage: 256,
     cover: "https://covers.openlibrary.org/b/isbn/9780375842207-L.jpg",
     description: "A young girl finds comfort and resistance through books during World War II.",
     status: "current",
@@ -463,6 +477,7 @@ const defaultBooks = [
     author: "Suzanne Collins",
     genre: "Young Adult",
     pages: 374,
+    currentPage: 123,
     cover: "https://covers.openlibrary.org/b/isbn/9780439023481-L.jpg",
     description: "Katniss Everdeen is forced to compete in a brutal televised competition.",
     status: "finished",
@@ -475,6 +490,7 @@ const defaultBooks = [
     author: "John Green",
     genre: "Romance",
     pages: 313,
+    currentPage: 43,
     cover: "https://covers.openlibrary.org/b/isbn/9780525478812-L.jpg",
     description: "Two teenagers meet and form a deep connection while facing difficult circumstances.",
     status: "want",
@@ -487,6 +503,7 @@ const defaultBooks = [
     author: "Cormac McCarthy",
     genre: "Post-Apocalyptic",
     pages: 287,
+    currentPage: 56,
     cover: "https://covers.openlibrary.org/b/isbn/9780307387899-L.jpg",
     description: "A father and son travel through a devastated world searching for safety.",
     status: "finished",
@@ -499,6 +516,7 @@ const defaultBooks = [
     author: "Khaled Hosseini",
     genre: "Historical Fiction",
     pages: 371,
+    currentPage: 189,
     cover: "https://covers.openlibrary.org/b/isbn/9781594631931-L.jpg",
     description: "A powerful story of friendship, guilt, redemption, and family.",
     status: "want",
@@ -511,6 +529,7 @@ const defaultBooks = [
     author: "Tara Westover",
     genre: "Memoir",
     pages: 352,
+    currentPage:245,
     cover: "https://covers.openlibrary.org/b/isbn/9780399590504-L.jpg",
     description: "A memoir about education, family, identity, and finding independence.",
     status: "current",
@@ -523,6 +542,7 @@ const defaultBooks = [
     author: "Michelle Obama",
     genre: "Memoir",
     pages: 448,
+    currentPage: 300,
     cover: "https://covers.openlibrary.org/b/isbn/9781524763138-L.jpg",
     description: "A memoir covering childhood, career, family, and life in the public eye.",
     status: "finished",
@@ -535,6 +555,7 @@ const defaultBooks = [
     author: "Morgan Housel",
     genre: "Finance",
     pages: 256,
+    currentPage: 35,
     cover: "https://covers.openlibrary.org/b/isbn/9780857197689-L.jpg",
     description: "Lessons about how behavior and psychology influence financial decisions.",
     status: "want",
@@ -547,6 +568,7 @@ const defaultBooks = [
     author: "Cal Newport",
     genre: "Productivity",
     pages: 296,
+    currentPage: 10,
     cover: "https://covers.openlibrary.org/b/isbn/9781455586691-L.jpg",
     description: "A guide to focused work and developing the ability to concentrate deeply.",
     status: "current",
@@ -559,6 +581,7 @@ const defaultBooks = [
     author: "Stephen R. Covey",
     genre: "Self-Help",
     pages: 464,
+    currentPage: 81,
     cover: "https://covers.openlibrary.org/b/isbn/9781982137274-L.jpg",
     description: "A framework for personal effectiveness, responsibility, and long-term growth.",
     status: "want",
@@ -571,6 +594,7 @@ const defaultBooks = [
     author: "Yuval Noah Harari",
     genre: "History",
     pages: 443,
+    currentPage: 96,
     cover: "https://covers.openlibrary.org/b/isbn/9780062316097-L.jpg",
     description: "An overview of human history from early humans to the modern world.",
     status: "finished",
@@ -583,6 +607,7 @@ const defaultBooks = [
     author: "Andy Weir",
     genre: "Science Fiction",
     pages: 369,
+    currentPage: 367,
     cover: "https://covers.openlibrary.org/b/isbn/9780553418026-L.jpg",
     description: "An astronaut stranded on Mars must use science and ingenuity to survive.",
     status: "current",
@@ -595,6 +620,7 @@ const defaultBooks = [
     author: "Andy Weir",
     genre: "Science Fiction",
     pages: 496,
+    currentPage: 293,
     cover: "https://covers.openlibrary.org/b/isbn/9780593135204-L.jpg",
     description: "A lone astronaut awakens with a mission to save humanity from extinction.",
     status: "want",
@@ -607,6 +633,7 @@ const defaultBooks = [
     author: "Fredrik Backman",
     genre: "Fiction",
     pages: 337,
+    currentPage: 109,
     cover: "https://covers.openlibrary.org/b/isbn/9781476738017-L.jpg",
     description: "A grumpy widower's life changes when a new family moves in next door.",
     status: "finished",
@@ -619,6 +646,7 @@ const defaultBooks = [
     author: "Alex Michaelides",
     genre: "Thriller",
     pages: 336,
+    currentPage: 206,
     cover: "https://covers.openlibrary.org/b/isbn/9781250301697-L.jpg",
     description: "A famous painter stops speaking after a shocking crime, leaving a mystery to solve.",
     status: "want",
@@ -631,6 +659,7 @@ const defaultBooks = [
     author: "Taylor Jenkins Reid",
     genre: "Historical Fiction",
     pages: 400,
+    currentPage: 190,
     cover: "https://covers.openlibrary.org/b/isbn/9781501161933-L.jpg",
     description: "An aging Hollywood star reveals the secrets of her extraordinary life.",
     status: "current",
@@ -643,6 +672,7 @@ const defaultBooks = [
     author: "Madeline Miller",
     genre: "Fantasy",
     pages: 393,
+    currentPage: 30,
     cover: "https://covers.openlibrary.org/b/isbn/9780316556347-L.jpg",
     description: "A mythological retelling following the life of the goddess Circe.",
     status: "want",
@@ -655,6 +685,7 @@ const defaultBooks = [
     author: "Haruki Murakami",
     genre: "Literary Fiction",
     pages: 298,
+    currentPage: 100,
     cover: "https://covers.openlibrary.org/b/isbn/9780375704024-L.jpg",
     description: "A reflective story about love, loss, memory, and growing up.",
     status: "finished",
@@ -718,24 +749,20 @@ function loadBooks() {
 
 let books = loadBooks();
 
+books = books.map(book => ({
+  ...book,
+  currentPage: Number(book.currentPage || 0)
+}));
 
 /* =================================
    SAVE BOOKS
 ================================= */
 
 function saveBooks() {
-  /*
-     ONLY the original/sample books
-     are saved permanently.
-  */
-
-  const booksToSave = books.filter(
-    book => book.default === true
-  );
 
   localStorage.setItem(
     STORAGE_KEY,
-    JSON.stringify(booksToSave)
+    JSON.stringify(books)
   );
 }
 
@@ -904,12 +931,69 @@ function setFormMode(mode) {
 ================================= */
 
 function getBookFromForm() {
+
   const selectedStatus =
     document.querySelector(
       'input[name="book-status"]:checked'
     );
 
+  const pages =
+    Number(
+      document.querySelector("#book-pages").value
+    );
+
+  let currentPage =
+    Number(
+      document.querySelector("#book-current-page").value
+    );
+
+  /*
+     Make sure current page is valid.
+  */
+
+  if (currentPage < 0) {
+    currentPage = 0;
+  }
+
+  if (currentPage > pages) {
+    currentPage = pages;
+  }
+
+  /*
+     Automatically determine status
+     based on reading progress.
+  */
+
+  let status =
+    selectedStatus
+      ? selectedStatus.value
+      : "want";
+
+  /*
+     If the book has reached 100%,
+     automatically mark it finished.
+  */
+
+  if (currentPage >= pages) {
+    currentPage = pages;
+    status = "finished";
+  }
+
+  /*
+     If a current/finished book is not
+     100% complete, it belongs in
+     Current Reads.
+  */
+
+  else if (
+    status === "current" ||
+    status === "finished"
+  ) {
+    status = "current";
+  }
+
   return {
+
     title:
       document
         .querySelector("#book-title")
@@ -928,17 +1012,11 @@ function getBookFromForm() {
         .value
         .trim(),
 
-    pages:
-      Number(
-        document
-          .querySelector("#book-pages")
-          .value
-      ),
+    pages,
 
-    status:
-      selectedStatus
-        ? selectedStatus.value
-        : "want",
+    currentPage,
+
+    status,
 
     cover:
       document
@@ -951,6 +1029,7 @@ function getBookFromForm() {
         .querySelector("#book-description")
         .value
         .trim()
+
   };
 }
 
@@ -960,6 +1039,7 @@ function getBookFromForm() {
 ================================= */
 
 function fillEditForm(book) {
+
   document.querySelector("#book-title").value =
     book.title;
 
@@ -971,6 +1051,9 @@ function fillEditForm(book) {
 
   document.querySelector("#book-pages").value =
     book.pages;
+
+  document.querySelector("#book-current-page").value =
+    book.currentPage || 0;
 
   document.querySelector("#book-cover").value =
     book.cover || "";
@@ -1141,6 +1224,7 @@ function addBookToBookshelf(book) {
 ================================= */
 
 function addBookToCurrentReads(book) {
+
   const card =
     document.createElement("article");
 
@@ -1160,6 +1244,11 @@ function addBookToCurrentReads(book) {
   info.classList.add(
     "reading-info"
   );
+
+
+  /* ==============================
+     BOOK INFORMATION
+  ============================== */
 
   const title =
     createTextElement(
@@ -1186,6 +1275,26 @@ function addBookToCurrentReads(book) {
       "description"
     );
 
+
+  /* ==============================
+     READING PROGRESS
+  ============================== */
+
+  const currentPage =
+    Number(book.currentPage || 0);
+
+  const totalPages =
+    Number(book.pages || 1);
+
+  const percentage =
+    Math.min(
+      100,
+      Math.round(
+        (currentPage / totalPages) * 100
+      )
+    );
+
+
   const progress =
     document.createElement("div");
 
@@ -1195,12 +1304,14 @@ function addBookToCurrentReads(book) {
 
   const progressBar =
     document.createElement("span");
-
-  progressBar.style.width = "0%";
+  
+  progressBar.style.width =
+    `${percentage}%`;
 
   progress.appendChild(
     progressBar
   );
+
 
   const progressLabels =
     document.createElement("div");
@@ -1209,17 +1320,20 @@ function addBookToCurrentReads(book) {
     "progress-labels"
   );
 
+
   const pageLabel =
     createTextElement(
       "span",
-      `0 / ${book.pages} pages`
+      `${currentPage} / ${totalPages} pages`
     );
+
 
   const percentLabel =
     createTextElement(
       "span",
-      "0%"
+      `${percentage}%`
     );
+
 
   progressLabels.appendChild(
     pageLabel
@@ -1229,19 +1343,195 @@ function addBookToCurrentReads(book) {
     percentLabel
   );
 
+
+  /* ==============================
+     BOOKMARK PAGE
+  ============================== */
+
+  const bookmarkArea =
+    document.createElement("div");
+
+  bookmarkArea.classList.add(
+    "bookmark-area"
+  );
+
+
+  const bookmarkLabel =
+    createTextElement(
+      "label",
+      "Current Page"
+    );
+
+
+  const bookmarkControls =
+    document.createElement("div");
+
+  bookmarkControls.classList.add(
+    "bookmark-controls"
+  );
+
+
+  const pageInput =
+    document.createElement("input");
+
+  pageInput.type = "number";
+
+  pageInput.min = "0";
+
+  pageInput.max =
+    totalPages;
+
+  pageInput.value =
+    currentPage;
+
+  pageInput.classList.add(
+    "bookmark-page-input"
+  );
+
+
+  const bookmarkButton =
+    document.createElement("button");
+
+  bookmarkButton.type =
+    "button";
+
+  bookmarkButton.classList.add(
+    "bookmark-btn"
+  );
+
+  bookmarkButton.textContent =
+    "Bookmark Page";
+
+
+  bookmarkButton.addEventListener(
+    "click",
+    () => {
+
+      let newPage =
+        Number(pageInput.value);
+
+      /*
+         Keep the page within
+         valid boundaries.
+      */
+
+      if (newPage < 0) {
+        newPage = 0;
+      }
+
+      if (newPage > totalPages) {
+        newPage = totalPages;
+      }
+
+
+      /*
+         Find the actual book.
+      */
+
+      const bookIndex =
+        books.findIndex(
+          item =>
+            item.id === book.id
+        );
+
+      if (bookIndex === -1) {
+        return;
+      }
+
+
+      /*
+         Update page.
+      */
+
+      books[bookIndex].currentPage =
+        newPage;
+
+
+      /*
+         Automatically determine
+         the book's status.
+      */
+
+      if (newPage >= totalPages) {
+
+        books[bookIndex].currentPage =
+          totalPages;
+
+        books[bookIndex].status =
+          "finished";
+
+      } else {
+
+        books[bookIndex].status =
+          "current";
+
+      }
+
+
+      /*
+         Save and completely
+         re-render the library.
+      */
+
+      saveBooks();
+
+      renderBooks();
+
+    }
+  );
+
+
+  bookmarkControls.appendChild(
+    pageInput
+  );
+
+  bookmarkControls.appendChild(
+    bookmarkButton
+  );
+
+
+  bookmarkArea.appendChild(
+    bookmarkLabel
+  );
+
+  bookmarkArea.appendChild(
+    bookmarkControls
+  );
+
+
+  /* ==============================
+     EDIT BUTTON
+  ============================== */
+
   const editButton =
     createEditButton(book);
 
+
+  /* ==============================
+     BUILD CARD
+  ============================== */
+
   info.appendChild(title);
+
   info.appendChild(author);
+
   info.appendChild(genre);
+
   info.appendChild(description);
+
   info.appendChild(progress);
+
   info.appendChild(progressLabels);
+
+  info.appendChild(bookmarkArea);
+
   info.appendChild(editButton);
 
+
   card.appendChild(cover);
+
   card.appendChild(info);
+
 
   readingList.appendChild(card);
 }
@@ -1386,6 +1676,7 @@ function addBookToFinished(book) {
 ================================= */
 
 function showDashboardCurrentBook(book) {
+
   if (!currentCard || !book) {
     return;
   }
@@ -1418,49 +1709,80 @@ function showDashboardCurrentBook(book) {
       ".progress-labels span"
     );
 
+
+  const currentPage =
+    Number(book.currentPage || 0);
+
+  const totalPages =
+    Number(book.pages || 1);
+
+  const percentage =
+    Math.min(
+      100,
+      Math.round(
+        (currentPage / totalPages) * 100
+      )
+    );
+
+
   if (cover) {
+
     cover.style.backgroundImage =
       book.cover
         ? `url("${book.cover}")`
         : "";
+
   }
+
 
   if (title) {
     title.textContent =
       book.title;
   }
 
+
   if (author) {
     author.textContent =
       book.author;
   }
+
 
   if (genre) {
     genre.textContent =
       book.genre;
   }
 
+
   if (description) {
     description.textContent =
       book.description;
   }
 
+
   if (pageCount) {
+
     pageCount.textContent =
-      `0 / ${book.pages} pages`;
+      `${currentPage} / ${totalPages} pages`;
+
   }
+
 
   if (progressBar) {
+
     progressBar.style.width =
-      "0%";
+      `${percentage}%`;
+
   }
 
+
   if (progressLabels.length >= 2) {
+
     progressLabels[0].textContent =
-      "0%";
+      `${percentage}%`;
 
     progressLabels[1].textContent =
-      `0 / ${book.pages} pages`;
+      `${currentPage} / ${totalPages} pages`;
+
   }
 }
 

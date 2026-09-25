@@ -1447,3 +1447,82 @@ button:hover {
 #save-profile-btn:hover {
   background: #FAEFDD;
 }
+
+/* =================================
+   BOOKMARK PAGE
+================================= */
+
+.bookmark-area {
+  margin-top: 18px;
+}
+
+.bookmark-area > label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #482716;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.bookmark-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bookmark-page-input {
+  width: 100px;
+
+  padding: 10px 12px;
+
+  border: 1px solid #C79D64;
+  border-radius: 8px;
+
+  background: #FAEFDD;
+  color: #482716;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  outline: none;
+}
+
+.bookmark-page-input:focus {
+  border-color: #482716;
+
+  box-shadow:
+    0 0 0 2px
+    rgba(199, 157, 100, 0.25);
+}
+
+.bookmark-btn {
+  padding: 10px 15px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #482716;
+  color: #FAEFDD;
+
+  cursor: pointer;
+
+  font-family: inherit;
+  font-weight: 600;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.bookmark-btn:hover {
+  background: #C79D64;
+  color: #482716;
+
+  transform: translateY(-1px);
+}
