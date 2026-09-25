@@ -179,17 +179,17 @@
   <header class="topbar">
 
 <a href="#dashboard" class="logo" id="logo-btn">
-  <img src="./resources/bws2.jpg" alt="Book Reader Logo">
+  <img src="./resources/bookworm v3.png" alt="Book Reader Logo">
 </a>
 
-
 <div class="site-name">
+  Bookworm
 </div>
 
 
-<a class="user-btn" href="#profile">
-  User
-</a>
+<button class="user-btn" id="profile-btn" type="button" aria-label="Open profile">
+  <span class="user-icon"><img src="./resources/user.png"/></span>
+</button>
 
   </header>
 
@@ -834,7 +834,134 @@
     </div>
 
   </section>
+  <section id="profile" class="page invisible-page">
 
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">YOUR PROFILE</p>
+
+      <h1>My Profile</h1>
+
+      <p class="muted">
+        Customize your reader profile.
+      </p>
+    </div>
+  </div>
+
+  <div class="profile-card">
+
+    <div class="profile-avatar">
+      <img src="./resources/user.png"/>
+    </div>
+
+    <div class="profile-info">
+      <h2 id="profile-display-name">
+        Reader
+      </h2>
+
+      <p id="profile-display-age">
+        Age not set
+      </p>
+
+      <p
+        id="profile-display-description"
+        class="profile-description"
+      >
+        Tell us a little about yourself.
+      </p>
+    </div>
+
+      <button
+        type="button"
+        class="edit-profile-btn"
+        id="edit-profile-btn"
+      >
+        Edit Profile
+      </button>
+
+    </div>
+
+
+    <div
+      class="profile-edit-card invisible-page"
+      id="profile-edit-card"
+    >
+
+      <form id="profile-form">
+
+        <div class="form-group">
+
+          <label for="profile-name">
+            Name
+          </label>
+
+          <input
+            type="text"
+            id="profile-name"
+            placeholder="Enter your name"
+            maxlength="50"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="profile-age">
+            Age
+          </label>
+
+          <input
+            type="number"
+            id="profile-age"
+            placeholder="Enter your age"
+            min="1"
+            max="120"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="profile-description">
+            About Me
+          </label>
+
+          <textarea
+            id="profile-description"
+            placeholder="Write a short description about yourself..."
+            rows="5"
+            maxlength="250"
+          ></textarea>
+
+        </div>
+
+
+        <div class="form-actions">
+
+          <button
+            type="button"
+            id="cancel-profile-btn"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            id="save-profile-btn"
+          >
+            Save Profile
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </section>
 </main>
 
 

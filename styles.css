@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap');
+
 /* ==============================
 RESET
 ================================= */
@@ -9,88 +11,79 @@ RESET
   }
 
 html {
-scroll-behavior: smooth;
-scroll-padding-top: 75px;
-}
+  scroll-behavior: smooth;
+  scroll-padding-top: 75px;
+  }
 
 body {
-font-family: Arial, Helvetica, sans-serif;
-background: #202020;
-color: #202020;
-line-height: 1.45;
-}
+  font-family: Arial, Helvetica, sans-serif;
+  background: #202020;
+  color: #202020;
+  line-height: 1.45;
+  }
 
 button,
 input,
 textarea {
-font: inherit;
-}
+  font: inherit;
+  }
 
 button {
-cursor: pointer;
-}
+  cursor: pointer;
+  }
 
 a {
-color: inherit;
-text-decoration: none;
-}
+  color: inherit;
+  text-decoration: none;
+  }
 
 /* ==============================
 TOP NAVIGATION
 ================================= */
 
 .topbar {
-position: sticky;
-top: 0;
-z-index: 100;
-height: 100px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 100px;
 
-display: flex;
-align-items: center;
-gap: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
 
-padding: 0 24px;
+  padding: 0 24px;
+  color: white;
 
-background: #707070;
-color: white;
-
-border-bottom: 1px solid #444;
-}
+  border-bottom: 1px solid #444;
+  }
 
 .logo {
-width: 72px;
-height: 34px;
+  width: 70px;
+  height: 70px;
 
-display: grid;
-place-items: center;
+  display: grid;
+  place-items: center;
 
-font-size: 12px;
-font-weight: bold;
-letter-spacing: 0.5px;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
 
-margin-top:-40px;
-}
+  margin-top:-5px;
+  }
 
 .logo img {
-  width: 100%;
-  height: 100%;
+  width: 120%;
   object-fit: contain;
 }
 
 .site-name {
-flex: 1;
+  flex: 1;
+  font-family: "Merriweather", serif;
+  font-size: 17px;
+  font-weight: 900;
+  text-align: center;
+  }
 
-font-size: 14px;
-font-weight: 600;
-}
-
-.user-btn {
-padding: 7px 15px;
-
-background: #854829;
-
-font-size: 12px;
-}
 
 /* ==============================
 MAIN LAYOUT
@@ -729,24 +722,15 @@ border-radius: 4px;
 font-size: 13px;
 }
 
-#discard-btn {
-background: transparent;
-color: white;
-border: 1px solid white;
-}
-
-#discard-btn:hover {
-background: #313131;
-}
-
 #save-btn {
-background: white;
-color: #555;
-border: 1px solid white;
+background: #F7E6CA;
+color: #482716;
+border: 1px solid #F7E6CA;
+font-weight: 600;
 }
 
 #save-btn:hover {
-background: #efefef;
+background: #FAEFDD;
 }
 
 /* ==============================
@@ -882,7 +866,7 @@ padding: 18px;
 .edit-book-btn {
   display: block;
 
-  margin-top: auto;
+  margin-top: 10px;
   margin-left: auto;
 
   padding: 7px 16px;
@@ -1182,6 +1166,7 @@ button:hover {
   background: #482716;
   color: var(--cream);
   border: 1px solid var(--cream);
+  font-weight: 600;
 }
 
 #discard-btn:hover {
@@ -1215,5 +1200,250 @@ button:hover {
 }
 
 .add-form-card::-webkit-scrollbar-thumb:hover {
+  background: #FAEFDD;
+}
+
+/* =================================
+   PROFILE BUTTON
+================================= */
+
+.user-btn {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  padding: 7px 15px;
+
+  border-radius: 50%;
+
+  background: #FAEFDD;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.user-btn:hover {
+  background: #F7E6CA;
+  color: var(--cream);
+  transform: translateY(-2px);
+}
+
+.user-icon {
+  font-size: 21px;
+  line-height: 1;
+}
+
+.user-icon img {
+  width: 15px;
+  height: auto;
+}
+
+/* =================================
+   PROFILE CARD
+================================= */
+
+.profile-card {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  gap: 24px;
+
+  padding: 30px;
+
+  background: #FAEFDD;
+
+  border: 1px solid #C79D64;
+  border-radius: 16px;
+
+  box-shadow: 0 8px 24px rgba(72, 39, 22, 0.08);
+}
+
+
+/* =================================
+   PROFILE AVATAR
+================================= */
+
+.profile-avatar {
+  width: 90px;
+  height: 90px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #F7E6CA;
+  color: #FAEFDD;
+
+  font-size: 42px;
+}
+
+.profile-avatar img {
+  width: 40px;
+  height: auto;
+}
+
+
+/* =================================
+   PROFILE INFORMATION
+================================= */
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-info h2 {
+  margin-bottom: 6px;
+
+  color: #482716;
+
+  font-size: 26px;
+}
+
+.profile-info p {
+  color: #482716;
+}
+
+.profile-description {
+  max-width: 650px;
+
+  margin-top: 12px;
+
+  line-height: 1.6;
+  opacity: 0.8;
+}
+
+
+/* =================================
+   EDIT PROFILE BUTTON
+================================= */
+
+.edit-profile-btn {
+  padding: 11px 18px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #482716;
+  color: #FAEFDD;
+
+  cursor: pointer;
+
+  font-weight: 600;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.edit-profile-btn:hover {
+  background: #C79D64;
+  color: #482716;
+
+  transform: translateY(-2px);
+}
+
+
+/* =================================
+   PROFILE EDIT CARD
+================================= */
+
+.profile-edit-card {
+  margin-top: 24px;
+
+  padding: 28px;
+
+  background: #482716;
+
+  border: 1px solid #C79D64;
+  border-radius: 16px;
+}
+
+
+/* =================================
+   PROFILE FORM
+================================= */
+
+.profile-edit-card input,
+.profile-edit-card textarea {
+  width: 100%;
+
+  padding: 12px 14px;
+
+  border-radius: 8px;
+
+  background: #5F331D;
+  color: white;
+
+  font-family: inherit;
+
+  outline: none;
+}
+
+.profile-edit-card input:focus,
+.profile-edit-card textarea:focus {
+  border-color: #482716;
+  box-shadow: 0 0 0 2px rgba(199, 157, 100, 0.25);
+}
+
+.profile-edit-card textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+
+/* =================================
+   PROFILE FORM ACTIONS
+================================= */
+
+.profile-edit-card .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+
+  margin-top: 20px;
+}
+
+#cancel-profile-btn,
+#save-profile-btn {
+  padding: 11px 20px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-weight: 600;
+}
+
+#cancel-profile-btn {
+  background: #482716;
+  color: var(--cream);
+  border: 1px solid var(--cream);
+}
+
+#save-profile-btn {
+  background: #F7E6CA;
+  color: #482716;
+  border: 1px solid #F7E6CA;
+}
+
+#cancel-profile-btn:hover {
+  background: #5f331d;
+}
+
+#save-profile-btn:hover {
   background: #FAEFDD;
 }

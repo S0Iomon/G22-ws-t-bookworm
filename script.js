@@ -18,7 +18,272 @@ const STORAGE_KEY = "myBookReaderBooks";
 
 let editingBookId = null;
 
+/* =================================
+   PROFILE
+================================= */
 
+const profileButton =
+  document.querySelector("#profile-btn");
+
+const profileSection =
+  document.querySelector("#profile");
+
+const editProfileButton =
+  document.querySelector("#edit-profile-btn");
+
+const profileEditCard =
+  document.querySelector("#profile-edit-card");
+
+const profileForm =
+  document.querySelector("#profile-form");
+
+const cancelProfileButton =
+  document.querySelector("#cancel-profile-btn");
+
+const profileDisplayName =
+  document.querySelector("#profile-display-name");
+
+const profileDisplayAge =
+  document.querySelector("#profile-display-age");
+
+const profileDisplayDescription =
+  document.querySelector("#profile-display-description");
+
+const profileNameInput =
+  document.querySelector("#profile-name");
+
+const profileAgeInput =
+  document.querySelector("#profile-age");
+
+const profileDescriptionInput =
+  document.querySelector("#profile-description");
+
+const PROFILE_STORAGE_KEY =
+  "myBookReaderProfile";
+
+
+/* =================================
+   DEFAULT PROFILE
+================================= */
+
+const defaultProfile = {
+  name: "Reader",
+  age: "",
+  description: ""
+};
+
+
+/* =================================
+   LOAD PROFILE
+================================= */
+
+function loadProfile() {
+
+  const savedProfile =
+    localStorage.getItem(PROFILE_STORAGE_KEY);
+
+  if (!savedProfile) {
+    return { ...defaultProfile };
+  }
+
+  try {
+
+    return {
+      ...defaultProfile,
+      ...JSON.parse(savedProfile)
+    };
+
+  } catch (error) {
+
+    console.error(
+      "Could not load profile:",
+      error
+    );
+
+    return { ...defaultProfile };
+  }
+}
+
+
+let profile = loadProfile();
+
+
+/* =================================
+   SAVE PROFILE
+================================= */
+
+function saveProfile() {
+
+  localStorage.setItem(
+    PROFILE_STORAGE_KEY,
+    JSON.stringify(profile)
+  );
+}
+
+
+/* =================================
+   DISPLAY PROFILE
+================================= */
+
+function renderProfile() {
+
+  if (!profileDisplayName) {
+    return;
+  }
+
+  profileDisplayName.textContent =
+    profile.name || "Reader";
+
+
+  if (profile.age) {
+
+    profileDisplayAge.textContent =
+      `${profile.age} years old`;
+
+  } else {
+
+    profileDisplayAge.textContent =
+      "Age not set";
+
+  }
+
+
+  profileDisplayDescription.textContent =
+    profile.description ||
+    "Tell us a little about yourself.";
+}
+
+
+/* =================================
+   OPEN PROFILE
+================================= */
+
+if (profileButton) {
+
+  profileButton.addEventListener(
+    "click",
+    () => {
+
+      showSection("profile");
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+  );
+
+}
+
+
+/* =================================
+   EDIT PROFILE
+================================= */
+
+if (editProfileButton) {
+
+  editProfileButton.addEventListener(
+    "click",
+    () => {
+
+      profileNameInput.value =
+        profile.name || "";
+
+      profileAgeInput.value =
+        profile.age || "";
+
+      profileDescriptionInput.value =
+        profile.description || "";
+
+      profileEditCard.classList.remove(
+        "invisible-page"
+      );
+
+      profileEditCard.classList.add(
+        "visible-page"
+      );
+
+      profileNameInput.focus();
+
+    }
+  );
+
+}
+
+
+/* =================================
+   CANCEL PROFILE EDIT
+================================= */
+
+if (cancelProfileButton) {
+
+  cancelProfileButton.addEventListener(
+    "click",
+    () => {
+
+      profileEditCard.classList.remove(
+        "visible-page"
+      );
+
+      profileEditCard.classList.add(
+        "invisible-page"
+      );
+
+    }
+  );
+
+}
+
+
+/* =================================
+   SAVE PROFILE FORM
+================================= */
+
+if (profileForm) {
+
+  profileForm.addEventListener(
+    "submit",
+    event => {
+
+      event.preventDefault();
+
+      profile = {
+
+        name:
+          profileNameInput.value.trim() ||
+          "Reader",
+
+        age:
+          profileAgeInput.value.trim(),
+
+        description:
+          profileDescriptionInput.value.trim()
+
+      };
+
+      saveProfile();
+
+      renderProfile();
+
+
+      profileEditCard.classList.remove(
+        "visible-page"
+      );
+
+      profileEditCard.classList.add(
+        "invisible-page"
+      );
+
+    }
+  );
+
+}
+/* =================================
+   INITIALIZE PROFILE
+================================= */
+
+renderProfile();
 /* =================================
    SAMPLE BOOKS
 ================================= */
