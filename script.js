@@ -529,7 +529,7 @@ const defaultBooks = [
     author: "Tara Westover",
     genre: "Memoir",
     pages: 352,
-    currentPage:245,
+    currentPage: 245,
     cover: "https://covers.openlibrary.org/b/isbn/9780399590504-L.jpg",
     description: "A memoir about education, family, identity, and finding independence.",
     status: "current",
@@ -1262,7 +1262,7 @@ function addBookToBookshelf(book) {
   );
 
   bookTile.dataset.genre =
-  book.genre;
+    book.genre;
 
   const cover =
     createBookCover(book);
@@ -1308,7 +1308,7 @@ function addBookToCurrentReads(book) {
   );
 
   card.dataset.genre =
-  book.genre;
+    book.genre;
 
   const cover =
     createBookCover(
@@ -1382,7 +1382,7 @@ function addBookToCurrentReads(book) {
 
   const progressBar =
     document.createElement("span");
-  
+
   progressBar.style.width =
     `${percentage}%`;
 
@@ -1628,7 +1628,7 @@ function addBookToWantList(book) {
   );
 
   card.dataset.genre =
-  book.genre;
+    book.genre;
 
   const cover =
     createBookCover(
@@ -1701,7 +1701,7 @@ function addBookToFinished(book) {
   );
 
   card.dataset.genre =
-  book.genre;
+    book.genre;
 
   const cover =
     createBookCover(
@@ -1913,37 +1913,33 @@ function updateBookCounts() {
 
   if (bookshelfCount) {
     bookshelfCount.textContent =
-      `${books.length} ${
-        books.length === 1
-          ? "book"
-          : "books"
+      `${books.length} ${books.length === 1
+        ? "book"
+        : "books"
       }`;
   }
 
   if (currentCount) {
     currentCount.textContent =
-      `${currentBooks.length} ${
-        currentBooks.length === 1
-          ? "book"
-          : "books"
+      `${currentBooks.length} ${currentBooks.length === 1
+        ? "book"
+        : "books"
       }`;
   }
 
   if (wantCount) {
     wantCount.textContent =
-      `${wantBooks.length} ${
-        wantBooks.length === 1
-          ? "book"
-          : "books"
+      `${wantBooks.length} ${wantBooks.length === 1
+        ? "book"
+        : "books"
       }`;
   }
 
   if (finishedCount) {
     finishedCount.textContent =
-      `${finishedBooks.length} ${
-        finishedBooks.length === 1
-          ? "book"
-          : "books"
+      `${finishedBooks.length} ${finishedBooks.length === 1
+        ? "book"
+        : "books"
       }`;
   }
 }
@@ -2118,6 +2114,33 @@ function populateGenreFilters() {
   });
 }
 
+/* =================================
+   EMPTY GENRE MESSAGE
+================================= */
+
+function toggleEmptyGenreMessage(container, visibleCount) {
+
+  let emptyMessage =
+    container.querySelector(".empty-genre-message");
+
+  if (!emptyMessage) {
+
+    emptyMessage =
+      document.createElement("p");
+
+    emptyMessage.classList.add(
+      "empty-genre-message"
+    );
+
+    emptyMessage.textContent =
+      "No books are saved in this genre yet.";
+
+    container.appendChild(emptyMessage);
+  }
+
+  emptyMessage.hidden = visibleCount > 0;
+}
+
 
 /* =================================
    FILTER BOOKS BY GENRE
@@ -2139,17 +2162,29 @@ function filterBooksByGenre(
         ".book-tile:not(.add-tile)"
       );
 
+    let visibleCount = 0;
+
     bookTiles.forEach(tile => {
 
       const bookGenre =
         tile.dataset.genre;
 
-      tile.hidden =
+      const isHidden =
         genre !== "all" &&
         bookGenre !== genre;
 
+      tile.hidden = isHidden;
+
+      if (isHidden) {
+        visibleCount++;
+      }
+
     });
 
+    toggleEmptyGenreMessage(
+      bookshelfGrid,
+      visibleCount
+    );
   }
 
 
@@ -2164,17 +2199,29 @@ function filterBooksByGenre(
         ".reading-card"
       );
 
+    let visibleCount = 0;
+
     cards.forEach(card => {
 
       const bookGenre =
         card.dataset.genre;
 
-      card.hidden =
+      const isHidden =
         genre !== "all" &&
         bookGenre !== genre;
 
+      card.hidden = isHidden;
+
+      if (!isHidden) {
+        visibleCount++;
+      }
+
     });
 
+    toggleEmptyGenreMessage(
+      readingList,
+      visibleCount
+    );
   }
 
 
@@ -2189,16 +2236,29 @@ function filterBooksByGenre(
         ".want-card"
       );
 
+    let visibleCount = 0;
+
     cards.forEach(card => {
 
       const bookGenre =
         card.dataset.genre;
 
-      card.hidden =
+      const isHidden =
         genre !== "all" &&
         bookGenre !== genre;
 
+      card.hidden = isHidden;
+
+      if (!isHidden) {
+        visibleCount++;
+      }
+
     });
+
+    toggleEmptyGenreMessage(
+      wantList,
+      visibleCount
+    );
 
   }
 
@@ -2214,16 +2274,29 @@ function filterBooksByGenre(
         ".finished-card"
       );
 
+    let visibleCount = 0;
+
     cards.forEach(card => {
 
       const bookGenre =
         card.dataset.genre;
 
-      card.hidden =
+      const isHidden =
         genre !== "all" &&
         bookGenre !== genre;
 
+      card.hidden = isHidden;
+
+      if (!isHidden) {
+        visibleCount++;
+      }
+
     });
+
+    toggleEmptyGenreMessage(
+      finishedList,
+      visibleCount
+    );
 
   }
 }
@@ -2347,10 +2420,10 @@ function renderBooks() {
 
     const randomBook =
       currentBooks[
-        Math.floor(
-          Math.random() *
-          currentBooks.length
-        )
+      Math.floor(
+        Math.random() *
+        currentBooks.length
+      )
       ];
 
     showDashboardCurrentBook(

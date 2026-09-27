@@ -8,36 +8,36 @@ RESET
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  }
+}
 
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 75px;
-  }
+}
 
 body {
   font-family: Arial, Helvetica, sans-serif;
   background: #202020;
   color: #202020;
   line-height: 1.45;
-  }
+}
 
 button,
 input,
 textarea {
   font: inherit;
-  }
+}
 
 button {
   cursor: pointer;
-  }
+}
 
 a {
   color: inherit;
   text-decoration: none;
-  }
+}
 
-  /* ==============================
+/* ==============================
    HAMBURGER MENU
 ================================= */
 
@@ -302,7 +302,7 @@ TOP NAVIGATION
   color: white;
 
   border-bottom: 1px solid #444;
-  }
+}
 
 .logo {
   width: 70px;
@@ -315,8 +315,8 @@ TOP NAVIGATION
   font-weight: bold;
   letter-spacing: 0.5px;
 
-  margin-top:-5px;
-  }
+  margin-top: -5px;
+}
 
 .logo img {
   width: 120%;
@@ -329,7 +329,7 @@ TOP NAVIGATION
   font-size: 17px;
   font-weight: 900;
   text-align: center;
-  }
+}
 
 
 /* ==============================
@@ -337,8 +337,8 @@ MAIN LAYOUT
 ================================= */
 
 .layout {
-display: flex;
-min-height: calc(100vh - 58px);
+  display: flex;
+  min-height: calc(100vh - 58px);
 }
 
 /* ==============================
@@ -346,68 +346,68 @@ SIDEBAR
 ================================= */
 
 .sidebar {
-position: sticky;
-top: 58px;
+  position: sticky;
+  top: 58px;
 
-width: 230px;
-height: calc(100vh - 58px);
+  width: 230px;
+  height: calc(100vh - 58px);
 
-padding: 28px 18px;
+  padding: 28px 18px;
 
-background: #f7e6ca;
-color: #ddd;
+  background: #f7e6ca;
+  color: #ddd;
 
-border-right: 1px solid #454545;
+  border-right: 1px solid #454545;
 }
 
 .sidebar h2 {
-margin-bottom: 22px;
-font-size: 19px;
+  margin-bottom: 22px;
+  font-size: 19px;
 }
 
 .side-nav {
-display: grid;
-border-radius: 4px;
-padding: 12px;
-gap: 7px;
+  display: grid;
+  border-radius: 4px;
+  padding: 12px;
+  gap: 7px;
 }
 
 .side-nav a {
-padding: 12px;
+  padding: 12px;
 
-color: #bbb;
-border-radius: 4px;
+  color: #bbb;
+  border-radius: 4px;
 
-font-size: 14px;
+  font-size: 14px;
 
-transition:
-background 0.2s ease,
-color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .side-nav a:hover,
 .side-nav a.selected-section {
-color: white;
+  color: white;
 }
 
 .sidebar-card {
-margin-top: 40px;
-padding: 17px;
+  margin-top: 40px;
+  padding: 17px;
 
-background: #482716;
-border: 1px solid #555;
-border-radius: 4px;
+  background: #482716;
+  border: 1px solid #555;
+  border-radius: 4px;
 }
 
 .sidebar-card .small-label {
-margin-bottom: 5px;
+  margin-bottom: 5px;
 
-color: #aaa;
-font-size: 10px;
+  color: #aaa;
+  font-size: 10px;
 }
 
 .sidebar-card strong {
-font-size: 27px;
+  font-size: 27px;
 }
 
 /* ==============================
@@ -416,21 +416,21 @@ PROGRESS
 
 .goal-bar,
 .progress {
-height: 7px;
-overflow: hidden;
+  height: 7px;
+  overflow: hidden;
 
-background: #d5d5d5;
+  background: #d5d5d5;
 }
 
 .goal-bar {
-margin-top: 12px;
+  margin-top: 12px;
 }
 
 .goal-bar span,
 .progress span {
-display: block;
-height: 100%;
-background: #C79D64;
+  display: block;
+  height: 100%;
+  background: #C79D64;
 }
 
 /* ==============================
@@ -438,24 +438,24 @@ CONTENT
 ================================= */
 
 .content {
-width: min(1200px, 100%);
-margin: 0 auto;
-padding: 30px;
+  width: min(1200px, 100%);
+  margin: 0 auto;
+  padding: 30px;
 
-background: #FAEFDD;
+  background: #FAEFDD;
 }
 
 .page {
-min-height: calc(100vh - 118px);
-padding-bottom: 70px;
+  min-height: calc(100vh - 118px);
+  padding-bottom: 70px;
 }
 
 .invisible-page {
-display: none;
+  display: none;
 }
 
 .visible-page {
-display: block;
+  display: block;
 }
 
 /* ==============================
@@ -464,44 +464,44 @@ HEADINGS
 
 .welcome-row,
 .page-heading {
-display: flex;
-align-items: flex-start;
-justify-content: space-between;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
 
-gap: 20px;
-margin-bottom: 25px;
+  gap: 20px;
+  margin-bottom: 25px;
 }
 
 .eyebrow {
-color: #666;
+  color: #666;
 
-font-size: 10px;
-font-weight: 700;
-letter-spacing: 0.8px;
-text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
 }
 
 h1 {
-margin-top: 3px;
-font-size: clamp(24px, 3vw, 34px);
+  margin-top: 3px;
+  font-size: clamp(24px, 3vw, 34px);
 }
 
 h1 small {
-color: #777;
+  color: #777;
 
-font-size: 12px;
-font-weight: normal;
+  font-size: 12px;
+  font-weight: normal;
 }
 
 h2 {
-font-size: 17px;
+  font-size: 17px;
 }
 
 .muted {
-margin-top: 5px;
+  margin-top: 5px;
 
-color: #666;
-font-size: 13px;
+  color: #666;
+  font-size: 13px;
 }
 
 /* ==============================
@@ -515,17 +515,17 @@ CARDS
 .reading-card,
 .want-card,
 .finished-card {
-background: #d9d9d9;
-border: 1px solid #aaa;
+  background: #d9d9d9;
+  border: 1px solid #aaa;
 
-transition:
-background 0.2s ease,
-border-color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .stat-card {
-background: #482716;
-color: white;
+  background: #482716;
+  color: white;
 }
 
 
@@ -536,9 +536,10 @@ color: white;
 .reading-card:hover,
 .want-card:hover,
 .finished-card:hover {
-background: #F7E6CA;
+  background: #F7E6CA;
 }
-.stat-card:hover{
+
+.stat-card:hover {
   background: #C79D64;
   color: #482716;
 }
@@ -548,120 +549,120 @@ DASHBOARD
 ================================= */
 
 .dashboard-grid {
-display: grid;
-grid-template-columns: 150px 1fr;
-gap: 18px;
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 18px;
 }
 
 .card {
-min-height: 250px;
+  min-height: 250px;
 }
 
 .add-card {
-display: grid;
-place-items: center;
+  display: grid;
+  place-items: center;
 }
 
 .add-book {
-width: 100%;
-height: 100%;
+  width: 100%;
+  height: 100%;
 
-display: grid;
-place-items: center;
-align-content: center;
-gap: 7px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 7px;
 
-background: transparent;
-border: 0;
-color: inherit;
+  background: transparent;
+  border: 0;
+  color: inherit;
 }
 
 .add-book span,
 .add-tile span {
-font-size: 38px;
-font-weight: 200;
+  font-size: 38px;
+  font-weight: 200;
 }
 
 .add-book strong,
 .add-tile strong {
-font-size: 12px;
-font-weight: normal;
+  font-size: 12px;
+  font-weight: normal;
 }
 
 .current-card {
-padding: 20px;
+  padding: 20px;
 }
 
 .section-title {
-display: flex;
-align-items: end;
-justify-content: space-between;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
 
-margin-bottom: 14px;
+  margin-bottom: 14px;
 }
 
 .pages {
-color: #666;
-font-size: 10px;
+  color: #666;
+  font-size: 10px;
 }
 
 .book-summary {
-display: flex;
-gap: 22px;
+  display: flex;
+  gap: 22px;
 }
 
 .book-info {
-flex: 1;
+  flex: 1;
 }
 
 .book-author,
 .book-genre {
-font-size: 12px;
-font-style: italic;
+  font-size: 12px;
+  font-style: italic;
 }
 
 .description {
-margin: 10px 0;
+  margin: 10px 0;
 
-color: #555;
-font-size: 11px;
+  color: #555;
+  font-size: 11px;
 }
 
 .cover {
-flex: 0 0 85px;
+  flex: 0 0 85px;
 
-width: 85px;
-height: 105px;
+  width: 85px;
+  height: 105px;
 
-background: #f4f4f4;
-border: 1px solid #c8c8c8;
+  background: #f4f4f4;
+  border: 1px solid #c8c8c8;
 
-background-position: center;
-background-size: cover;
-background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .placeholder {
-width: 115px;
-height: 145px;
-flex-basis: 115px;
+  width: 115px;
+  height: 145px;
+  flex-basis: 115px;
 }
 
 .progress-labels {
-display: flex;
-justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 
-margin-top: 4px;
+  margin-top: 4px;
 
-color: #555;
-font-size: 9px;
+  color: #555;
+  font-size: 9px;
 }
 
 .rating {
-margin-top: 16px;
+  margin-top: 16px;
 
-text-align: center;
-font-size: 12px;
+  text-align: center;
+  font-size: 12px;
 }
 
 /* ==============================
@@ -669,29 +670,29 @@ STATISTICS
 ================================= */
 
 .stats-grid {
-display: grid;
-grid-template-columns: repeat(4, 1fr);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
 
-gap: 12px;
-margin-top: 18px;
+  gap: 12px;
+  margin-top: 18px;
 }
 
 .stat-card {
-padding: 18px;
+  padding: 18px;
 }
 
 .stat-card span {
-display: block;
+  display: block;
 
-color: #F7E6CA;
-font-size: 10px;
+  color: #F7E6CA;
+  font-size: 10px;
 }
 
 .stat-card strong {
-display: block;
+  display: block;
 
-margin-top: 5px;
-font-size: 24px;
+  margin-top: 5px;
+  font-size: 24px;
 }
 
 /* ==============================
@@ -699,36 +700,51 @@ BOOKSHELF
 ================================= */
 
 .bookshelf-grid {
-display: grid;
-grid-template-columns: repeat(6, 1fr);
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
 
-gap: 10px;
-padding: 18px;
+  gap: 10px;
+  padding: 18px;
 
-background: #C79D64;
-border: 1px solid #C79D64;
+  background: #C79D64;
+  border: 1px solid #C79D64;
 }
 
 .book-tile {
-min-height: 170px;
+  min-height: 170px;
 
-display: grid;
-place-items: center;
-align-content: center;
-gap: 8px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
 
-padding: 10px;
+  padding: 10px;
 
-text-align: center;
+  text-align: center;
 }
 
 .book-tile .cover {
-width: 70px;
-height: 95px;
+  width: 70px;
+  height: 95px;
 }
 
 .book-tile b {
-font-size: 10px;
+  font-size: 10px;
+}
+
+/* ==============================
+   EMPTY GENRE MESSAGE
+================================= */
+
+.empty-genre-message {
+  grid-column: 1 / -1;
+
+  padding: 20px;
+
+  text-align: center;
+
+  color: var(--brown);
+  font-size: 13px;
 }
 
 /* ==============================
@@ -737,51 +753,51 @@ READING LIST
 
 .reading-list,
 .want-list {
-display: grid;
-gap: 14px;
+  display: grid;
+  gap: 14px;
 }
 
 .reading-card,
 .want-card {
-display: flex;
-gap: 25px;
+  display: flex;
+  gap: 25px;
 
-padding: 18px;
+  padding: 18px;
 }
 
 .large-cover {
-width: 120px;
-height: 155px;
-flex-basis: 120px;
+  width: 120px;
+  height: 155px;
+  flex-basis: 120px;
 }
 
 .reading-info {
-flex: 1;
+  flex: 1;
 }
 
 .reading-info h2,
 .want-card h2 {
-margin-bottom: 3px;
+  margin-bottom: 3px;
 }
 
 .reading-info p,
 .want-card p {
-font-size: 11px;
+  font-size: 11px;
 }
 
 .medium-cover {
-width: 90px;
-height: 120px;
-flex-basis: 90px;
+  width: 90px;
+  height: 120px;
+  flex-basis: 90px;
 }
 
-.want-card > div:last-child {
-flex: 1;
+.want-card>div:last-child {
+  flex: 1;
 }
 
 .page-count {
-color: #555;
-font-size: 10px;
+  color: #555;
+  font-size: 10px;
 }
 
 /* ==============================
@@ -789,30 +805,30 @@ FINISHED BOOKS
 ================================= */
 
 .finished-grid {
-display: grid;
-grid-template-columns: repeat(3, 1fr);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 
-gap: 14px;
+  gap: 14px;
 }
 
 .finished-card {
-padding: 20px;
-text-align: center;
+  padding: 20px;
+  text-align: center;
 }
 
 .finished-cover {
-width: 110px;
-height: 145px;
+  width: 110px;
+  height: 145px;
 
-margin: 0 auto 15px;
+  margin: 0 auto 15px;
 }
 
 .finished-card h2 {
-font-size: 15px;
+  font-size: 15px;
 }
 
 .finished-card p {
-font-size: 10px;
+  font-size: 10px;
 }
 
 /* ==============================
@@ -820,38 +836,38 @@ ADD BOOK MODAL
 ================================= */
 
 .modal-overlay {
-position: fixed;
-inset: 0;
-z-index: 1000;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
 
-display: grid;
-place-items: center;
+  display: grid;
+  place-items: center;
 
-padding: 20px;
+  padding: 20px;
 
-background: rgba(0, 0, 0, 0.65);
+  background: rgba(0, 0, 0, 0.65);
 }
 
 .modal-overlay.invisible-page {
-display: none;
+  display: none;
 }
 
 .modal-overlay.visible-page {
-display: grid;
+  display: grid;
 }
 
 .add-form-card {
-width: min(600px, 100%);
-max-height: 90vh;
+  width: min(600px, 100%);
+  max-height: 90vh;
 
-overflow-y: auto;
+  overflow-y: auto;
 
-padding: 25px;
+  padding: 25px;
 
-background: #482716;
-color: #ddd;
+  background: #482716;
+  color: #ddd;
 
-border-radius: 6px;
+  border-radius: 6px;
 }
 
 
@@ -860,48 +876,48 @@ FORM
 ================================= */
 
 .form-group {
-display: flex;
-flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .form-group label,
 .form-group legend {
-margin-bottom: 5px;
+  margin-bottom: 5px;
 
-color: #ddd;
-font-size: 14px;
+  color: #ddd;
+  font-size: 14px;
 }
 
 .form-group input,
 .form-group textarea {
-width: 100%;
+  width: 100%;
 
-padding: 12px 13px;
+  padding: 12px 13px;
 
-background: #555;
-color: white;
+  background: #555;
+  color: white;
 
-border: 1px solid transparent;
-border-radius: 4px;
+  border: 1px solid transparent;
+  border-radius: 4px;
 
-font-size: 13px;
+  font-size: 13px;
 }
 
 .form-group textarea {
-resize: vertical;
+  resize: vertical;
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-color: #F7E6CA;
+  color: #F7E6CA;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
-outline: none;
-border-color: #aaa;
+  outline: none;
+  border-color: #aaa;
 }
 
 .form-group small {
@@ -910,49 +926,50 @@ border-color: #aaa;
   margin-top: 5px;
   color: #F7E6CA;
 }
+
 /* ==============================
 STATUS
 ================================= */
 
 .form-group {
-border-color: transparent;
+  border-color: transparent;
 }
 
 .status-options {
-display: flex;
-flex-wrap: wrap;
-gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .status-option {
-cursor: pointer;
+  cursor: pointer;
 }
 
 .status-option input {
-position: absolute;
-opacity: 0;
-pointer-events: none;
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .status-option span {
-display: block;
+  display: block;
 
-padding: 12px 13px;
+  padding: 12px 13px;
 
-background: #5f331d;
-color: white;
-border-radius: 8px;
+  background: #5f331d;
+  color: white;
+  border-radius: 8px;
 
-transition: background 0.2s ease;
+  transition: background 0.2s ease;
 }
 
 .status-option span:hover {
-background: #703c22;
+  background: #703c22;
 }
 
-.status-option input:checked + span {
-background: white;
-color: #292929;
+.status-option input:checked+span {
+  background: white;
+  color: #292929;
 }
 
 /* ==============================
@@ -960,30 +977,30 @@ FORM ACTIONS
 ================================= */
 
 .form-actions {
-display: flex;
-justify-content: center;
-gap: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 
-margin-top: 20px;
+  margin-top: 20px;
 }
 
 .form-actions button {
-padding: 12px 20px;
+  padding: 12px 20px;
 
-border-radius: 4px;
+  border-radius: 4px;
 
-font-size: 13px;
+  font-size: 13px;
 }
 
 #save-btn {
-background: #F7E6CA;
-color: #482716;
-border: 1px solid #F7E6CA;
-font-weight: 600;
+  background: #F7E6CA;
+  color: #482716;
+  border: 1px solid #F7E6CA;
+  font-weight: 600;
 }
 
 #save-btn:hover {
-background: #FAEFDD;
+  background: #FAEFDD;
 }
 
 /* ==============================
@@ -992,25 +1009,25 @@ RESPONSIVE
 
 @media (max-width: 900px) {
 
-.sidebar {
-width: 190px;
-}
+  .sidebar {
+    width: 190px;
+  }
 
-.content {
-padding: 20px;
-}
+  .content {
+    padding: 20px;
+  }
 
-.bookshelf-grid {
-grid-template-columns: repeat(4, 1fr);
-}
+  .bookshelf-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 
-.dashboard-grid {
-grid-template-columns: 1fr;
-}
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
 
-.add-card {
-min-height: 120px;
-}
+  .add-card {
+    min-height: 120px;
+  }
 
 }
 
@@ -1025,9 +1042,7 @@ min-height: 120px;
      NAVIGATION
   ========================= */
 
-  .side-nav {
-    
-  }
+  .side-nav {}
 
 
   /* =========================
@@ -1042,14 +1057,14 @@ min-height: 120px;
 
 @media (max-width: 650px) {
 
-.topbar {
-padding: 0 12px;
-display: flex;
-justify-content: space-around;
-}
+  .topbar {
+    padding: 0 12px;
+    display: flex;
+    justify-content: space-around;
+  }
 
-.sidebar {
-  
+  .sidebar {
+
 
     width: 100%;
     height: 0;
@@ -1063,7 +1078,7 @@ justify-content: space-around;
       height 0.3s ease,
       padding 0.3s ease;
 
-}
+  }
 
   /* Hamburger was pressed */
   .sidebar.mobile-open {
@@ -1075,55 +1090,56 @@ justify-content: space-around;
     margin-bottom: 10px;
     text-align: center;
   }
-.layout {
-display: block;
-}
 
-.side-nav {
-grid-template-columns: repeat(2, 1fr);
-width: 100%;
-display: flex;
-flex-direction: column;
-}
+  .layout {
+    display: block;
+  }
 
-.sidebar-card {
-display: none;
-}
+  .side-nav {
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
 
-.content {
-padding: 16px;
-}
+  .sidebar-card {
+    display: none;
+  }
 
-.welcome-row,
-.page-heading {
-flex-direction: column;
-}
+  .content {
+    padding: 16px;
+  }
 
-.stats-grid {
-grid-template-columns: repeat(2, 1fr);
-}
+  .welcome-row,
+  .page-heading {
+    flex-direction: column;
+  }
 
-.bookshelf-grid {
-grid-template-columns: repeat(3, 1fr);
-}
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-.finished-grid {
-grid-template-columns: 1fr;
-}
+  .bookshelf-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 
-.reading-card,
-.want-card {
-flex-direction: column;
-}
+  .finished-grid {
+    grid-template-columns: 1fr;
+  }
 
-.large-cover,
-.medium-cover {
-width: 100px;
-}
+  .reading-card,
+  .want-card {
+    flex-direction: column;
+  }
 
-.add-form-card {
-padding: 18px;
-}
+  .large-cover,
+  .medium-cover {
+    width: 100px;
+  }
+
+  .add-form-card {
+    padding: 18px;
+  }
 
 
   main {
@@ -1133,7 +1149,7 @@ padding: 18px;
     width: 100%;
   }
 
-    .page {
+  .page {
     margin-top: 0;
   }
 }
@@ -1144,7 +1160,7 @@ padding: 18px;
 ================================= */
 
 .reading-info,
-.want-card > div:last-child,
+.want-card>div:last-child,
 .finished-card {
   display: flex;
   flex-direction: column;
@@ -1156,7 +1172,7 @@ padding: 18px;
 ================================= */
 
 .reading-info,
-.want-card > div:last-child {
+.want-card>div:last-child {
   flex: 1;
   min-width: 0;
 }
@@ -1272,7 +1288,7 @@ body {
 }
 
 .side-nav a:hover {
-  background:#854829;
+  background: #854829;
   color: var(--cream);
 }
 
@@ -1339,7 +1355,7 @@ button:hover {
   border: 2px dashed var(--gold);
 }
 
-.add-tile:hover{
+.add-tile:hover {
   background: var(--brown);
   color: var(--cream);
 }
@@ -1451,7 +1467,7 @@ button:hover {
   padding: 12px 13px;
   background: #5F331D;
   color: #F7E6CA;
-  
+
   border-radius: 4px;
   font-size: 13px;
 
@@ -1501,7 +1517,7 @@ button:hover {
    ADD FORM SCROLLBAR
 ================================= */
 
-.add-form-card{
+.add-form-card {
   scrollbar-width: thin;
   scrollbar-color: #C79D64 #482716;
 }
@@ -1775,7 +1791,7 @@ button:hover {
   margin-top: 18px;
 }
 
-.bookmark-area > label {
+.bookmark-area>label {
   display: block;
 
   margin-bottom: 8px;
@@ -1816,8 +1832,7 @@ button:hover {
   border-color: #482716;
 
   box-shadow:
-    0 0 0 2px
-    rgba(199, 157, 100, 0.25);
+    0 0 0 2px rgba(199, 157, 100, 0.25);
 }
 
 .bookmark-btn {
