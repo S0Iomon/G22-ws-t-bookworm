@@ -1261,6 +1261,9 @@ function addBookToBookshelf(book) {
     "book-tile"
   );
 
+  bookTile.dataset.genre =
+  book.genre;
+
   const cover =
     createBookCover(book);
 
@@ -1303,6 +1306,9 @@ function addBookToCurrentReads(book) {
   card.classList.add(
     "reading-card"
   );
+
+  card.dataset.genre =
+  book.genre;
 
   const cover =
     createBookCover(
@@ -1621,6 +1627,9 @@ function addBookToWantList(book) {
     "want-card"
   );
 
+  card.dataset.genre =
+  book.genre;
+
   const cover =
     createBookCover(
       book,
@@ -1690,6 +1699,9 @@ function addBookToFinished(book) {
   card.classList.add(
     "finished-card"
   );
+
+  card.dataset.genre =
+  book.genre;
 
   const cover =
     createBookCover(
@@ -2000,6 +2012,242 @@ function updateDashboardStats() {
   }
 }
 
+/* =================================
+   GENRE FILTERS
+================================= */
+
+const genreFilters =
+  document.querySelectorAll(
+    ".genre-filter-select"
+  );
+
+
+/* =================================
+   GET AVAILABLE GENRES
+================================= */
+
+function getAvailableGenres() {
+
+  return [
+    ...new Set(
+      books
+        .map(book => book.genre)
+        .filter(Boolean)
+    )
+  ].sort((a, b) =>
+    a.localeCompare(b)
+  );
+}
+
+
+/* =================================
+   POPULATE GENRE FILTERS
+================================= */
+
+function populateGenreFilters() {
+
+  const genres =
+    getAvailableGenres();
+
+  genreFilters.forEach(select => {
+
+    /*
+       Remember the currently
+       selected genre.
+    */
+
+    const previousValue =
+      select.value || "all";
+
+
+    /*
+       Clear existing options.
+    */
+
+    select.innerHTML = "";
+
+
+    /*
+       Add "All Genres".
+    */
+
+    const allOption =
+      document.createElement("option");
+
+    allOption.value = "all";
+    allOption.textContent =
+      "All Genres";
+
+    select.appendChild(allOption);
+
+
+    /*
+       Add every genre found
+       in the book collection.
+    */
+
+    genres.forEach(genre => {
+
+      const option =
+        document.createElement("option");
+
+      option.value = genre;
+      option.textContent = genre;
+
+      select.appendChild(option);
+
+    });
+
+
+    /*
+       Restore the previous selection
+       if that genre still exists.
+    */
+
+    const genreStillExists =
+      [...select.options].some(
+        option =>
+          option.value === previousValue
+      );
+
+    select.value =
+      genreStillExists
+        ? previousValue
+        : "all";
+
+  });
+}
+
+
+/* =================================
+   FILTER BOOKS BY GENRE
+================================= */
+
+function filterBooksByGenre(
+  section,
+  genre
+) {
+
+  /*
+     MY BOOKSHELF
+  */
+
+  if (section === "bookshelf") {
+
+    const bookTiles =
+      bookshelfGrid.querySelectorAll(
+        ".book-tile:not(.add-tile)"
+      );
+
+    bookTiles.forEach(tile => {
+
+      const bookGenre =
+        tile.dataset.genre;
+
+      tile.hidden =
+        genre !== "all" &&
+        bookGenre !== genre;
+
+    });
+
+  }
+
+
+  /*
+     CURRENT READS
+  */
+
+  if (section === "current") {
+
+    const cards =
+      readingList.querySelectorAll(
+        ".reading-card"
+      );
+
+    cards.forEach(card => {
+
+      const bookGenre =
+        card.dataset.genre;
+
+      card.hidden =
+        genre !== "all" &&
+        bookGenre !== genre;
+
+    });
+
+  }
+
+
+  /*
+     WANT TO READ
+  */
+
+  if (section === "want") {
+
+    const cards =
+      wantList.querySelectorAll(
+        ".want-card"
+      );
+
+    cards.forEach(card => {
+
+      const bookGenre =
+        card.dataset.genre;
+
+      card.hidden =
+        genre !== "all" &&
+        bookGenre !== genre;
+
+    });
+
+  }
+
+
+  /*
+     FINISHED BOOKS
+  */
+
+  if (section === "finished") {
+
+    const cards =
+      finishedList.querySelectorAll(
+        ".finished-card"
+      );
+
+    cards.forEach(card => {
+
+      const bookGenre =
+        card.dataset.genre;
+
+      card.hidden =
+        genre !== "all" &&
+        bookGenre !== genre;
+
+    });
+
+  }
+}
+
+
+/* =================================
+   FILTER CHANGE EVENT
+================================= */
+
+genreFilters.forEach(select => {
+
+  select.addEventListener(
+    "change",
+    () => {
+
+      filterBooksByGenre(
+        select.dataset.section,
+        select.value
+      );
+
+    }
+  );
+
+});
 
 /* =================================
    RENDER ALL BOOKS
@@ -2071,6 +2319,16 @@ function renderBooks() {
 
   updateBookCounts();
   updateDashboardStats();
+  populateGenreFilters();
+
+  genreFilters.forEach(select => {
+
+    filterBooksByGenre(
+      select.dataset.section,
+      select.value
+    );
+
+  });
 
   /*
      Pick a random CURRENT book

@@ -1845,3 +1845,73 @@ button:hover {
 
   transform: translateY(-1px);
 }
+
+/* ==============================
+   GENRE FILTER
+================================= */
+
+.genre-filter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+
+  margin: 0 0 24px;
+}
+
+.genre-filter label {
+  font-size: 0.9rem;
+  font-weight: 700;
+
+  color: #482716;
+}
+
+.genre-filter-select {
+  min-width: 180px;
+
+  padding: 10px 38px 10px 14px;
+
+  border: 2px solid #C79D64;
+  border-radius: 8px;
+
+  background-color: #FAEFDD;
+  color: #482716;
+
+  font: inherit;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.genre-filter-select:hover {
+  border-color: #482716;
+}
+
+.genre-filter-select:focus {
+  outline: 2px solid #C79D64;
+  outline-offset: 2px;
+}
+
+
+/* ==============================
+   MOBILE
+================================= */
+
+@media (max-width: 768px) {
+
+  .genre-filter {
+    align-items: stretch;
+    flex-direction: column;
+
+    gap: 7px;
+  }
+
+  .genre-filter-select {
+    width: 100%;
+  }
+
+}
+
+[hidden] {
+  display: none !important;
+}
