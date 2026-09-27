@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,11 +10,7 @@
 
   <link rel="stylesheet" href="./styles.css">
 
-  <link
-    rel="icon"
-    type="image/png"
-    href="./resources/bookworm v3.jpg"
-  >
+  <link rel="icon" type="image/png" href="./resources/bookworm v3.jpg">
 </head>
 
 <body>
@@ -22,22 +19,14 @@
        ADD / EDIT BOOK MODAL
   ================================= -->
 
-  <div
-    class="modal-overlay invisible-page"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="book-form-title"
-  >
+  <div class="modal-overlay invisible-page" role="dialog" aria-modal="true" aria-labelledby="book-form-title">
 
     <article class="add-form-card">
 
       <form id="add-book-form">
 
         <header>
-          <h2
-            id="book-form-title"
-            class="modal-title"
-          >
+          <h2 id="book-form-title" class="modal-title">
             Add Book
           </h2>
         </header>
@@ -49,12 +38,7 @@
             Book Title *
           </label>
 
-          <input
-            type="text"
-            id="book-title"
-            placeholder="Enter book title"
-            required
-          >
+          <input type="text" id="book-title" placeholder="Enter book title" required>
 
         </div>
 
@@ -65,12 +49,7 @@
             Author *
           </label>
 
-          <input
-            type="text"
-            id="book-author"
-            placeholder="Enter author name"
-            required
-          >
+          <input type="text" id="book-author" placeholder="Enter author name" required>
 
         </div>
 
@@ -81,10 +60,7 @@
             Genre *
           </label>
 
-          <select
-            id="book-genre"
-            required
-          >
+          <select id="book-genre" required>
             <option value="" disabled selected>
               Select a genre
             </option>
@@ -121,13 +97,7 @@
             Pages *
           </label>
 
-          <input
-            type="number"
-            id="book-pages"
-            placeholder="Enter number of pages"
-            min="1"
-            required
-          >
+          <input type="number" id="book-pages" placeholder="Enter number of pages" min="1" required>
 
         </div>
 
@@ -138,14 +108,7 @@
             Current Page
           </label>
 
-          <input
-            type="number"
-            id="book-current-page"
-            placeholder="Enter your current page"
-            min="0"
-            value="0"
-            required
-          >
+          <input type="number" id="book-current-page" placeholder="Enter your current page" min="0" value="0" required>
 
           <small class="form-help">
             Enter the page you have currently reached.
@@ -164,12 +127,7 @@
 
             <label class="status-option">
 
-              <input
-                type="radio"
-                name="book-status"
-                value="current"
-                required
-              >
+              <input type="radio" name="book-status" value="current" required>
 
               <span>
                 Currently Reading
@@ -180,11 +138,7 @@
 
             <label class="status-option">
 
-              <input
-                type="radio"
-                name="book-status"
-                value="want"
-              >
+              <input type="radio" name="book-status" value="want">
 
               <span>
                 Want to Read
@@ -195,11 +149,7 @@
 
             <label class="status-option">
 
-              <input
-                type="radio"
-                name="book-status"
-                value="finished"
-              >
+              <input type="radio" name="book-status" value="finished">
 
               <span>
                 Finished
@@ -218,11 +168,7 @@
             Cover Image
           </label>
 
-          <input
-            type="url"
-            id="book-cover"
-            placeholder="Optional cover image URL"
-          >
+          <input type="url" id="book-cover" placeholder="Optional cover image URL">
 
         </div>
 
@@ -233,28 +179,18 @@
             Description
           </label>
 
-          <textarea
-            id="book-description"
-            placeholder="Enter book description"
-            rows="4"
-          ></textarea>
+          <textarea id="book-description" placeholder="Enter book description" rows="4"></textarea>
 
         </div>
 
 
         <div class="form-actions">
 
-          <button
-            id="discard-btn"
-            type="button"
-          >
+          <button id="discard-btn" type="button">
             Discard
           </button>
 
-          <button
-            id="save-btn"
-            type="submit"
-          >
+          <button id="save-btn" type="submit">
             Save
           </button>
 
@@ -274,16 +210,8 @@
 
   <header class="topbar">
 
-    <a
-      href="#home"
-      class="logo"
-      id="logo-btn"
-      aria-label="Go to dashboard"
-    >
-      <img
-        src="./resources/bookworm v3.png"
-        alt="Bookworm logo"
-      >
+    <a href="#home" class="logo" id="logo-btn" aria-label="Go to dashboard">
+      <img src="./resources/bookworm v3.png" alt="Bookworm logo">
     </a>
 
 
@@ -292,30 +220,16 @@
     </strong>
 
 
-    <button
-      class="hamburger-btn"
-      id="hamburger-btn"
-      type="button"
-      aria-label="Open navigation menu"
-      aria-expanded="false"
-    >
+    <button class="hamburger-btn" id="hamburger-btn" type="button" aria-label="Open navigation menu"
+      aria-expanded="false">
       <span></span>
       <span></span>
       <span></span>
     </button>
 
 
-    <button
-      class="user-btn"
-      id="profile-btn"
-      type="button"
-      aria-label="Open profile"
-    >
-      <img
-        class="user-icon"
-        src="./resources/user.png"
-        alt=""
-      >
+    <button class="user-btn" id="profile-btn" type="button" aria-label="Open profile">
+      <img class="user-icon" src="./resources/user.png" alt="">
     </button>
 
   </header>
@@ -335,15 +249,9 @@
       </h2>
 
 
-      <nav
-        class="side-nav"
-        aria-label="Library navigation"
-      >
+      <nav class="side-nav" aria-label="Library navigation">
 
-        <a
-          href="#home"
-          class="selected-section"
-        >
+        <a href="#home" class="selected-section">
           ⌂ Dashboard
         </a>
 
@@ -366,15 +274,9 @@
       </nav>
 
 
-      <section
-        class="sidebar-card"
-        aria-labelledby="reading-goal-title"
-      >
+      <section class="sidebar-card" aria-labelledby="reading-goal-title">
 
-        <h3
-          id="reading-goal-title"
-          class="small-label"
-        >
+        <h3 id="reading-goal-title" class="small-label">
           READING GOAL
         </h3>
 
@@ -382,14 +284,8 @@
           7 / 25
         </strong>
 
-        <div
-          class="goal-bar"
-          role="progressbar"
-          aria-label="Reading goal progress"
-          aria-valuemin="0"
-          aria-valuemax="25"
-          aria-valuenow="7"
-        >
+        <div class="goal-bar" role="progressbar" aria-label="Reading goal progress" aria-valuemin="0" aria-valuemax="25"
+          aria-valuenow="7">
           <span style="width: 28%;"></span>
         </div>
 
@@ -410,11 +306,7 @@
            DASHBOARD
       ================================= -->
 
-      <section
-        id="home"
-        class="page"
-        aria-labelledby="home-title"
-      >
+      <section id="home" class="page" aria-labelledby="home-title">
 
         <header class="welcome-row">
 
@@ -445,10 +337,7 @@
 
           <article class="card add-card">
 
-            <button
-              class="add-book"
-              type="button"
-            >
+            <button class="add-book" type="button">
 
               <span aria-hidden="true">
                 +
@@ -491,10 +380,7 @@
 
             <div class="book-summary">
 
-              <figure
-                class="cover placeholder"
-                aria-label="Book cover"
-              ></figure>
+              <figure class="cover placeholder" aria-label="Book cover"></figure>
 
 
               <div class="book-info">
@@ -515,14 +401,8 @@
                 </p>
 
 
-                <div
-                  class="progress"
-                  role="progressbar"
-                  aria-label="Reading progress"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                  aria-valuenow="50"
-                >
+                <div class="progress" role="progressbar" aria-label="Reading progress" aria-valuemin="0"
+                  aria-valuemax="100" aria-valuenow="50">
                   <span style="width: 50%;"></span>
                 </div>
 
@@ -553,16 +433,9 @@
              STATISTICS
         ================================= -->
 
-        <section
-          class="stats-grid"
-          aria-label="Library statistics"
-        >
+        <section class="stats-grid" aria-label="Library statistics">
 
-          <article
-            class="stat-card"
-            data-section="bookshelf"
-            tabindex="0"
-          >
+          <article class="stat-card" data-section="bookshelf" tabindex="0">
 
             <span>
               MY BOOKS
@@ -575,11 +448,7 @@
           </article>
 
 
-          <article
-            class="stat-card"
-            data-section="current"
-            tabindex="0"
-          >
+          <article class="stat-card" data-section="current" tabindex="0">
 
             <span>
               CURRENT READS
@@ -592,11 +461,7 @@
           </article>
 
 
-          <article
-            class="stat-card"
-            data-section="want"
-            tabindex="0"
-          >
+          <article class="stat-card" data-section="want" tabindex="0">
 
             <span>
               WANT TO READ
@@ -609,11 +474,7 @@
           </article>
 
 
-          <article
-            class="stat-card"
-            data-section="finished"
-            tabindex="0"
-          >
+          <article class="stat-card" data-section="finished" tabindex="0">
 
             <span>
               BOOKS READ
@@ -635,11 +496,7 @@
            MY BOOKSHELF
       ================================= -->
 
-      <section
-        id="bookshelf"
-        class="page invisible-page"
-        aria-labelledby="bookshelf-title"
-      >
+      <section id="bookshelf" class="page invisible-page" aria-labelledby="bookshelf-title">
 
         <header class="page-heading">
 
@@ -663,11 +520,7 @@
               Filter by Genre
             </label>
 
-            <select
-              id="bookshelf-genre-filter"
-              class="genre-filter-select"
-              data-section="bookshelf"
-            >
+            <select id="bookshelf-genre-filter" class="genre-filter-select" data-section="bookshelf">
               <option value="all">
                 All Genres
               </option>
@@ -681,10 +534,7 @@
 
           <!-- ADD BOOK TILE -->
 
-          <button
-            class="book-tile add-tile"
-            type="button"
-          >
+          <button class="book-tile add-tile" type="button">
 
             <span aria-hidden="true">
               +
@@ -702,12 +552,9 @@
 
           <article class="book-tile">
 
-            <figure
-              class="cover"
-              style="background-image:
+            <figure class="cover" style="background-image:
                 url('https://covers.openlibrary.org/b/isbn/9780525559474-L.jpg');"
-              aria-label="The Midnight Library book cover"
-            ></figure>
+              aria-label="The Midnight Library book cover"></figure>
 
             <strong>
               The Midnight Library
@@ -718,12 +565,9 @@
 
           <article class="book-tile">
 
-            <figure
-              class="cover"
-              style="background-image:
+            <figure class="cover" style="background-image:
                 url('https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg');"
-              aria-label="Atomic Habits book cover"
-            ></figure>
+              aria-label="Atomic Habits book cover"></figure>
 
             <strong>
               Atomic Habits
@@ -734,12 +578,9 @@
 
           <article class="book-tile">
 
-            <figure
-              class="cover"
-              style="background-image:
-                url('https://covers.openlibrary.org/b/isbn/9780441172719-L.jpg');"
-              aria-label="Dune book cover"
-            ></figure>
+            <figure class="cover" style="background-image:
+                url('https://covers.openlibrary.org/b/isbn/9780441172719-L.jpg');" aria-label="Dune book cover">
+            </figure>
 
             <strong>
               Dune
@@ -750,12 +591,9 @@
 
           <article class="book-tile">
 
-            <figure
-              class="cover"
-              style="background-image:
-                url('https://covers.openlibrary.org/b/isbn/9780547928227-L.jpg');"
-              aria-label="The Hobbit book cover"
-            ></figure>
+            <figure class="cover" style="background-image:
+                url('https://covers.openlibrary.org/b/isbn/9780547928227-L.jpg');" aria-label="The Hobbit book cover">
+            </figure>
 
             <strong>
               The Hobbit
@@ -766,12 +604,9 @@
 
           <article class="book-tile">
 
-            <figure
-              class="cover"
-              style="background-image:
-                url('https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg');"
-              aria-label="1984 book cover"
-            ></figure>
+            <figure class="cover" style="background-image:
+                url('https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg');" aria-label="1984 book cover">
+            </figure>
 
             <strong>
               1984
@@ -782,12 +617,9 @@
 
           <article class="book-tile">
 
-            <figure
-              class="cover"
-              style="background-image:
+            <figure class="cover" style="background-image:
                 url('https://covers.openlibrary.org/b/isbn/9780062315007-L.jpg');"
-              aria-label="The Alchemist book cover"
-            ></figure>
+              aria-label="The Alchemist book cover"></figure>
 
             <strong>
               The Alchemist
@@ -805,15 +637,11 @@
            CURRENT READS
       ================================= -->
 
-      <section
-        id="current"
-        class="page invisible-page"
-        aria-labelledby="current-title"
-      >
+      <section id="current" class="page invisible-page" aria-labelledby="current-title">
 
         <header class="page-heading">
 
-          
+
 
           <div>
 
@@ -834,11 +662,7 @@
               Filter by Genre
             </label>
 
-            <select
-              id="current-genre-filter"
-              class="genre-filter-select"
-              data-section="current"
-            >
+            <select id="current-genre-filter" class="genre-filter-select" data-section="current">
               <option value="all">
                 All Genres
               </option>
@@ -851,10 +675,7 @@
 
           <article class="reading-card">
 
-            <figure
-              class="cover large-cover"
-              aria-label="Book cover"
-            ></figure>
+            <figure class="cover large-cover" aria-label="Book cover"></figure>
 
 
             <div class="reading-info">
@@ -879,14 +700,8 @@
               </p>
 
 
-              <div
-                class="progress"
-                role="progressbar"
-                aria-label="Reading progress"
-                aria-valuemin="0"
-                aria-valuemax="100"
-                aria-valuenow="50"
-              >
+              <div class="progress" role="progressbar" aria-label="Reading progress" aria-valuemin="0"
+                aria-valuemax="100" aria-valuenow="50">
                 <span style="width: 50%;"></span>
               </div>
 
@@ -917,14 +732,10 @@
            WANT TO READ
       ================================= -->
 
-      <section
-        id="want"
-        class="page invisible-page"
-        aria-labelledby="want-title"
-      >
+      <section id="want" class="page invisible-page" aria-labelledby="want-title">
 
         <header class="page-heading">
-          
+
           <div>
 
             <p class="eyebrow">
@@ -940,20 +751,16 @@
 
           </div>
           <div class="genre-filter">
-            <label for="current-genre-filter">
+            <label for="want-genre-filter">
               Filter by Genre
             </label>
 
-            <select
-              id="current-genre-filter"
-              class="genre-filter-select"
-              data-section="current"
-            >
+            <select id="want-genre-filter" class="genre-filter-select" data-section="want">
               <option value="all">
                 All Genres
               </option>
             </select>
-          </div>    
+          </div>
         </header>
 
 
@@ -961,10 +768,7 @@
 
           <article class="want-card">
 
-            <figure
-              class="cover medium-cover"
-              aria-label="Book cover"
-            ></figure>
+            <figure class="cover medium-cover" aria-label="Book cover"></figure>
 
 
             <div>
@@ -1003,14 +807,10 @@
            FINISHED BOOKS
       ================================= -->
 
-      <section
-        id="finished"
-        class="page invisible-page"
-        aria-labelledby="finished-title"
-      >
+      <section id="finished" class="page invisible-page" aria-labelledby="finished-title">
 
         <header class="page-heading">
-          
+
           <div>
 
             <p class="eyebrow">
@@ -1030,11 +830,7 @@
               Filter by Genre
             </label>
 
-            <select
-              id="current-genre-filter"
-              class="genre-filter-select"
-              data-section="current"
-            >
+            <select id="finished-genre-filter" class="genre-filter-select" data-section="finished">
               <option value="all">
                 All Genres
               </option>
@@ -1047,10 +843,7 @@
 
           <article class="finished-card">
 
-            <figure
-              class="cover finished-cover"
-              aria-label="Book cover"
-            ></figure>
+            <figure class="cover finished-cover" aria-label="Book cover"></figure>
 
             <h2>
               Book Title
@@ -1075,7 +868,7 @@
 
           </article>
         </div>
-        
+
       </section>
 
 
@@ -1084,11 +877,7 @@
            PROFILE
       ================================= -->
 
-      <section
-        id="profile"
-        class="page invisible-page"
-        aria-labelledby="profile-title"
-      >
+      <section id="profile" class="page invisible-page" aria-labelledby="profile-title">
 
         <header class="page-heading">
 
@@ -1115,10 +904,7 @@
 
           <figure class="profile-avatar">
 
-            <img
-              src="./resources/user.png"
-              alt="Profile avatar"
-            >
+            <img src="./resources/user.png" alt="Profile avatar">
 
           </figure>
 
@@ -1133,21 +919,14 @@
               Age not set
             </p>
 
-            <p
-              id="profile-display-description"
-              class="profile-description"
-            >
+            <p id="profile-display-description" class="profile-description">
               Tell us a little about yourself.
             </p>
 
           </div>
 
 
-          <button
-            type="button"
-            class="edit-profile-btn"
-            id="edit-profile-btn"
-          >
+          <button type="button" class="edit-profile-btn" id="edit-profile-btn">
             Edit Profile
           </button>
 
@@ -1157,11 +936,7 @@
 
         <!-- PROFILE EDIT FORM -->
 
-        <section
-          class="profile-edit-card invisible-page"
-          id="profile-edit-card"
-          aria-labelledby="profile-edit-title"
-        >
+        <section class="profile-edit-card invisible-page" id="profile-edit-card" aria-labelledby="profile-edit-title">
 
           <form id="profile-form">
 
@@ -1178,13 +953,7 @@
                 Name
               </label>
 
-              <input
-                type="text"
-                id="profile-name"
-                placeholder="Enter your name"
-                maxlength="50"
-                required
-              >
+              <input type="text" id="profile-name" placeholder="Enter your name" maxlength="50" required>
 
             </div>
 
@@ -1195,13 +964,7 @@
                 Age
               </label>
 
-              <input
-                type="number"
-                id="profile-age"
-                placeholder="Enter your age"
-                min="1"
-                max="120"
-              >
+              <input type="number" id="profile-age" placeholder="Enter your age" min="1" max="120">
 
             </div>
 
@@ -1212,29 +975,19 @@
                 About Me
               </label>
 
-              <textarea
-                id="profile-description"
-                placeholder="Write a short description about yourself..."
-                rows="5"
-                maxlength="250"
-              ></textarea>
+              <textarea id="profile-description" placeholder="Write a short description about yourself..." rows="5"
+                maxlength="250"></textarea>
 
             </div>
 
 
             <div class="form-actions">
 
-              <button
-                type="button"
-                id="cancel-profile-btn"
-              >
+              <button type="button" id="cancel-profile-btn">
                 Cancel
               </button>
 
-              <button
-                type="submit"
-                id="save-profile-btn"
-              >
+              <button type="submit" id="save-profile-btn">
                 Save Profile
               </button>
 
@@ -1254,4 +1007,5 @@
   <script src="./script.js"></script>
 
 </body>
+
 </html>
