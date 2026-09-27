@@ -37,6 +37,253 @@ a {
   text-decoration: none;
   }
 
+  /* ==============================
+   HAMBURGER MENU
+================================= */
+
+.hamburger-btn {
+  display: none;
+  width: 38px;
+  height: 38px;
+
+  padding: 8px;
+
+  background: transparent;
+  border: 0;
+
+  cursor: pointer;
+}
+
+.hamburger-btn span {
+  display: block;
+
+  width: 100%;
+  height: 2px;
+
+  margin: 5px 0;
+
+  background: #FAEFDD;
+
+  border-radius: 2px;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+/* ==============================
+   SITE TITLE / HAMBURGER
+================================= */
+
+.site-name {
+
+  /* Hamburger → X */
+
+  .hamburger-btn.menu-open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .hamburger-btn.menu-open span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger-btn.menu-open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+}
+
+@media (max-width: 650px) {
+
+  /* ==============================
+     TOP BAR
+  ============================== */
+
+  .topbar {
+    height: 70px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 14px;
+    gap: 10px;
+  }
+
+  /* Logo stays on the far left */
+
+  .logo {
+    width: 52px;
+    height: 52px;
+
+    flex: 0 0 52px;
+
+    margin: 0;
+  }
+
+  .logo img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+  }
+
+
+  /* ==============================
+     REPLACE BOOKWORM WITH ☰
+  ============================== */
+
+  .site-name {
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    text-align: left;
+  }
+
+  .site-title {
+    display: none;
+  }
+
+  .hamburger-btn {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    padding: 8px;
+
+    background: transparent;
+    border: 0;
+  }
+
+  .hamburger-btn span {
+    display: block;
+
+    width: 22px;
+    height: 2px;
+
+    margin: 0;
+
+    background: #FAEFDD;
+
+    border-radius: 2px;
+  }
+
+
+  /* Hamburger → X */
+
+  .hamburger-btn.menu-open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .hamburger-btn.menu-open span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger-btn.menu-open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+
+  /* ==============================
+     MOBILE SIDEBAR
+  ============================== */
+
+  .sidebar {
+    position: fixed;
+
+    top: 70px;
+    left: 0;
+
+    z-index: 99;
+
+    width: 230px;
+    height: calc(100vh - 70px);
+
+    padding: 28px 18px;
+
+    background: #482716;
+
+    border-right: 1px solid #C79D64;
+    border-bottom: 0;
+
+    transform: translateX(-100%);
+
+    transition: transform 0.25s ease;
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .side-nav {
+    display: grid;
+    grid-template-columns: 1fr;
+
+    gap: 7px;
+  }
+
+  .side-nav a {
+    color: #FAEFDD;
+  }
+
+  .sidebar-card {
+    display: block;
+  }
+
+
+  /* ==============================
+     MAIN CONTENT
+  ============================== */
+
+  .layout {
+    display: block;
+  }
+
+  .content {
+    padding: 16px;
+  }
+
+  .welcome-row,
+  .page-heading {
+    flex-direction: column;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bookshelf-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .finished-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .reading-card,
+  .want-card {
+    flex-direction: column;
+  }
+
+  .large-cover,
+  .medium-cover {
+    width: 100px;
+  }
+
+  .add-form-card {
+    padding: 18px;
+  }
+}
+
 /* ==============================
 TOP NAVIGATION
 ================================= */
@@ -76,7 +323,7 @@ TOP NAVIGATION
   object-fit: contain;
 }
 
-.site-name {
+.site-title {
   flex: 1;
   font-family: "Merriweather", serif;
   font-size: 17px;
@@ -648,7 +895,7 @@ resize: vertical;
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-color: #aaa;
+color: #F7E6CA;
 }
 
 .form-group input:focus,
@@ -657,6 +904,12 @@ outline: none;
 border-color: #aaa;
 }
 
+.form-group small {
+  font-size: 10px;
+  font-style: italic;
+  margin-top: 5px;
+  color: #F7E6CA;
+}
 /* ==============================
 STATUS
 ================================= */
@@ -763,27 +1016,74 @@ min-height: 120px;
 
 @media (max-width: 650px) {
 
+
+
+
+
+
+  /* =========================
+     NAVIGATION
+  ========================= */
+
+  .side-nav {
+    
+  }
+
+
+  /* =========================
+     MAIN CONTENT
+  ========================= */
+
+
+
+
+
+}
+
+@media (max-width: 650px) {
+
 .topbar {
 padding: 0 12px;
+display: flex;
+justify-content: space-around;
 }
 
 .sidebar {
-position: static;
+  
 
-width: 100%;
-height: auto;
+    width: 100%;
+    height: 0;
 
-border-right: 0;
-border-bottom: 1px solid #444;
+    padding: 0;
+    margin: 0;
+
+    overflow: hidden;
+
+    transition:
+      height 0.3s ease,
+      padding 0.3s ease;
 
 }
 
+  /* Hamburger was pressed */
+  .sidebar.mobile-open {
+    height: auto;
+    padding: 10px 10px 10px 10px;
+  }
+
+  .sidebar.mobile-open h2 {
+    margin-bottom: 10px;
+    text-align: center;
+  }
 .layout {
 display: block;
 }
 
 .side-nav {
 grid-template-columns: repeat(2, 1fr);
+width: 100%;
+display: flex;
+flex-direction: column;
 }
 
 .sidebar-card {
@@ -825,7 +1125,19 @@ width: 100px;
 padding: 18px;
 }
 
+
+  main {
+    margin-left: 0;
+    margin-top: 0;
+    padding-top: 0;
+    width: 100%;
+  }
+
+    .page {
+    margin-top: 0;
+  }
 }
+
 
 /* =================================
    STATUS CARD LAYOUT
@@ -1135,8 +1447,15 @@ button:hover {
 .form-group input,
 .form-group textarea,
 .form-group select {
+  width: 100%;
+  padding: 12px 13px;
   background: #5F331D;
-  color: var(--cream);
+  color: #F7E6CA;
+  
+  border-radius: 4px;
+  font-size: 13px;
+
+  cursor: pointer;
 }
 
 .form-group input:focus,
@@ -1147,6 +1466,10 @@ button:hover {
   box-shadow: 0 0 0 2px rgba(199, 157, 100, 0.25);
 }
 
+.form-group select option {
+  background: #482716;
+  color: #FAEFDD;
+}
 
 /* =================================
    MODAL BUTTONS
@@ -1178,7 +1501,7 @@ button:hover {
    ADD FORM SCROLLBAR
 ================================= */
 
-.add-form-card {
+.add-form-card{
   scrollbar-width: thin;
   scrollbar-color: #C79D64 #482716;
 }
@@ -1237,14 +1560,10 @@ button:hover {
   transform: translateY(-2px);
 }
 
-.user-icon {
-  font-size: 21px;
-  line-height: 1;
-}
 
-.user-icon img {
-  width: 15px;
-  height: auto;
+.user-icon {
+  width: 20px;
+  height: 20px;
 }
 
 /* =================================

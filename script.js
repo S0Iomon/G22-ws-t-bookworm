@@ -800,6 +800,78 @@ function showSection(sectionId) {
 }
 
 /* =================================
+   MOBILE HAMBURGER MENU
+================================= */
+
+const hamburgerButton =
+  document.querySelector("#hamburger-btn");
+
+const sidebar =
+  document.querySelector(".sidebar");
+
+
+function openMobileMenu() {
+
+  sidebar.classList.add(
+    "mobile-open"
+  );
+
+  hamburgerButton.classList.add(
+    "menu-open"
+  );
+
+  hamburgerButton.setAttribute(
+    "aria-expanded",
+    "true"
+  );
+
+}
+
+
+function closeMobileMenu() {
+
+  sidebar.classList.remove(
+    "mobile-open"
+  );
+
+  hamburgerButton.classList.remove(
+    "menu-open"
+  );
+
+  hamburgerButton.setAttribute(
+    "aria-expanded",
+    "false"
+  );
+
+}
+
+
+function toggleMobileMenu() {
+
+  const isOpen =
+    sidebar.classList.contains(
+      "mobile-open"
+    );
+
+  if (isOpen) {
+    closeMobileMenu();
+  } else {
+    openMobileMenu();
+  }
+
+}
+
+
+if (hamburgerButton && sidebar) {
+
+  hamburgerButton.addEventListener(
+    "click",
+    toggleMobileMenu
+  );
+
+}
+
+/* =================================
    LOGO → DASHBOARD
 ================================= */
 
@@ -2123,6 +2195,35 @@ addBookForm.addEventListener(
 
   }
 );
+
+/* =================================
+   STAT CARD NAVIGATION
+================================= */
+
+const statCards =
+  document.querySelectorAll(".stat-card");
+
+statCards.forEach(card => {
+
+  card.addEventListener("click", () => {
+
+    const sectionId =
+      card.dataset.section;
+
+    if (!sectionId) {
+      return;
+    }
+
+    showSection(sectionId);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+  });
+
+});
 
 
 /* =================================
