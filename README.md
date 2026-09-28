@@ -23,8 +23,6 @@ Megg Cleofe Cagampang
 
 Aira Joie Piopongco
 
-Megg Cleofe Cagampang
-
 Julie Ann Abella
 
 ## Project Objectives
