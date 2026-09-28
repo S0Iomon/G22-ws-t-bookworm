@@ -118,7 +118,7 @@ changes to built-in sample books between visits.
 The interface includes mobile-friendly navigation with a collapsible
 sidebar/menu.
 
-##Structural Language
+## Structural Language
 
 The project is developed as a browser-based frontend application using:
 
