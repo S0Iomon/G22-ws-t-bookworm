@@ -132,7 +132,7 @@ Git & GitHub -- version control and collaboration
 
 ## Application Structure
 
- '''
+ ```text
  Bookworm
 │
 ├── Header
