@@ -108,8 +108,6 @@ Name
 
 Age
 
-Description
-
 💾 Browser Storage
 
 The application uses browser storage to retain profile changes and
@@ -120,7 +118,7 @@ changes to built-in sample books between visits.
 The interface includes mobile-friendly navigation with a collapsible
 sidebar/menu.
 
-🛠️ Technologies
+🛠️Structural Language
 
 The project is developed as a browser-based frontend application using:
 
@@ -130,12 +128,9 @@ CSS -- styling and responsive layout
 
 JavaScript -- interactions and application functionality
 
-Browser Storage -- local persistence of selected application
-data
-
 Git & GitHub -- version control and collaboration
 
-🧭 Application Structure
+🧭 Application Structure flow
 
 Bookworm
 │
@@ -247,7 +242,7 @@ cloud synchronization, APIs, or social functionality.
 
 This project was developed for:
 
-MO-IT161 Web Systems and Technology
+MO-IT161 Web Systems and Technology Group 22
 
 Project: Browser-Based Application Development
 
@@ -263,3 +258,5 @@ testing, planning, and suggestions for improving the web application.
 
 here's our  Browser-Based Application Development Workflow Worksheet.
 https://docs.google.com/spreadsheets/d/1Dcc6HQ06H-PPQb5HkpUq9p9t4cSmBx068XOl37uzfJM/edit?usp=sharing
+
+
