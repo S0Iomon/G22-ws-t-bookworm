@@ -1019,49 +1019,48 @@ function getBookFromForm() {
       document.querySelector("#book-current-page").value
     );
 
+  /* =================================
+    AUTOMATIC STATUS FROM PROGRESS
+  ================================= */
+
+  let status;
+
   /*
-     Make sure current page is valid.
+    No pages read yet:
+    keep the status selected by the user.
   */
 
-  if (currentPage < 0) {
-    currentPage = 0;
+  if (currentPage === 0) {
+
+    status =
+      selectedStatus
+        ? selectedStatus.value
+        : "want";
+
   }
 
-  if (currentPage > pages) {
-    currentPage = pages;
+  /*
+    At least one page has been read,
+    but the book is not finished:
+    automatically move it to Current Reads.
+  */
+
+  else if (currentPage < pages) {
+
+    status = "current";
+
   }
 
   /*
-     Automatically determine status
-     based on reading progress.
+    All pages have been read:
+    automatically move it to Finished Books.
   */
 
-  let status =
-    selectedStatus
-      ? selectedStatus.value
-      : "want";
+  else {
 
-  /*
-     If the book has reached 100%,
-     automatically mark it finished.
-  */
-
-  if (currentPage >= pages) {
     currentPage = pages;
     status = "finished";
-  }
 
-  /*
-     If a current/finished book is not
-     100% complete, it belongs in
-     Current Reads.
-  */
-
-  else if (
-    status === "current" ||
-    status === "finished"
-  ) {
-    status = "current";
   }
 
   return {
@@ -1620,6 +1619,7 @@ function addBookToCurrentReads(book) {
 ================================= */
 
 function addBookToWantList(book) {
+
   const card =
     document.createElement("article");
 
@@ -1630,14 +1630,17 @@ function addBookToWantList(book) {
   card.dataset.genre =
     book.genre;
 
+
   const cover =
     createBookCover(
       book,
       "medium-cover"
     );
 
+
   const info =
     document.createElement("div");
+
 
   const title =
     createTextElement(
@@ -1645,17 +1648,20 @@ function addBookToWantList(book) {
       book.title
     );
 
+
   const author =
     createTextElement(
       "p",
       book.author
     );
 
+
   const genre =
     createTextElement(
       "p",
       book.genre
     );
+
 
   const description =
     createTextElement(
@@ -1664,6 +1670,7 @@ function addBookToWantList(book) {
       "description"
     );
 
+
   const pageCount =
     createTextElement(
       "span",
@@ -1671,18 +1678,114 @@ function addBookToWantList(book) {
       "page-count"
     );
 
+
+  /* =================================
+     START READING BUTTON
+  ================================= */
+
+  const startReadingButton =
+    document.createElement("button");
+
+  startReadingButton.type =
+    "button";
+
+  startReadingButton.classList.add(
+    "start-reading-btn"
+  );
+
+  startReadingButton.textContent =
+    "Start Reading";
+
+
+  startReadingButton.addEventListener(
+    "click",
+    () => {
+
+      const bookIndex =
+        books.findIndex(
+          item =>
+            item.id === book.id
+        );
+
+
+      if (bookIndex === -1) {
+        return;
+      }
+
+
+      /*
+         Reading starts at page 1.
+      */
+
+      books[bookIndex].currentPage = 1;
+
+
+      /*
+         Move book from Want to Read
+         to Current Reads.
+      */
+
+      books[bookIndex].status =
+        "current";
+
+
+      /*
+         Save the change.
+      */
+
+      saveBooks();
+
+
+      /*
+         Re-render all sections.
+
+         Because the status is now
+         "current", the book disappears
+         from Want to Read and appears
+         in Current Reads.
+      */
+
+      renderBooks();
+
+    }
+  );
+
+
+  /* =================================
+     EDIT BUTTON
+  ================================= */
+
   const editButton =
     createEditButton(book);
 
+
+  /* =================================
+     BUILD CARD
+  ================================= */
+
   info.appendChild(title);
+
   info.appendChild(author);
+
   info.appendChild(genre);
+
   info.appendChild(description);
+
   info.appendChild(pageCount);
-  info.appendChild(editButton);
+
+  info.appendChild(
+    startReadingButton
+  );
+
+  info.appendChild(
+    editButton
+  );
+
 
   card.appendChild(cover);
+
   card.appendChild(info);
+
 
   wantList.appendChild(card);
 }

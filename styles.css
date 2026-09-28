@@ -800,6 +800,25 @@ READING LIST
   font-size: 10px;
 }
 
+.start-reading-btn {
+  display: block;
+  margin-top: 10px;
+  margin-left: auto;
+  padding: 7px 16px;
+  border: none;
+  border-radius: 3px;
+  background: #FAEFDD;
+  color: #482716;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.start-reading-btn:hover {
+  background: #C79D74;
+  color: #FAEFDD;
+}
+
+
 /* ==============================
 FINISHED BOOKS
 ================================= */
@@ -1417,9 +1436,9 @@ button:hover {
 }
 
 .edit-book-btn:hover {
-  background: var(--gold);
+  background: #ffffff;
   color: var(--brown);
-  border-color: var(--gold);
+  border-color: var(--brown);
 }
 
 .edit-book-btn:active {
