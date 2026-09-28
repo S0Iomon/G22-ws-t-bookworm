@@ -130,43 +130,44 @@ JavaScript -- interactions and application functionality
 
 Git & GitHub -- version control and collaboration
 
-🧭 Application Structure flow
+🧭 Application Structure
 
 Bookworm
-
-── Header
-  ├── Bookworm Logo
-  ├── Application Name
-  └── Profile / Mobile Menu Controls
-
-── Sidebar Navigation
-  ├── Dashboard
-  ├── Bookshelf
-  └── Reading Status
-
-── Dashboard
-  ├── Library Statistics
-  ├── Reading Goal
-  └── Featured Current Read
-
-── Bookshelf 
-  ├── Book Grid
-  └── Add Book
-
-── Reading Status
-   ├── Current Reads
-   ├── Want to Read
-   └── Finished Books
-
-── Profile
-   └── Edit Profile
-
+│
+├── Header
+│   ├── Bookworm Logo
+│   ├── Application Name
+│   └── Profile / Mobile Menu Controls
+│
+├── Sidebar Navigation
+│   ├── Dashboard
+│   ├── Bookshelf
+│   └── Reading Status
+│
+├── Dashboard
+│   ├── Library Statistics
+│   ├── Reading Goal
+│   └── Featured Current Read
+│
+├── Bookshelf
+│   ├── Book Grid
+│   └── Add Book
+│
+├── Reading Status
+│   ├── Current Reads
+│   ├── Want to Read
+│   └── Finished Books
+│
+├── Profile
+│   └── Edit Profile
+│
 └── Add/Edit Book Modal
     ├── Book Details
     ├── Reading Status
     └── Save / Discard
 
-🔄 Development Workflow
+    
+#🔄 Development Workflow
 
 The project was developed progressively throughout the course:
 
