@@ -172,24 +172,25 @@ Git & GitHub -- version control and collaboration
 
 The project was developed progressively throughout the course:
 
-Week  1                             Development Progress
+Week  1
+ Development Progress
 
-Week 2                              Project selection, GitHub
+Week 2
+Project selection, GitHub
 repository creation, and
 collaboration of initial ideas
 
-Week 3                              Wireframe and initial application
-design
+Week 3
+ Wireframe and initial application design
 
-Week 4                              Development of the header,
-navigation, and webpage content
+Week 4
+ Development of the header, navigation, and webpage content
 sections
 
-Week 5                              Continued coding, testing, and
-identification of possible
-improvements
+Week 5
+ Continued coding, testing, and identification of possible improvements
 
-- Planned Improvements
+ ## Planned Improvements
 
 - Future development may include:
 
