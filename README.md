@@ -17,13 +17,15 @@ https://s0iomon.github.io/G22-ws-t-bookworm/
 
 Nathaniel Avila
 
-Aira Joie Piopongco
-
 Ghaylord Lugod
 
-Julie Ann Abella
+Megg Cleofe Cagampang
+
+Aira Joie Piopongco
 
 Megg Cleofe Cagampang
+
+Julie Ann Abella
 
 🎯 Project Objectives
 
