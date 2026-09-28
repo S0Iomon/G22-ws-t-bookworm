@@ -32,19 +32,19 @@ Julie Ann Abella
 Bookworm aims to provide readers with an easy-to-use web application
 for:
 
-Organizing a personal book library
+- Organizing a personal book library
 
-Categorizing books according to reading status
+- Categorizing books according to reading status
 
-Tracking reading progress
+- Tracking reading progress
 
-Setting and viewing reading goals
+- Setting and viewing reading goals
 
-Adding and editing book information
+- Adding and editing book information
 
-Managing reader profile information
+- Managing reader profile information
 
-Providing a responsive experience on desktop and mobile devices
+- Providing a responsive experience on desktop and mobile devices
 
 ## Features
 
@@ -52,13 +52,13 @@ Dashboard
 
 Provides a quick overview of the reader's library, including:
 
-Total book counts
+- Total book counts
 
-Reading goals
+- Reading goals
 
-Featured/currently reading book
+- Featured/currently reading book
 
-Navigation to relevant library sections
+- Navigation to relevant library sections
 
 ## Bookshelf
 
@@ -69,11 +69,11 @@ Book option.
 
 Books are organized into:
 
-Current Reads
+- Current Reads
 
-Want to Read
+- Want to Read
 
-Finished Books
+- Finished Books
 
 ## Reading Progress
 
@@ -166,6 +166,7 @@ Git & GitHub -- version control and collaboration
     ├── Book Details
     ├── Reading Status
     └── Save / Discard
+```
 
     
 ## Development Workflow
