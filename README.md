@@ -167,7 +167,7 @@ Bookworm
     └── Save / Discard
 
     
-🔄 # Development Workflow
+🔄 Development Workflow
 
 The project was developed progressively throughout the course:
 
