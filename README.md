@@ -69,7 +69,6 @@ Bookworm/
 ## Project Team
 
 - Nathaniel Avila
-- Ghaylord Lugod
 - Megg Cleofe Cagampang
 - Aira Joie Piopongco
 - Julie Ann Abella
