@@ -15,6 +15,7 @@ const finishedList = document.querySelector(".finished-grid");
 const currentCard = document.querySelector(".current-card");
 
 const STORAGE_KEY = "myBookReaderBooks";
+const STREAK_STORAGE_KEY = "myBookReaderStreak";
 
 let editingBookId = null;
 
@@ -24,6 +25,133 @@ let editingBookId = null;
 
 const profileButton =
   document.querySelector("#profile-btn");
+
+const accountButton = document.querySelector("#account-btn");
+const authOverlay = document.querySelector("#auth-overlay");
+const authForm = document.querySelector("#auth-form");
+const authNameGroup = document.querySelector("#auth-name-group");
+const authNameInput = document.querySelector("#auth-name");
+const authEmailInput = document.querySelector("#auth-email");
+const authPasswordInput = document.querySelector("#auth-password");
+const authTitle = document.querySelector("#auth-title");
+const authStatus = document.querySelector("#auth-status");
+const authSubmitButton = document.querySelector("#auth-submit-btn");
+const authSwitchPrompt = document.querySelector("#auth-switch-prompt");
+const authSwitchButton = document.querySelector("#auth-switch-btn");
+let authMode = "login";
+let authenticatedUser = null;
+
+function setAuthenticatedUser(user) {
+  authenticatedUser = user;
+  accountButton.textContent = user ? "Log out" : "Log in";
+  accountButton.setAttribute("aria-label", user ? `Log out ${user.name}` : "Log in");
+  accountButton.title = user ? `Signed in as ${user.email}` : "Log in or create an account";
+}
+
+function setAuthMode(mode) {
+  authMode = mode;
+  const isRegistering = mode === "register";
+  authTitle.textContent = isRegistering ? "Create account" : "Log in";
+  authSubmitButton.textContent = isRegistering ? "Create account" : "Log in";
+  authNameGroup.hidden = !isRegistering;
+  authNameInput.required = isRegistering;
+  authNameInput.autocomplete = isRegistering ? "name" : "off";
+  authPasswordInput.autocomplete = isRegistering ? "new-password" : "current-password";
+  authSwitchPrompt.textContent = isRegistering ? "Already have an account?" : "Need an account?";
+  authSwitchButton.textContent = isRegistering ? "Log in" : "Create one";
+  authStatus.textContent = "";
+}
+
+function openAuthDialog() {
+  setAuthMode("login");
+  authOverlay.classList.remove("invisible-page");
+  authOverlay.classList.add("visible-page");
+  document.body.style.overflow = "hidden";
+  authEmailInput.focus();
+}
+
+function closeAuthDialog() {
+  authOverlay.classList.remove("visible-page");
+  authOverlay.classList.add("invisible-page");
+  document.body.style.overflow = "";
+  accountButton.focus();
+}
+
+async function loadAuthState() {
+  try {
+    const response = await fetch("/api/auth/me");
+    const data = await response.json();
+    if (response.ok) setAuthenticatedUser(data.user);
+  } catch (error) {
+    authStatus.textContent = "Account service is unavailable.";
+  }
+}
+
+async function logOut() {
+  accountButton.disabled = true;
+  try {
+    const response = await fetch("/api/auth/logout", { method: "POST" });
+    if (!response.ok) throw new Error("Logout failed");
+    setAuthenticatedUser(null);
+  } catch (error) {
+    accountButton.title = "Could not log out. Check the server connection.";
+  } finally {
+    accountButton.disabled = false;
+  }
+}
+
+accountButton.addEventListener("click", () => {
+  if (authenticatedUser) logOut();
+  else openAuthDialog();
+});
+
+document.querySelector("#close-auth-btn").addEventListener("click", closeAuthDialog);
+authSwitchButton.addEventListener("click", () => {
+  setAuthMode(authMode === "login" ? "register" : "login");
+});
+
+authOverlay.addEventListener("click", event => {
+  if (event.target === authOverlay) closeAuthDialog();
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape" && authOverlay.classList.contains("visible-page")) {
+    closeAuthDialog();
+  }
+});
+
+authForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  authStatus.textContent = authMode === "register" ? "Creating your account…" : "Logging in…";
+  authSubmitButton.disabled = true;
+
+  const payload = {
+    email: authEmailInput.value,
+    password: authPasswordInput.value
+  };
+  if (authMode === "register") payload.name = authNameInput.value;
+
+  try {
+    const response = await fetch(`/api/auth/${authMode}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const contentType = response.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) {
+      throw new Error("The account API was not found. Restart the Express server with npm start, then open http://localhost:3000.");
+    }
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "Authentication failed.");
+    setAuthenticatedUser(data.user);
+    authForm.reset();
+    closeAuthDialog();
+  } catch (error) {
+    authStatus.textContent = error.message || "Could not connect to the account service.";
+  } finally {
+    authSubmitButton.disabled = false;
+  }
+});
 
 const profileSection =
   document.querySelector("#profile");
@@ -165,6 +293,7 @@ if (profileButton) {
     () => {
 
       showSection("profile");
+      closeMobileMenu();
 
       window.scrollTo({
         top: 0,
@@ -529,7 +658,7 @@ const defaultBooks = [
     author: "Tara Westover",
     genre: "Memoir",
     pages: 352,
-    currentPage: 245,
+    currentPage:245,
     cover: "https://covers.openlibrary.org/b/isbn/9780399590504-L.jpg",
     description: "A memoir about education, family, identity, and finding independence.",
     status: "current",
@@ -698,6 +827,11 @@ const defaultBooks = [
    LOAD BOOKS
 ================================= */
 
+
+/* =================================
+   LOAD BOOKS
+================================= */
+
 function loadBooks() {
   const savedBooks = localStorage.getItem(STORAGE_KEY);
 
@@ -705,38 +839,17 @@ function loadBooks() {
     try {
       const parsedBooks = JSON.parse(savedBooks);
 
-      /*
-         Only load books that were originally
-         part of the sample collection.
-      */
-
-      const savedDefaultBooks = parsedBooks.filter(
-        book => book.default === true
-      );
-
-      /*
-         If valid default books exist,
-         use those saved versions.
-      */
-
-      if (savedDefaultBooks.length > 0) {
-        return savedDefaultBooks;
+      // Accept all saved books, not just sample books.
+      if (Array.isArray(parsedBooks)) {
+        return parsedBooks.map(normalizeBookProgress);
       }
-
     } catch (error) {
-      console.error(
-        "Could not load saved books:",
-        error
-      );
+      console.error("Could not load saved books:", error);
     }
   }
 
-  /*
-     No valid saved sample books found.
-     Start with the original six.
-  */
-
-  const initialBooks = structuredClone(defaultBooks);
+  // First launch: initialize with sample books.
+  const initialBooks = structuredClone(defaultBooks).map(normalizeBookProgress);
 
   localStorage.setItem(
     STORAGE_KEY,
@@ -746,25 +859,130 @@ function loadBooks() {
   return initialBooks;
 }
 
+function normalizeBookProgress(book) {
+  const pages = Number(book.pages) || 0;
+  let currentPage = Math.max(0, Number(book.currentPage) || 0);
+
+  // Keep books explicitly on the wishlist unread during migration.
+  if (book.status === "want") currentPage = 0;
+  if (pages > 0) currentPage = Math.min(currentPage, pages);
+
+  const status = currentPage === 0
+    ? "want"
+    : pages > 0 && currentPage >= pages
+      ? "finished"
+      : "current";
+
+  return { ...book, currentPage, status };
+}
 
 let books = loadBooks();
-
-books = books.map(book => ({
-  ...book,
-  currentPage: Number(book.currentPage || 0)
-}));
 
 /* =================================
    SAVE BOOKS
 ================================= */
 
 function saveBooks() {
-
   localStorage.setItem(
     STORAGE_KEY,
     JSON.stringify(books)
   );
 }
+
+function getLocalDateString(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function renderStreakWeek(activityDates = []) {
+  const week = document.querySelector("#streak-week");
+  const dates = new Set(activityDates);
+  const today = new Date();
+  const sunday = new Date(today);
+  sunday.setDate(today.getDate() - today.getDay());
+  const fragment = document.createDocumentFragment();
+  const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  let daysRead = 0;
+
+  weekdays.forEach((weekday, index) => {
+    const date = new Date(sunday);
+    date.setDate(sunday.getDate() + index);
+    const dateKey = getLocalDateString(date);
+    const isRead = dates.has(dateKey);
+    if (isRead) daysRead += 1;
+
+    const day = document.createElement("div");
+    day.className = "streak-week-day";
+    if (isRead) day.classList.add("is-read");
+    if (dateKey === getLocalDateString()) day.classList.add("is-today");
+    day.setAttribute("aria-label", `${weekday}, ${dateKey}: ${isRead ? "read" : "no reading recorded"}`);
+
+    const label = document.createElement("span");
+    label.className = "streak-week-label";
+    label.textContent = weekday;
+    const circle = document.createElement("span");
+    circle.className = "streak-week-circle";
+    circle.textContent = isRead ? "✓" : "";
+    circle.setAttribute("aria-hidden", "true");
+    day.append(label, circle);
+    fragment.appendChild(day);
+  });
+
+  week.replaceChildren(fragment);
+  document.querySelector("#streak-week-summary").textContent = `${daysRead} of 7 days read this week`;
+}
+
+function renderStreak(streak) {
+  const weekActivityDates = streak.activityDates ||
+    (streak.lastReadDate ? [streak.lastReadDate] : []);
+  renderStreakWeek(weekActivityDates);
+  document.querySelector("#current-streak").textContent = streak.currentStreak;
+  document.querySelector("#best-streak").textContent = streak.longestStreak;
+  const message = document.querySelector("#streak-message");
+
+  if (streak.status === "broken") {
+    message.textContent = `Streak ended after ${streak.lastReadDate}. Read today to start a new one.`;
+    message.classList.add("streak-broken");
+  } else if (streak.readToday) {
+    message.textContent = "You read today. Come back tomorrow to keep it going!";
+    message.classList.remove("streak-broken");
+  } else if (streak.currentStreak) {
+    message.textContent = "Read today to keep your streak alive.";
+    message.classList.remove("streak-broken");
+  } else {
+    message.textContent = "Log pages read each day to build a streak.";
+    message.classList.remove("streak-broken");
+  }
+  localStorage.setItem(STREAK_STORAGE_KEY, JSON.stringify(streak));
+}
+
+async function loadStreak() {
+  try {
+    const response = await fetch(`/api/streak?today=${getLocalDateString()}`);
+    if (!response.ok) throw new Error("Could not load streak");
+    renderStreak(await response.json());
+  } catch (error) {
+    document.querySelector("#streak-message").textContent = "Streak data is unavailable. Start the server to sync your progress.";
+  }
+}
+
+async function recordReadingActivity() {
+  document.querySelector("#streak-message").textContent = "Saving today’s reading…";
+  try {
+    const response = await fetch("/api/streak/activity", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ date: getLocalDateString() })
+    });
+    if (!response.ok) throw new Error("Could not save reading activity");
+    renderStreak(await response.json());
+  } catch (error) {
+    document.querySelector("#streak-message").textContent = "Could not save today’s reading. Check your server connection.";
+  }
+}
+
 
 
 /* =================================
@@ -824,6 +1042,7 @@ function openMobileMenu() {
     "aria-expanded",
     "true"
   );
+  hamburgerButton.setAttribute("aria-label", "Close navigation menu");
 
 }
 
@@ -842,6 +1061,7 @@ function closeMobileMenu() {
     "aria-expanded",
     "false"
   );
+  hamburgerButton.setAttribute("aria-label", "Open navigation menu");
 
 }
 
@@ -876,12 +1096,58 @@ if (hamburgerButton && sidebar) {
 ================================= */
 
 const logoButton = document.querySelector("#logo-btn");
+const mobileMenuHeader = document.querySelector("#mobile-menu-header");
+const sidebarTitle = document.querySelector(".sidebar > h2");
+let logoPlaceholder = null;
+let profilePlaceholder = null;
+let titlePlaceholder = null;
+
+function placeBrandControlsForViewport() {
+  const isMobile = window.matchMedia("(max-width: 650px)").matches;
+
+  if (isMobile) {
+    if (logoButton.parentElement !== mobileMenuHeader) {
+      logoPlaceholder = document.createComment("logo topbar position");
+      logoButton.before(logoPlaceholder);
+      mobileMenuHeader.appendChild(logoButton);
+    }
+    if (sidebarTitle.parentElement !== mobileMenuHeader) {
+      titlePlaceholder = document.createComment("sidebar title position");
+      sidebarTitle.before(titlePlaceholder);
+      mobileMenuHeader.appendChild(sidebarTitle);
+    }
+    if (profileButton.parentElement !== mobileMenuHeader) {
+      profilePlaceholder = document.createComment("profile topbar position");
+      profileButton.before(profilePlaceholder);
+      mobileMenuHeader.appendChild(profileButton);
+    }
+    return;
+  }
+
+  if (logoPlaceholder?.parentNode) {
+    logoPlaceholder.replaceWith(logoButton);
+    logoPlaceholder = null;
+  }
+  if (titlePlaceholder?.parentNode) {
+    titlePlaceholder.replaceWith(sidebarTitle);
+    titlePlaceholder = null;
+  }
+  if (profilePlaceholder?.parentNode) {
+    profilePlaceholder.replaceWith(profileButton);
+    profilePlaceholder = null;
+  }
+}
+
+placeBrandControlsForViewport();
+window.matchMedia("(max-width: 650px)").addEventListener("change", placeBrandControlsForViewport);
+window.addEventListener("resize", placeBrandControlsForViewport);
 
 if (logoButton) {
   logoButton.addEventListener("click", event => {
     event.preventDefault();
 
     showSection("home");
+    closeMobileMenu();
 
     window.scrollTo({
       top: 0,
@@ -901,6 +1167,7 @@ navLinks.forEach(link => {
         .substring(1);
 
     showSection(sectionId);
+    closeMobileMenu();
 
     window.scrollTo({
       top: 0,
@@ -1003,12 +1270,6 @@ function setFormMode(mode) {
 ================================= */
 
 function getBookFromForm() {
-
-  const selectedStatus =
-    document.querySelector(
-      'input[name="book-status"]:checked'
-    );
-
   const pages =
     Number(
       document.querySelector("#book-pages").value
@@ -1019,49 +1280,29 @@ function getBookFromForm() {
       document.querySelector("#book-current-page").value
     );
 
-  /* =================================
-    AUTOMATIC STATUS FROM PROGRESS
-  ================================= */
-
-  let status;
-
   /*
-    No pages read yet:
-    keep the status selected by the user.
+     Make sure current page is valid.
   */
 
-  if (currentPage === 0) {
-
-    status =
-      selectedStatus
-        ? selectedStatus.value
-        : "want";
-
+  if (currentPage < 0) {
+    currentPage = 0;
   }
 
-  /*
-    At least one page has been read,
-    but the book is not finished:
-    automatically move it to Current Reads.
-  */
-
-  else if (currentPage < pages) {
-
-    status = "current";
-
-  }
-
-  /*
-    All pages have been read:
-    automatically move it to Finished Books.
-  */
-
-  else {
-
+  if (currentPage > pages) {
     currentPage = pages;
-    status = "finished";
-
   }
+
+  
+  /*
+     Automatically determine status
+     based on reading progress.
+  */
+
+  const status = currentPage === 0
+    ? "want"
+    : currentPage >= pages
+      ? "finished"
+      : "current";
 
   return {
 
@@ -1252,6 +1493,33 @@ function createEditButton(book) {
    BOOKSHELF
 ================================= */
 
+function navigateToBook(bookId) {
+  const book = books.find(item => item.id === bookId);
+  if (!book) return;
+
+  const destinations = {
+    current: { section: "current", selector: ".reading-card" },
+    want: { section: "want", selector: ".want-card" },
+    finished: { section: "finished", selector: ".finished-card" }
+  };
+  const destination = destinations[book.status];
+  if (!destination) return;
+
+  showSection(destination.section);
+  closeMobileMenu();
+
+  const target = [...document.querySelectorAll(destination.selector)]
+    .find(card => card.dataset.bookId === bookId);
+  if (!target) return;
+
+  target.hidden = false;
+  requestAnimationFrame(() => {
+    target.scrollIntoView({ behavior: "smooth", block: "center" });
+    target.classList.add("book-navigation-highlight");
+    setTimeout(() => target.classList.remove("book-navigation-highlight"), 1400);
+  });
+}
+
 function addBookToBookshelf(book) {
   const bookTile =
     document.createElement("div");
@@ -1260,8 +1528,23 @@ function addBookToBookshelf(book) {
     "book-tile"
   );
 
+  bookTile.dataset.bookId = book.id;
+  bookTile.setAttribute("role", "button");
+  bookTile.tabIndex = 0;
+  const statusLabel = book.status === "current"
+    ? "currently reading"
+    : book.status === "finished" ? "finished" : "wishlist";
+  bookTile.setAttribute("aria-label", `${book.title}, ${statusLabel}. Open book`);
+  bookTile.addEventListener("click", () => navigateToBook(book.id));
+  bookTile.addEventListener("keydown", event => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      navigateToBook(book.id);
+    }
+  });
+
   bookTile.dataset.genre =
-    book.genre;
+  book.genre;
 
   const cover =
     createBookCover(book);
@@ -1306,8 +1589,10 @@ function addBookToCurrentReads(book) {
     "reading-card"
   );
 
+  card.dataset.bookId = book.id;
+
   card.dataset.genre =
-    book.genre;
+  book.genre;
 
   const cover =
     createBookCover(
@@ -1381,7 +1666,7 @@ function addBookToCurrentReads(book) {
 
   const progressBar =
     document.createElement("span");
-
+  
   progressBar.style.width =
     `${percentage}%`;
 
@@ -1515,6 +1800,7 @@ function addBookToCurrentReads(book) {
         return;
       }
 
+      const previousPage = Number(books[bookIndex].currentPage || 0);
 
       /*
          Update page.
@@ -1537,6 +1823,10 @@ function addBookToCurrentReads(book) {
         books[bookIndex].status =
           "finished";
 
+      } else if (newPage === 0) {
+
+        books[bookIndex].status = "want";
+
       } else {
 
         books[bookIndex].status =
@@ -1551,6 +1841,8 @@ function addBookToCurrentReads(book) {
       */
 
       saveBooks();
+
+      if (newPage > previousPage) recordReadingActivity();
 
       renderBooks();
 
@@ -1619,7 +1911,6 @@ function addBookToCurrentReads(book) {
 ================================= */
 
 function addBookToWantList(book) {
-
   const card =
     document.createElement("article");
 
@@ -1627,9 +1918,10 @@ function addBookToWantList(book) {
     "want-card"
   );
 
-  card.dataset.genre =
-    book.genre;
+  card.dataset.bookId = book.id;
 
+  card.dataset.genre =
+  book.genre;
 
   const cover =
     createBookCover(
@@ -1637,10 +1929,8 @@ function addBookToWantList(book) {
       "medium-cover"
     );
 
-
   const info =
     document.createElement("div");
-
 
   const title =
     createTextElement(
@@ -1648,20 +1938,17 @@ function addBookToWantList(book) {
       book.title
     );
 
-
   const author =
     createTextElement(
       "p",
       book.author
     );
 
-
   const genre =
     createTextElement(
       "p",
       book.genre
     );
-
 
   const description =
     createTextElement(
@@ -1670,7 +1957,6 @@ function addBookToWantList(book) {
       "description"
     );
 
-
   const pageCount =
     createTextElement(
       "span",
@@ -1678,114 +1964,18 @@ function addBookToWantList(book) {
       "page-count"
     );
 
-
-  /* =================================
-     START READING BUTTON
-  ================================= */
-
-  const startReadingButton =
-    document.createElement("button");
-
-  startReadingButton.type =
-    "button";
-
-  startReadingButton.classList.add(
-    "start-reading-btn"
-  );
-
-  startReadingButton.textContent =
-    "Start Reading";
-
-
-  startReadingButton.addEventListener(
-    "click",
-    () => {
-
-      const bookIndex =
-        books.findIndex(
-          item =>
-            item.id === book.id
-        );
-
-
-      if (bookIndex === -1) {
-        return;
-      }
-
-
-      /*
-         Reading starts at page 1.
-      */
-
-      books[bookIndex].currentPage = 1;
-
-
-      /*
-         Move book from Want to Read
-         to Current Reads.
-      */
-
-      books[bookIndex].status =
-        "current";
-
-
-      /*
-         Save the change.
-      */
-
-      saveBooks();
-
-
-      /*
-         Re-render all sections.
-
-         Because the status is now
-         "current", the book disappears
-         from Want to Read and appears
-         in Current Reads.
-      */
-
-      renderBooks();
-
-    }
-  );
-
-
-  /* =================================
-     EDIT BUTTON
-  ================================= */
-
   const editButton =
     createEditButton(book);
 
-
-  /* =================================
-     BUILD CARD
-  ================================= */
-
   info.appendChild(title);
-
   info.appendChild(author);
-
   info.appendChild(genre);
-
   info.appendChild(description);
-
   info.appendChild(pageCount);
-
-  info.appendChild(
-    startReadingButton
-  );
-
-  info.appendChild(
-    editButton
-  );
-
+  info.appendChild(editButton);
 
   card.appendChild(cover);
-
   card.appendChild(info);
-
 
   wantList.appendChild(card);
 }
@@ -1803,8 +1993,10 @@ function addBookToFinished(book) {
     "finished-card"
   );
 
+  card.dataset.bookId = book.id;
+
   card.dataset.genre =
-    book.genre;
+  book.genre;
 
   const cover =
     createBookCover(
@@ -1866,6 +2058,23 @@ function showDashboardCurrentBook(book) {
 
   if (!currentCard || !book) {
     return;
+  }
+
+  currentCard.dataset.bookId = book.id;
+  currentCard.setAttribute("role", "button");
+  currentCard.tabIndex = 0;
+  currentCard.setAttribute("aria-label", `${book.title}, currently reading. Open in Current Reads`);
+  if (currentCard.dataset.navigationBound !== "true") {
+    currentCard.addEventListener("click", () => {
+      navigateToBook(currentCard.dataset.bookId);
+    });
+    currentCard.addEventListener("keydown", event => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        navigateToBook(currentCard.dataset.bookId);
+      }
+    });
+    currentCard.dataset.navigationBound = "true";
   }
 
   const cover =
@@ -2016,33 +2225,37 @@ function updateBookCounts() {
 
   if (bookshelfCount) {
     bookshelfCount.textContent =
-      `${books.length} ${books.length === 1
-        ? "book"
-        : "books"
+      `${books.length} ${
+        books.length === 1
+          ? "book"
+          : "books"
       }`;
   }
 
   if (currentCount) {
     currentCount.textContent =
-      `${currentBooks.length} ${currentBooks.length === 1
-        ? "book"
-        : "books"
+      `${currentBooks.length} ${
+        currentBooks.length === 1
+          ? "book"
+          : "books"
       }`;
   }
 
   if (wantCount) {
     wantCount.textContent =
-      `${wantBooks.length} ${wantBooks.length === 1
-        ? "book"
-        : "books"
+      `${wantBooks.length} ${
+        wantBooks.length === 1
+          ? "book"
+          : "books"
       }`;
   }
 
   if (finishedCount) {
     finishedCount.textContent =
-      `${finishedBooks.length} ${finishedBooks.length === 1
-        ? "book"
-        : "books"
+      `${finishedBooks.length} ${
+        finishedBooks.length === 1
+          ? "book"
+          : "books"
       }`;
   }
 }
@@ -2217,33 +2430,6 @@ function populateGenreFilters() {
   });
 }
 
-/* =================================
-   EMPTY GENRE MESSAGE
-================================= */
-
-function toggleEmptyGenreMessage(container, visibleCount) {
-
-  let emptyMessage =
-    container.querySelector(".empty-genre-message");
-
-  if (!emptyMessage) {
-
-    emptyMessage =
-      document.createElement("p");
-
-    emptyMessage.classList.add(
-      "empty-genre-message"
-    );
-
-    emptyMessage.textContent =
-      "No books are saved in this genre yet.";
-
-    container.appendChild(emptyMessage);
-  }
-
-  emptyMessage.hidden = visibleCount > 0;
-}
-
 
 /* =================================
    FILTER BOOKS BY GENRE
@@ -2265,29 +2451,17 @@ function filterBooksByGenre(
         ".book-tile:not(.add-tile)"
       );
 
-    let visibleCount = 0;
-
     bookTiles.forEach(tile => {
 
       const bookGenre =
         tile.dataset.genre;
 
-      const isHidden =
+      tile.hidden =
         genre !== "all" &&
         bookGenre !== genre;
 
-      tile.hidden = isHidden;
-
-      if (isHidden) {
-        visibleCount++;
-      }
-
     });
 
-    toggleEmptyGenreMessage(
-      bookshelfGrid,
-      visibleCount
-    );
   }
 
 
@@ -2302,29 +2476,17 @@ function filterBooksByGenre(
         ".reading-card"
       );
 
-    let visibleCount = 0;
-
     cards.forEach(card => {
 
       const bookGenre =
         card.dataset.genre;
 
-      const isHidden =
+      card.hidden =
         genre !== "all" &&
         bookGenre !== genre;
 
-      card.hidden = isHidden;
-
-      if (!isHidden) {
-        visibleCount++;
-      }
-
     });
 
-    toggleEmptyGenreMessage(
-      readingList,
-      visibleCount
-    );
   }
 
 
@@ -2339,29 +2501,16 @@ function filterBooksByGenre(
         ".want-card"
       );
 
-    let visibleCount = 0;
-
     cards.forEach(card => {
 
       const bookGenre =
         card.dataset.genre;
 
-      const isHidden =
+      card.hidden =
         genre !== "all" &&
         bookGenre !== genre;
 
-      card.hidden = isHidden;
-
-      if (!isHidden) {
-        visibleCount++;
-      }
-
     });
-
-    toggleEmptyGenreMessage(
-      wantList,
-      visibleCount
-    );
 
   }
 
@@ -2377,29 +2526,16 @@ function filterBooksByGenre(
         ".finished-card"
       );
 
-    let visibleCount = 0;
-
     cards.forEach(card => {
 
       const bookGenre =
         card.dataset.genre;
 
-      const isHidden =
+      card.hidden =
         genre !== "all" &&
         bookGenre !== genre;
 
-      card.hidden = isHidden;
-
-      if (!isHidden) {
-        visibleCount++;
-      }
-
     });
-
-    toggleEmptyGenreMessage(
-      finishedList,
-      visibleCount
-    );
 
   }
 }
@@ -2523,10 +2659,10 @@ function renderBooks() {
 
     const randomBook =
       currentBooks[
-      Math.floor(
-        Math.random() *
-        currentBooks.length
-      )
+        Math.floor(
+          Math.random() *
+          currentBooks.length
+        )
       ];
 
     showDashboardCurrentBook(
@@ -2661,7 +2797,148 @@ statCards.forEach(card => {
 
 
 /* =================================
+   SEARCH OVERLAY CONTROLS
+================================= */
+
+const searchBtn = document.getElementById("search-btn");
+const searchOverlay = document.getElementById("search-overlay");
+const closeSearchBtn = document.getElementById("close-search-btn");
+const bookSearchInput = document.getElementById("book-search-input");
+const searchResults = document.getElementById("search-results");
+const mobileBookSearchInput = document.getElementById("mobile-book-search-input");
+const mobileSearchResults = document.getElementById("mobile-search-results");
+let searchRequestController;
+let searchDebounce;
+
+function showSearchMessage(message, target = searchResults) {
+  if (target === mobileSearchResults) target.hidden = false;
+  const status = document.createElement("p");
+  status.className = "search-empty-state";
+  status.textContent = message;
+  target.replaceChildren(status);
+}
+
+function renderSearchResults(books, target = searchResults) {
+  if (!books.length) {
+    showSearchMessage("No books found. Try another title, author, or genre.", target);
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+  books.forEach(book => {
+    const result = document.createElement("article");
+    result.className = "search-result-card";
+
+    const cover = document.createElement("div");
+    cover.className = "search-result-cover";
+    if (book.cover) cover.style.backgroundImage = `url("${book.cover}")`;
+    cover.setAttribute("aria-hidden", "true");
+
+    const details = document.createElement("div");
+    details.className = "search-result-details";
+    const title = document.createElement("h3");
+    title.textContent = book.title;
+    const metadata = document.createElement("p");
+    metadata.textContent = [book.author, book.genre].filter(Boolean).join(" · ");
+
+    details.append(title, metadata);
+    result.append(cover, details);
+    fragment.append(result);
+  });
+
+  if (target === mobileSearchResults) target.hidden = false;
+  target.replaceChildren(fragment);
+}
+
+async function searchBooks(query, target = searchResults) {
+  searchRequestController?.abort();
+  if (!query) {
+    if (target === mobileSearchResults) {
+      target.replaceChildren();
+      target.hidden = true;
+    } else {
+      showSearchMessage("Start typing to find a book.", target);
+    }
+    return;
+  }
+
+  const controller = new AbortController();
+  searchRequestController = controller;
+  showSearchMessage("Searching your bookshelf…", target);
+
+  try {
+    const response = await fetch(`/api/books/search?q=${encodeURIComponent(query)}`, {
+      signal: controller.signal
+    });
+    if (!response.ok) throw new Error("Search request failed");
+    const { results } = await response.json();
+    if (!controller.signal.aborted) renderSearchResults(results, target);
+  } catch (error) {
+    if (error.name !== "AbortError") {
+      showSearchMessage("Search is unavailable right now. Please try again.", target);
+    }
+  }
+}
+
+bookSearchInput.addEventListener("input", () => {
+  clearTimeout(searchDebounce);
+  const query = bookSearchInput.value.trim();
+  searchDebounce = setTimeout(() => searchBooks(query), 180);
+});
+
+mobileBookSearchInput.addEventListener("input", () => {
+  clearTimeout(searchDebounce);
+  const query = mobileBookSearchInput.value.trim();
+  searchDebounce = setTimeout(() => searchBooks(query, mobileSearchResults), 180);
+});
+
+function openSearch() {
+  searchOverlay.classList.remove("invisible-page");
+  searchOverlay.classList.add("visible-page");
+
+  document.body.style.overflow = "hidden";
+
+  bookSearchInput.focus();
+  searchBooks(bookSearchInput.value.trim());
+}
+
+function closeSearch() {
+  clearTimeout(searchDebounce);
+  searchRequestController?.abort();
+  searchOverlay.classList.remove("visible-page");
+  searchOverlay.classList.add("invisible-page");
+
+  document.body.style.overflow = "";
+
+  searchBtn.focus();
+}
+
+searchBtn.addEventListener("click", openSearch);
+closeSearchBtn.addEventListener("click", closeSearch);
+
+// Close when clicking the dark backdrop.
+searchOverlay.addEventListener("click", event => {
+  if (event.target === searchOverlay) {
+    closeSearch();
+  }
+});
+
+// Close with Escape.
+document.addEventListener("keydown", event => {
+  if (
+    event.key === "Escape" &&
+    searchOverlay.classList.contains("visible-page")
+  ) {
+    closeSearch();
+  }
+});
+
+
+/* =================================
    INITIALIZE
 ================================= */
 
 renderBooks();
+loadStreak();
+loadAuthState();
+
