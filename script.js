@@ -139,7 +139,10 @@ authForm.addEventListener("submit", async event => {
     });
     const contentType = response.headers.get("content-type") || "";
     if (!contentType.includes("application/json")) {
-      throw new Error("The account API was not found. Restart the Express server with npm start, then open http://localhost:3000.");
+      const isGitHubPages = location.hostname.endsWith(".github.io");
+      throw new Error(isGitHubPages
+        ? "Sign-in is unavailable on GitHub Pages because it only hosts the frontend. The Express backend must be deployed separately to enable accounts here."
+        : "The account API was not found. Restart the Express server with npm start, then open http://localhost:3000.");
     }
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || "Authentication failed.");
