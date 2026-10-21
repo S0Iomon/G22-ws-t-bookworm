@@ -1,265 +1,101 @@
 # Bookworm
 
-Bookworm is a browser-based reading tracker designed to help readers
-organize and manage their personal book collection. It provides a
-simple, responsive interface where users can view their bookshelf, track
-reading progress, manage reading statuses, and monitor their reading
-goals.
+Bookworm is a browser-based reading tracker for organizing a personal book collection, recording reading progress, and keeping a daily reading streak.
 
 ## Project Links
 
-GitHub Repository: https://github.com/S0Iomon/G22-ws-t-bookworm
+- **GitHub repository:** [S0Iomon/G22-ws-t-bookworm](https://github.com/S0Iomon/G22-ws-t-bookworm)
+- **Live web application:** [Bookworm on GitHub Pages](https://s0iomon.github.io/G22-ws-t-bookworm/)
+- **Workflow worksheet:** [Browser-Based Application Development Workflow](https://docs.google.com/spreadsheets/d/1Dcc6HQ06H-PPQb5HkpUq9p9t4cSmBx068XOl37uzfJM/edit?usp=sharing)
 
-Live Web Application:
-https://s0iomon.github.io/G22-ws-t-bookworm/
-
-## Group Members
-
-Nathaniel Avila
-
-Ghaylord Lugod
-
-Megg Cleofe Cagampang
-
-Aira Joie Piopongco
-
-Julie Ann Abella
-
-## Project Objectives
-
-Bookworm aims to provide readers with an easy-to-use web application
-for:
-
-- Organizing a personal book library
-
-- Categorizing books according to reading status
-
-- Tracking reading progress
-
-- Setting and viewing reading goals
-
-- Adding and editing book information
-
-- Managing reader profile information
-
-- Providing a responsive experience on desktop and mobile devices
+> The GitHub Pages link serves the static frontend. Express-backed features such as account login, search, and streak syncing require the Node.js server; GitHub Pages does not run that server.
 
 ## Features
 
-Dashboard
+- **Dashboard:** View library statistics and a featured current read.
+- **Bookshelf:** Browse books by cover and select a book to jump to its reading-status section.
+- **Reading statuses:** Books are categorized as Want to Read, Currently Reading, or Finished Reading.
+- **Progress tracking:** Update a bookmark page. Page 0 means Want to Read, progress before the final page means Currently Reading, and the final page means Finished Reading.
+- **Add and edit books:** Store a title, author, genre, page count, current page, optional cover URL, and description.
+- **Search:** Search the server catalogue by title, author, or genre. On mobile, search is available in the hamburger menu.
+- **Daily streaks:** Record a reading day when progress advances. The app displays current and best streaks and a Sunday-through-Saturday weekly check-in view.
+- **Accounts:** Register, log in, and log out through the Express backend.
+- **Profile:** View and edit profile details.
+- **Responsive navigation:** Use the collapsible hamburger menu on mobile.
 
-Provides a quick overview of the reader's library, including:
+## Run Locally
 
-- Total book counts
+Install [Node.js](https://nodejs.org/) and then run:
 
-- Reading goals
-
-- Featured/currently reading book
-
-- Navigation to relevant library sections
-
-## Bookshelf
-
-Displays the user's books in a cover-based grid and provides an Add
-Book option.
-
-## Reading Status
-
-Books are organized into:
-
-- Current Reads
-
-- Want to Read
-
-- Finished Books
-
-## Reading Progress
-
-Users can update their current page/bookmark page. When the reader
-reaches the book's final page, the book can be marked as finished.
-
-### ➕ Add and Edit Books
-
-Users can enter or modify:
-
-- Book title
-
-- Author
-
-- Genre
-
-- Total pages
-
-- Current page
-
-- Reading status
-
-- Optional cover URL
-
-- Description
-
-##Profile
-
-Users can view and edit their profile information, including:
-
-- Name
-
-- Age
-
-## Browser Storage
-
-The application uses browser storage to retain profile changes and
-changes to built-in sample books between visits.
-
-## Responsive Navigation
-
-The interface includes mobile-friendly navigation with a collapsible
-sidebar/menu.
-
-## Structural Language
-
-The project is developed as a browser-based frontend application using:
-
-HTML -- webpage structure
-
-CSS -- styling and responsive layout
-
-JavaScript -- interactions and application functionality
-
-Git & GitHub -- version control and collaboration
-
-## Application Structure
-
- ```text
- Bookworm
-│
-├── Header
-│   ├── Bookworm Logo
-│   ├── Application Name
-│   └── Profile / Mobile Menu Controls
-│
-├── Sidebar Navigation
-│   ├── Dashboard
-│   ├── Bookshelf
-│   └── Reading Status
-│
-├── Dashboard
-│   ├── Library Statistics
-│   ├── Reading Goal
-│   └── Featured Current Read
-│
-├── Bookshelf
-│   ├── Book Grid
-│   └── Add Book
-│
-├── Reading Status
-│   ├── Current Reads
-│   ├── Want to Read
-│   └── Finished Books
-│
-├── Profile
-│   └── Edit Profile
-│
-└── Add/Edit Book Modal
-    ├── Book Details
-    ├── Reading Status
-    └── Save / Discard
+```bash
+npm install
+npm start
 ```
 
-    
+Open [http://localhost:3000](http://localhost:3000). Use the **Log in** button to create an account or sign in. Restart the server with `Ctrl+C` followed by `npm start` after changing backend code.
+
+## Storage Notes
+
+- Books and profile edits are stored in the browser with `localStorage`.
+- Search reads the server-side catalogue in `data/books.json`; books added only in the browser are not included in server search.
+- Reading activity is stored by the server in `data/streak.json`.
+- Account records and sessions are stored under `data/.auth/`. Passwords are stored as scrypt hashes. Keep this runtime data private and out of public repositories.
+- Accounts currently provide login/logout, but book collections, profiles, and streaks are not separated by account or synchronized across devices.
+
+## Project Structure
+
+```text
+Bookworm/
+├── app.js             # Express server and API routes
+├── index.html         # Page structure and dialogs
+├── script.js          # Frontend interactions and local storage
+├── styles.css         # Styling and responsive layout
+├── data/
+│   ├── books.json     # Server-side search catalogue
+│   ├── streak.json    # Created by the server for reading activity
+│   └── .auth/         # Created by the server for account/session data
+├── resources/         # Images and other static assets
+├── package.json
+└── package-lock.json
+```
+
+## Technology
+
+- HTML, CSS, and browser JavaScript
+- Node.js and Express
+- Browser `localStorage`
+- Git and GitHub
+
+## Project Team
+
+- Nathaniel Avila
+- Ghaylord Lugod
+- Megg Cleofe Cagampang
+- Aira Joie Piopongco
+- Julie Ann Abella
+
+## Academic Project
+
+**MO-IT161 Web Systems and Technology — Group 22**  
+**Project:** Browser-Based Application Development  
+**Application:** Bookworm
+
 ## Development Workflow
 
-The project was developed progressively throughout the course:
+- **Week 1:** Development progress
+- **Week 2:** Project selection, repository creation, and initial collaboration
+- **Week 3:** Wireframe and initial application design
+- **Week 4:** Header, navigation, and content sections
+- **Week 5:** Continued development, testing, and improvement planning
 
-Week  1
- Development Progress
+## Possible Future Improvements
 
-Week 2
-Project selection, GitHub
-repository creation, and
-collaboration of initial ideas
+- Store each reader’s books, profile, and streak under their account.
+- Synchronize reading data across devices.
+- Include browser-added books in backend search.
+- Add reading notes, ratings, and more detailed goal controls.
+- Continue improving validation, accessibility, and empty-state feedback.
 
-Week 3
- Wireframe and initial application design
+---
 
-Week 4
- Development of the header, navigation, and webpage content
-sections
-
-Week 5
- Continued coding, testing, and identification of possible improvements
-
- ## Planned Improvements
-
-- Future development may include:
-
-- Persistent storage for newly added books
-
-- Improved form validation
-
-- More consistent reading-status rules
-
-- Accessibility improvements
-
-- Further responsive design improvements
-
-- Empty-state messages and user feedback
-
-- Search and filtering improvements
-
-- Reading notes or ratings
-
-- More detailed reading-goal controls
-
-- Additional book information
-
-## Possible Backend Support
-
-The current application can support many core interactions through
-frontend technologies and browser storage. If the project expands,
-backend support may be useful for features that require information to
-be stored and retrieved across devices or users.
-
-Possible future backend capabilities include:
-
-- User accounts and authentication
-
-- Cloud-based book collection storage
-
-- Persistent reading progress
-
-- Synchronization across devices
-
-- Server-side book data management
-
-## Project Scope
-
-The current scope focuses on a frontend reading-tracker experience for
-individual readers. The team plans to prioritize the existing
-navigation, book management, reading progress, responsive design, and
-local data handling before adding larger features such as accounts,
-cloud synchronization, APIs, or social functionality.
-
-### Academic Project
-
-This project was developed for:
-
-MO-IT161 Web Systems and Technology Group 22
-
-Project: Browser-Based Application Development
-
-Application: Bookworm
-
-### Collaboration
-
-The project was developed collaboratively using GitHub. Team members
-contributed through application development, documentation, coding,
-testing, planning, and suggestions for improving the web application.
-
-⭐ Bookworm --- Organize your books. Track your progress. 
-    https://s0iomon.github.io/G22-ws-t-bookworm/
-
-here's our  Browser-Based Application Development Workflow Worksheet.
-https://docs.google.com/spreadsheets/d/1Dcc6HQ06H-PPQb5HkpUq9p9t4cSmBx068XOl37uzfJM/edit?usp=sharing
-
-
+⭐ **Bookworm — Organize your books. Track your progress.**
