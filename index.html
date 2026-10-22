@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,12 +9,8 @@
   <title>My Book Reader</title>
 
   <link rel="stylesheet" href="./styles.css">
-  </button>  
-  <link
-    rel="icon"
-    type="image/png"
-    href="./resources/bookworm v3.jpg"
-  >
+  </button>
+  <link rel="icon" type="image/png" href="./resources/bookworm v3.jpg">
 </head>
 
 <body>
@@ -21,22 +18,14 @@
        ADD / EDIT BOOK MODAL
   ================================= -->
 
-  <div
-    class="modal-overlay invisible-page"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="book-form-title"
-  >
+  <div class="modal-overlay invisible-page" role="dialog" aria-modal="true" aria-labelledby="book-form-title">
 
     <article class="add-form-card">
 
       <form id="add-book-form">
 
         <header>
-          <h2
-            id="book-form-title"
-            class="modal-title"
-          >
+          <h2 id="book-form-title" class="modal-title">
             Add Book
           </h2>
         </header>
@@ -48,12 +37,7 @@
             Book Title *
           </label>
 
-          <input
-            type="text"
-            id="book-title"
-            placeholder="Enter book title"
-            required
-          >
+          <input type="text" id="book-title" placeholder="Enter book title" required>
 
         </div>
 
@@ -64,12 +48,7 @@
             Author *
           </label>
 
-          <input
-            type="text"
-            id="book-author"
-            placeholder="Enter author name"
-            required
-          >
+          <input type="text" id="book-author" placeholder="Enter author name" required>
 
         </div>
 
@@ -80,10 +59,7 @@
             Genre *
           </label>
 
-          <select
-            id="book-genre"
-            required
-          >
+          <select id="book-genre" required>
             <option value="" disabled selected>
               Select a genre
             </option>
@@ -120,13 +96,7 @@
             Pages *
           </label>
 
-          <input
-            type="number"
-            id="book-pages"
-            placeholder="Enter number of pages"
-            min="1"
-            required
-          >
+          <input type="number" id="book-pages" placeholder="Enter number of pages" min="1" required>
 
         </div>
 
@@ -137,14 +107,7 @@
             Current Page
           </label>
 
-          <input
-            type="number"
-            id="book-current-page"
-            placeholder="Enter your current page"
-            min="0"
-            value="0"
-            required
-          >
+          <input type="number" id="book-current-page" placeholder="Enter your current page" min="0" value="0" required>
 
           <small class="form-help">
             Enter the page you have currently reached.
@@ -154,7 +117,8 @@
 
 
         <p class="form-help book-status-help">
-          Status updates automatically: page 0 is Want to Read, pages 1 through the last page are Currently Reading, and the last page is Finished.
+          Status updates automatically: page 0 is Want to Read, pages 1 through the last page are Currently Reading, and
+          the last page is Finished.
         </p>
 
 
@@ -164,11 +128,7 @@
             Cover Image
           </label>
 
-          <input
-            type="url"
-            id="book-cover"
-            placeholder="Optional cover image URL"
-          >
+          <input type="url" id="book-cover" placeholder="Optional cover image URL">
 
         </div>
 
@@ -179,28 +139,18 @@
             Description
           </label>
 
-          <textarea
-            id="book-description"
-            placeholder="Enter book description"
-            rows="4"
-          ></textarea>
+          <textarea id="book-description" placeholder="Enter book description" rows="4"></textarea>
 
         </div>
 
 
         <div class="form-actions">
 
-          <button
-            id="discard-btn"
-            type="button"
-          >
+          <button id="discard-btn" type="button">
             Discard
           </button>
 
-          <button
-            id="save-btn"
-            type="submit"
-          >
+          <button id="save-btn" type="submit">
             Save
           </button>
 
@@ -220,16 +170,8 @@
 
   <header class="topbar">
 
-    <a
-      href="#home"
-      class="logo"
-      id="logo-btn"
-      aria-label="Go to dashboard"
-    >
-      <img
-        src="./resources/bookworm v3.png"
-        alt="Bookworm logo"
-      >
+    <a href="#home" class="logo" id="logo-btn" aria-label="Go to dashboard">
+      <img src="./resources/bookworm v3.png" alt="Bookworm logo">
     </a>
 
 
@@ -238,40 +180,22 @@
     </strong>
 
 
-    <button
-      class="hamburger-btn"
-      id="hamburger-btn"
-      type="button"
-      aria-label="Open navigation menu"
-      aria-expanded="false"
-    >
+    <button class="hamburger-btn" id="hamburger-btn" type="button" aria-label="Open navigation menu"
+      aria-expanded="false">
       <span></span>
       <span></span>
       <span></span>
     </button>
 
-    <button id="search-btn" class="header-search-btn" type="button"
-          aria-label="Search books" title="Search books">
-    <svg xmlns="http://www.w3.org/2000/svg"
-        width="21" height="21" viewBox="0 0 24 24"
-        fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round"
-        stroke-linejoin="round">
-      <circle cx="11" cy="11" r="8"></circle>
-      <path d="m21 21-4.35-4.35"></path>
-    </svg>
+    <button id="search-btn" class="header-search-btn" type="button" aria-label="Search books" title="Search books">
+      <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
     </button>
-    <button
-      class="user-btn"
-      id="profile-btn"
-      type="button"
-      aria-label="Open profile"
-    >
-      <img
-        class="user-icon"
-        src="./resources/user.png"
-        alt=""
-      >
+    <button class="user-btn" id="profile-btn" type="button" aria-label="Open profile">
+      <img class="user-icon" src="./resources/user.png" alt="">
     </button>
     <button class="account-btn" id="account-btn" type="button">Log in</button>
   </header>
@@ -294,20 +218,15 @@
 
       <div class="mobile-menu-search">
         <label for="mobile-book-search-input">Search books</label>
-        <input id="mobile-book-search-input" type="search" placeholder="Title, author, or genre..." autocomplete="off" />
+        <input id="mobile-book-search-input" type="search" placeholder="Title, author, or genre..."
+          autocomplete="off" />
         <div id="mobile-search-results" class="mobile-search-results" aria-live="polite" hidden></div>
       </div>
 
 
-      <nav
-        class="side-nav"
-        aria-label="Library navigation"
-      >
+      <nav class="side-nav" aria-label="Library navigation">
 
-        <a
-          href="#home"
-          class="selected-section"
-        >
+        <a href="#home" class="selected-section">
           ⌂ Dashboard
         </a>
 
@@ -330,10 +249,7 @@
       </nav>
 
 
-      <section
-        class="sidebar-card"
-        aria-labelledby="daily-streak-title"
-      >
+      <section class="sidebar-card" aria-labelledby="daily-streak-title">
 
         <h3 id="daily-streak-title" class="small-label">DAILY STREAKS</h3>
         <div id="streak-week" class="streak-week" role="group" aria-label="Weekly reading activity"></div>
@@ -356,11 +272,7 @@
            DASHBOARD
       ================================= -->
 
-      <section
-        id="home"
-        class="page"
-        aria-labelledby="home-title"
-      >
+      <section id="home" class="page" aria-labelledby="home-title">
 
         <header class="welcome-row">
 
@@ -398,10 +310,7 @@
 
           <article class="card add-card">
 
-            <button
-              class="add-book"
-              type="button"
-            >
+            <button class="add-book" type="button">
 
               <span aria-hidden="true">
                 +
@@ -444,10 +353,7 @@
 
             <div class="book-summary">
 
-              <figure
-                class="cover placeholder"
-                aria-label="Book cover"
-              ></figure>
+              <figure class="cover placeholder" aria-label="Book cover"></figure>
 
 
               <div class="book-info">
@@ -468,14 +374,8 @@
                 </p>
 
 
-                <div
-                  class="progress"
-                  role="progressbar"
-                  aria-label="Reading progress"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                  aria-valuenow="50"
-                >
+                <div class="progress" role="progressbar" aria-label="Reading progress" aria-valuemin="0"
+                  aria-valuemax="100" aria-valuenow="50">
                   <span style="width: 50%;"></span>
                 </div>
 
@@ -506,16 +406,9 @@
              STATISTICS
         ================================= -->
 
-        <section
-          class="stats-grid"
-          aria-label="Library statistics"
-        >
+        <section class="stats-grid" aria-label="Library statistics">
 
-          <article
-            class="stat-card"
-            data-section="bookshelf"
-            tabindex="0"
-          >
+          <article class="stat-card" data-section="bookshelf" tabindex="0">
 
             <span>
               MY BOOKS
@@ -528,11 +421,7 @@
           </article>
 
 
-          <article
-            class="stat-card"
-            data-section="current"
-            tabindex="0"
-          >
+          <article class="stat-card" data-section="current" tabindex="0">
 
             <span>
               CURRENT READS
@@ -545,11 +434,7 @@
           </article>
 
 
-          <article
-            class="stat-card"
-            data-section="want"
-            tabindex="0"
-          >
+          <article class="stat-card" data-section="want" tabindex="0">
 
             <span>
               WANT TO READ
@@ -562,11 +447,7 @@
           </article>
 
 
-          <article
-            class="stat-card"
-            data-section="finished"
-            tabindex="0"
-          >
+          <article class="stat-card" data-section="finished" tabindex="0">
 
             <span>
               BOOKS READ
@@ -578,38 +459,38 @@
 
           </article>
 
-        </section> 
+        </section>
 
         <section class="reading-insights">
-        <h2>My Reading Insights</h2>
+          <h2>My Reading Insights</h2>
 
-        <div class="insight-card">
-        <span>Total pages currently read</span>
-        <strong id="pages-read-stat">0</strong>
-        </div>
+          <div class="insight-card">
+            <span>Total pages currently read</span>
+            <strong id="pages-read-stat">0</strong>
+          </div>
 
-        <div class="insight-card">
-        <span>Books finished this month</span>
-        <strong id="books-month-stat">0</strong>
-        </div>
+          <div class="insight-card">
+            <span>Books finished this month</span>
+            <strong id="books-month-stat">0</strong>
+          </div>
 
-        <div class="insight-card">
-        <span>Favorite genre</span>
-        <strong id="favorite-genre-stat">Not enough data</strong>
-        </div>
+          <div class="insight-card">
+            <span>Favorite genre</span>
+            <strong id="favorite-genre-stat">Not enough data</strong>
+          </div>
 
-        <div class="insight-card">
-        <label for="yearly-goal">Yearly book goal</label>
-        <input id="yearly-goal" type="number" min="1" value="12">
+          <div class="insight-card">
+            <label for="yearly-goal">Yearly book goal</label>
+            <input id="yearly-goal" type="number" min="1" value="12">
 
-        <p id="yearly-goal-label">0 of 12 books finished this year</p>
+            <p id="yearly-goal-label">0 of 12 books finished this year</p>
 
-        <progress id="yearly-goal-progress" value="0" max="12"></progress>
-        </div>
+            <progress id="yearly-goal-progress" value="0" max="12"></progress>
+          </div>
         </section>
 
 
-       
+
 
       </section>
 
@@ -619,11 +500,7 @@
            MY BOOKSHELF
       ================================= -->
 
-      <section
-        id="bookshelf"
-        class="page invisible-page"
-        aria-labelledby="bookshelf-title"
-      >
+      <section id="bookshelf" class="page invisible-page" aria-labelledby="bookshelf-title">
 
         <header class="page-heading">
 
@@ -647,11 +524,7 @@
               Filter by Genre
             </label>
 
-            <select
-              id="bookshelf-genre-filter"
-              class="genre-filter-select"
-              data-section="bookshelf"
-            >
+            <select id="bookshelf-genre-filter" class="genre-filter-select" data-section="bookshelf">
               <option value="all">
                 All Genres
               </option>
@@ -665,10 +538,7 @@
 
           <!-- ADD BOOK TILE -->
 
-          <button
-            class="book-tile add-tile"
-            type="button"
-          >
+          <button class="book-tile add-tile" type="button">
 
             <span aria-hidden="true">
               +
@@ -686,12 +556,9 @@
 
           <article class="book-tile">
 
-            <figure
-              class="cover"
-              style="background-image:
+            <figure class="cover" style="background-image:
                 url('https://covers.openlibrary.org/b/isbn/9780525559474-L.jpg');"
-              aria-label="The Midnight Library book cover"
-            ></figure>
+              aria-label="The Midnight Library book cover"></figure>
 
             <strong>
               The Midnight Library
@@ -702,12 +569,9 @@
 
           <article class="book-tile">
 
-            <figure
-              class="cover"
-              style="background-image:
+            <figure class="cover" style="background-image:
                 url('https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg');"
-              aria-label="Atomic Habits book cover"
-            ></figure>
+              aria-label="Atomic Habits book cover"></figure>
 
             <strong>
               Atomic Habits
@@ -718,12 +582,9 @@
 
           <article class="book-tile">
 
-            <figure
-              class="cover"
-              style="background-image:
-                url('https://covers.openlibrary.org/b/isbn/9780441172719-L.jpg');"
-              aria-label="Dune book cover"
-            ></figure>
+            <figure class="cover" style="background-image:
+                url('https://covers.openlibrary.org/b/isbn/9780441172719-L.jpg');" aria-label="Dune book cover">
+            </figure>
 
             <strong>
               Dune
@@ -734,12 +595,9 @@
 
           <article class="book-tile">
 
-            <figure
-              class="cover"
-              style="background-image:
-                url('https://covers.openlibrary.org/b/isbn/9780547928227-L.jpg');"
-              aria-label="The Hobbit book cover"
-            ></figure>
+            <figure class="cover" style="background-image:
+                url('https://covers.openlibrary.org/b/isbn/9780547928227-L.jpg');" aria-label="The Hobbit book cover">
+            </figure>
 
             <strong>
               The Hobbit
@@ -750,12 +608,9 @@
 
           <article class="book-tile">
 
-            <figure
-              class="cover"
-              style="background-image:
-                url('https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg');"
-              aria-label="1984 book cover"
-            ></figure>
+            <figure class="cover" style="background-image:
+                url('https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg');" aria-label="1984 book cover">
+            </figure>
 
             <strong>
               1984
@@ -766,12 +621,9 @@
 
           <article class="book-tile">
 
-            <figure
-              class="cover"
-              style="background-image:
+            <figure class="cover" style="background-image:
                 url('https://covers.openlibrary.org/b/isbn/9780062315007-L.jpg');"
-              aria-label="The Alchemist book cover"
-            ></figure>
+              aria-label="The Alchemist book cover"></figure>
 
             <strong>
               The Alchemist
@@ -789,15 +641,11 @@
            CURRENT READS
       ================================= -->
 
-      <section
-        id="current"
-        class="page invisible-page"
-        aria-labelledby="current-title"
-      >
+      <section id="current" class="page invisible-page" aria-labelledby="current-title">
 
         <header class="page-heading">
 
-          
+
 
           <div>
 
@@ -818,11 +666,7 @@
               Filter by Genre
             </label>
 
-            <select
-              id="current-genre-filter"
-              class="genre-filter-select"
-              data-section="current"
-            >
+            <select id="current-genre-filter" class="genre-filter-select" data-section="current">
               <option value="all">
                 All Genres
               </option>
@@ -835,10 +679,7 @@
 
           <article class="reading-card">
 
-            <figure
-              class="cover large-cover"
-              aria-label="Book cover"
-            ></figure>
+            <figure class="cover large-cover" aria-label="Book cover"></figure>
 
 
             <div class="reading-info">
@@ -863,14 +704,8 @@
               </p>
 
 
-              <div
-                class="progress"
-                role="progressbar"
-                aria-label="Reading progress"
-                aria-valuemin="0"
-                aria-valuemax="100"
-                aria-valuenow="50"
-              >
+              <div class="progress" role="progressbar" aria-label="Reading progress" aria-valuemin="0"
+                aria-valuemax="100" aria-valuenow="50">
                 <span style="width: 50%;"></span>
               </div>
 
@@ -901,14 +736,10 @@
            WANT TO READ
       ================================= -->
 
-      <section
-        id="want"
-        class="page invisible-page"
-        aria-labelledby="want-title"
-      >
+      <section id="want" class="page invisible-page" aria-labelledby="want-title">
 
         <header class="page-heading">
-          
+
           <div>
 
             <p class="eyebrow">
@@ -924,20 +755,16 @@
 
           </div>
           <div class="genre-filter">
-            <label for="current-genre-filter">
+            <label for="want-genre-filter">
               Filter by Genre
             </label>
 
-            <select
-              id="current-genre-filter"
-              class="genre-filter-select"
-              data-section="current"
-            >
+            <select id="want-genre-filter" class="genre-filter-select" data-section="want">
               <option value="all">
                 All Genres
               </option>
             </select>
-          </div>    
+          </div>
         </header>
 
 
@@ -945,10 +772,7 @@
 
           <article class="want-card">
 
-            <figure
-              class="cover medium-cover"
-              aria-label="Book cover"
-            ></figure>
+            <figure class="cover medium-cover" aria-label="Book cover"></figure>
 
 
             <div>
@@ -987,14 +811,10 @@
            FINISHED BOOKS
       ================================= -->
 
-      <section
-        id="finished"
-        class="page invisible-page"
-        aria-labelledby="finished-title"
-      >
+      <section id="finished" class="page invisible-page" aria-labelledby="finished-title">
 
         <header class="page-heading">
-          
+
           <div>
 
             <p class="eyebrow">
@@ -1010,15 +830,11 @@
 
           </div>
           <div class="genre-filter">
-            <label for="current-genre-filter">
+            <label for="finished-genre-filter">
               Filter by Genre
             </label>
 
-            <select
-              id="current-genre-filter"
-              class="genre-filter-select"
-              data-section="current"
-            >
+            <select id="finished-genre-filter" class="genre-filter-select" data-section="finished">
               <option value="all">
                 All Genres
               </option>
@@ -1031,10 +847,7 @@
 
           <article class="finished-card">
 
-            <figure
-              class="cover finished-cover"
-              aria-label="Book cover"
-            ></figure>
+            <figure class="cover finished-cover" aria-label="Book cover"></figure>
 
             <h2>
               Book Title
@@ -1059,7 +872,7 @@
 
           </article>
         </div>
-        
+
       </section>
 
 
@@ -1068,11 +881,7 @@
            PROFILE
       ================================= -->
 
-      <section
-        id="profile"
-        class="page invisible-page"
-        aria-labelledby="profile-title"
-      >
+      <section id="profile" class="page invisible-page" aria-labelledby="profile-title">
 
         <header class="page-heading">
 
@@ -1099,10 +908,7 @@
 
           <figure class="profile-avatar">
 
-            <img
-              src="./resources/user.png"
-              alt="Profile avatar"
-            >
+            <img src="./resources/user.png" alt="Profile avatar">
 
           </figure>
 
@@ -1117,21 +923,14 @@
               Age not set
             </p>
 
-            <p
-              id="profile-display-description"
-              class="profile-description"
-            >
+            <p id="profile-display-description" class="profile-description">
               Tell us a little about yourself.
             </p>
 
           </div>
 
 
-          <button
-            type="button"
-            class="edit-profile-btn"
-            id="edit-profile-btn"
-          >
+          <button type="button" class="edit-profile-btn" id="edit-profile-btn">
             Edit Profile
           </button>
 
@@ -1141,11 +940,7 @@
 
         <!-- PROFILE EDIT FORM -->
 
-        <section
-          class="profile-edit-card invisible-page"
-          id="profile-edit-card"
-          aria-labelledby="profile-edit-title"
-        >
+        <section class="profile-edit-card invisible-page" id="profile-edit-card" aria-labelledby="profile-edit-title">
 
           <form id="profile-form">
 
@@ -1162,13 +957,7 @@
                 Name
               </label>
 
-              <input
-                type="text"
-                id="profile-name"
-                placeholder="Enter your name"
-                maxlength="50"
-                required
-              >
+              <input type="text" id="profile-name" placeholder="Enter your name" maxlength="50" required>
 
             </div>
 
@@ -1179,13 +968,7 @@
                 Age
               </label>
 
-              <input
-                type="number"
-                id="profile-age"
-                placeholder="Enter your age"
-                min="1"
-                max="120"
-              >
+              <input type="number" id="profile-age" placeholder="Enter your age" min="1" max="120">
 
             </div>
 
@@ -1196,29 +979,19 @@
                 About Me
               </label>
 
-              <textarea
-                id="profile-description"
-                placeholder="Write a short description about yourself..."
-                rows="5"
-                maxlength="250"
-              ></textarea>
+              <textarea id="profile-description" placeholder="Write a short description about yourself..." rows="5"
+                maxlength="250"></textarea>
 
             </div>
 
 
             <div class="form-actions">
 
-              <button
-                type="button"
-                id="cancel-profile-btn"
-              >
+              <button type="button" id="cancel-profile-btn">
                 Cancel
               </button>
 
-              <button
-                type="submit"
-                id="save-profile-btn"
-              >
+              <button type="submit" id="save-profile-btn">
                 Save Profile
               </button>
 
@@ -1233,10 +1006,9 @@
     </main>
 
   </div>
-      <!-- SEARCH OVERLAY -->
+  <!-- SEARCH OVERLAY -->
   <div id="search-overlay" class="search-overlay invisible-page">
-    <div class="search-panel" role="dialog"
-        aria-modal="true" aria-labelledby="search-heading">
+    <div class="search-panel" role="dialog" aria-modal="true" aria-labelledby="search-heading">
 
       <div class="search-header">
         <div>
@@ -1244,29 +1016,20 @@
           <h2 id="search-heading">Find your next read</h2>
         </div>
 
-        <button id="close-search-btn" class="close-search-btn"
-                type="button" aria-label="Close search">
+        <button id="close-search-btn" class="close-search-btn" type="button" aria-label="Close search">
           &times;
         </button>
       </div>
 
       <div class="search-input-wrapper">
-        <svg xmlns="http://www.w3.org/2000/svg"
-            width="22" height="22" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="11" cy="11" r="8"></circle>
           <path d="m21 21-4.35-4.35"></path>
         </svg>
 
-        <input
-          id="book-search-input"
-          type="search"
-          placeholder="Search by title, author, or genre..."
-          autocomplete="off"
-          aria-label="Search books"
-        />
+        <input id="book-search-input" type="search" placeholder="Search by title, author, or genre..."
+          autocomplete="off" aria-label="Search books" />
       </div>
 
       <p class="search-hint">
@@ -1299,7 +1062,8 @@
         </div>
         <div class="auth-field">
           <label for="auth-password">Password</label>
-          <input id="auth-password" name="password" type="password" minlength="8" maxlength="200" autocomplete="current-password" required />
+          <input id="auth-password" name="password" type="password" minlength="8" maxlength="200"
+            autocomplete="current-password" required />
         </div>
         <button id="auth-submit-btn" class="auth-submit-btn" type="submit">Log in</button>
       </form>
@@ -1312,4 +1076,5 @@
   <script src="./script.js"></script>
 
 </body>
+
 </html>
