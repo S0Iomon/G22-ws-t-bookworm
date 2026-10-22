@@ -2503,3 +2503,17 @@ button:hover {
     font-size: 13px;
   }
 }
+
+.placeholder-cover {
+  background: linear-gradient(145deg, #e8dfd2, #c9b9a5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.placeholder-cover::after {
+  content: "📚";
+  font-size: 2rem;
+}

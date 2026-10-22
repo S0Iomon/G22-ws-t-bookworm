@@ -1425,8 +1425,7 @@ function openEditBookForm(bookId) {
 ================================= */
 
 function createBookCover(book, className = "") {
-  const cover =
-    document.createElement("div");
+  const cover = document.createElement("div");
 
   cover.classList.add("cover");
 
@@ -1435,9 +1434,16 @@ function createBookCover(book, className = "") {
   }
 
   if (book.cover) {
-    cover.style.backgroundImage =
-      `url("${book.cover}")`;
+    cover.style.backgroundImage = `url("${book.cover}")`;
+  } else {
+    cover.classList.add("placeholder-cover");
   }
+
+  cover.setAttribute("role", "img");
+  cover.setAttribute(
+    "aria-label",
+    book.cover ? `${book.title} cover` : `No cover available for ${book.title}`
+  );
 
   return cover;
 }
