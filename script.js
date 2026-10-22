@@ -2568,7 +2568,87 @@ genreFilters.forEach(select => {
     }
   );
 
+}); 
+
+/* =================================
+   YEARLY GOAL 
+================================= */
+
+const YEARLY_GOAL_KEY = "bookwormYearlyGoal";
+
+function renderReadingInsights() {
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth();
+
+  // Sum the current page reached in each book.
+  const totalPages = books.reduce(
+    (sum, book) => sum + Number(book.currentPage || 0),
+    0
+  );
+
+  // Count books finished in the current month.
+  const finishedThisMonth = books.filter(book => {
+    if (!book.finishedAt) return false;
+
+    const date = new Date(book.finishedAt);
+
+    return date.getFullYear() === currentYear &&
+      date.getMonth() === currentMonth;
+  }).length;
+
+  // Find the genre that appears most often in the library.
+  const genreCounts = {};
+
+  books.forEach(book => {
+    if (book.genre) {
+      genreCounts[book.genre] =
+        (genreCounts[book.genre] || 0) + 1;
+    }
+  });
+
+  const favoriteGenre = Object.entries(genreCounts)
+    .sort((a, b) => b[1] - a[1])[0]?.[0] || "Not enough data";
+
+  // Count books finished during this year.
+  const finishedThisYear = books.filter(book => {
+    if (book.status !== "finished" || !book.finishedAt) {
+      return false;
+    }
+
+    return new Date(book.finishedAt).getFullYear() === currentYear;
+  }).length;
+
+  const savedGoal = Number(localStorage.getItem(YEARLY_GOAL_KEY));
+  const goalInput = document.querySelector("#yearly-goal");
+  const goal = savedGoal > 0 ? savedGoal : 12;
+
+  goalInput.value = goal;
+
+  document.querySelector("#pages-read-stat").textContent =
+    totalPages.toLocaleString();
+
+  document.querySelector("#books-month-stat").textContent =
+    finishedThisMonth;
+
+  document.querySelector("#favorite-genre-stat").textContent =
+    favoriteGenre;
+
+  document.querySelector("#yearly-goal-label").textContent =
+    `${finishedThisYear} of ${goal} books finished this year`;
+
+  const progress = document.querySelector("#yearly-goal-progress");
+  progress.max = goal;
+  progress.value = Math.min(finishedThisYear, goal);
+}
+
+document.querySelector("#yearly-goal").addEventListener("change", event => {
+  const goal = Math.max(1, Number(event.target.value) || 12);
+
+  localStorage.setItem(YEARLY_GOAL_KEY, String(goal));
+  renderReadingInsights();
 });
+
+
 
 /* =================================
    RENDER ALL BOOKS
@@ -2678,7 +2758,11 @@ function renderBooks() {
       randomBook
     );
 
-  }
+  } 
+
+  renderReadingInsights();
+
+  
 }
 
 
