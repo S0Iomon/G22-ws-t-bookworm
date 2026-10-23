@@ -2038,7 +2038,7 @@ button:hover {
   color: #482716;
 }
 
-.genre-filter-select {
+.genre-filter-select, .sort-books-select {
   min-width: 180px;
 
   padding: 10px 38px 10px 14px;
@@ -2055,11 +2055,13 @@ button:hover {
   cursor: pointer;
 }
 
-.genre-filter-select:hover {
+.genre-filter-select:hover,
+.sort-books-select:hover {
   border-color: #482716;
 }
 
-.genre-filter-select:focus {
+.genre-filter-select:focus,
+.sort-books-select:focus {
   outline: 2px solid #C79D64;
   outline-offset: 2px;
 }
@@ -2078,7 +2080,8 @@ button:hover {
     gap: 7px;
   }
 
-  .genre-filter-select {
+  .genre-filter-select,
+  .sort-books-select {
     width: 100%;
   }
 
@@ -2536,6 +2539,13 @@ button:hover {
   background: #fffaf2;
   border: 1px solid rgba(199, 157, 100, 0.45);
   border-radius: 10px;
+}
+
+.search-result-card[role="button"] { cursor: pointer; }
+
+.search-result-card[role="button"]:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
 }
 
 .search-result-cover {

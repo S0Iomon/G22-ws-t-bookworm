@@ -13,6 +13,12 @@ const streakPath = path.join(__dirname, "data", "streak.json");
 const authDirectory = path.join(__dirname, "data", ".auth");
 const usersPath = path.join(authDirectory, "users.json");
 const sessionsPath = path.join(authDirectory, "sessions.json");
+const BOOKS_FILE = booksPath;
+
+async function readBooks() {
+  const contents = await fs.promises.readFile(BOOKS_FILE, 'utf8');
+  return JSON.parse(contents);
+}
 const sessionCookie = 'bookworm_session';
 const sessionDurationMs = 7 * 24 * 60 * 60 * 1000;
 
@@ -255,6 +261,164 @@ app.get('/api/books/search', (req, res) => {
       res.status(500).json({ error: 'Book search is unavailable.' });
     }
   });
+});
+
+app.get("/api/books", async (req, res) => {
+  try {
+    const books = deduplicateServerBooks(await readBooks());
+    res.json(books);
+  } catch (error) {
+    console.error("Failed to read books:", error);
+    res.status(500).json({ error: "Could not load books." });
+  }
+});
+
+function deduplicateServerBooks(books) {
+  const seen = new Set();
+  return books.filter(book => {
+    const key = `${String(book.title || '').trim().toLocaleLowerCase()}|${String(book.author || '').trim().toLocaleLowerCase()}`;
+    if (!key.split('|')[0] || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+// Add a new book and save it to books.json
+app.post("/api/books", async (req, res) => {
+  try {
+    const {
+      title,
+      author,
+      genre,
+      pages,
+      currentPage,
+      cover,
+      description,
+      status
+    } = req.body;
+
+    if (
+      typeof title !== "string" || !title.trim() ||
+      typeof author !== "string" || !author.trim() ||
+      typeof genre !== "string" || !genre.trim()
+    ) {
+      return res.status(400).json({
+        error: "Title, author, and genre are required."
+      });
+    }
+
+    const totalPages = Number(pages);
+    const page = Number(currentPage ?? 0);
+
+    if (
+      !Number.isSafeInteger(totalPages) ||
+      totalPages < 1 ||
+      !Number.isSafeInteger(page) ||
+      page < 0 ||
+      page > totalPages
+    ) {
+      return res.status(400).json({
+        error: "Page numbers are invalid."
+      });
+    }
+
+    const allowedStatuses = ["want", "current", "finished"];
+
+    if (!allowedStatuses.includes(status)) {
+      return res.status(400).json({
+        error: "Invalid reading status."
+      });
+    }
+
+    const books = deduplicateServerBooks(await readBooks());
+
+    const duplicateSafeBooks = books;
+
+    const newBook = {
+      id: crypto.randomUUID(),
+      title: title.trim(),
+      author: author.trim(),
+      genre: genre.trim(),
+      pages: totalPages,
+      currentPage:
+        status === "want" ? 0 :
+        status === "finished" ? totalPages :
+        Math.max(1, page),
+      cover: typeof cover === "string" ? cover.trim() : "",
+      description:
+        typeof description === "string" ? description.trim() : "",
+      status,
+      default: false
+    };
+
+    if (books.some(book =>
+      String(book.title).trim().toLocaleLowerCase() === newBook.title.toLocaleLowerCase() &&
+      String(book.author).trim().toLocaleLowerCase() === newBook.author.toLocaleLowerCase()
+    )) {
+      return res.status(409).json({ error: "That book is already in the library." });
+    }
+
+    duplicateSafeBooks.push(newBook);
+
+    await fs.promises.writeFile(
+      BOOKS_FILE,
+      JSON.stringify(duplicateSafeBooks, null, 2) + "\n",
+      "utf8"
+    );
+
+    res.status(201).json(newBook);
+  } catch (error) {
+    console.error("Failed to save book:", error);
+    res.status(500).json({
+      error: "Could not save the book."
+    });
+  }
+});
+
+app.put("/api/books/:id", async (req, res) => {
+  try {
+    const input = req.body || {};
+    const title = String(input.title || '').trim();
+    const author = String(input.author || '').trim();
+    const genre = String(input.genre || '').trim();
+    const pages = Number(input.pages);
+    const currentPage = Number(input.currentPage ?? 0);
+
+    if (!title || !author || !genre || !Number.isSafeInteger(pages) || pages < 1 ||
+        !Number.isSafeInteger(currentPage) || currentPage < 0 || currentPage > pages) {
+      return res.status(400).json({ error: 'Book details or page numbers are invalid.' });
+    }
+
+    const status = currentPage === 0 ? 'want' : currentPage >= pages ? 'finished' : 'current';
+    const books = deduplicateServerBooks(await readBooks());
+    const requestedId = String(req.params.id);
+    let index = books.findIndex(book => book.id === requestedId);
+    if (index === -1 && input.previousTitle && input.previousAuthor) {
+      index = books.findIndex(book =>
+        String(book.title).trim().toLocaleLowerCase() === String(input.previousTitle).trim().toLocaleLowerCase() &&
+        String(book.author).trim().toLocaleLowerCase() === String(input.previousAuthor).trim().toLocaleLowerCase()
+      );
+    }
+    if (index === -1) return res.status(404).json({ error: 'Book was not found in books.json.' });
+
+    const updatedBook = {
+      ...books[index],
+      title,
+      author,
+      genre,
+      pages,
+      currentPage,
+      status,
+      cover: typeof input.cover === 'string' ? input.cover.trim() : '',
+      description: typeof input.description === 'string' ? input.description.trim() : ''
+    };
+    books[index] = updatedBook;
+    await fs.promises.writeFile(BOOKS_FILE, JSON.stringify(books, null, 2) + "\n", "utf8");
+    res.json(updatedBook);
+  } catch (error) {
+    console.error('Failed to update book:', error);
+    res.status(500).json({ error: 'Could not update the book.' });
+  }
 });
 
 app.get('/', (req, res) => {
