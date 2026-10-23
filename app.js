@@ -8,16 +8,40 @@ const crypto = require('crypto');
 const { promisify } = require('util');
 const scrypt = promisify(crypto.scrypt);
 const bookwormPath = path.join(__dirname, "index.html");
-const booksPath = path.join(__dirname, "data", "books.json");
 const streakPath = path.join(__dirname, "data", "streak.json");
 const authDirectory = path.join(__dirname, "data", ".auth");
 const usersPath = path.join(authDirectory, "users.json");
 const sessionsPath = path.join(authDirectory, "sessions.json");
-const BOOKS_FILE = booksPath;
+const userBooksDirectory = path.join(authDirectory, "books");
 
-async function readBooks() {
-  const contents = await fs.promises.readFile(BOOKS_FILE, 'utf8');
-  return JSON.parse(contents);
+async function getBooksForRequest(req) {
+  const user = findAuthenticatedUser(req);
+  if (!user) return { user: null, books: [] };
+
+  const userBooksPath = path.join(userBooksDirectory, `${user.id}.json`);
+  try {
+    const storedBooks = JSON.parse(await fs.promises.readFile(userBooksPath, 'utf8'));
+    const books = Array.isArray(storedBooks) ? storedBooks.filter(book => book?.default !== true) : [];
+    if (!Array.isArray(storedBooks) || books.length !== storedBooks.length) {
+      await saveBooksForUser(user, books);
+    }
+    return { user, books };
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+    const emptyBooks = [];
+    await fs.promises.mkdir(userBooksDirectory, { recursive: true });
+    await fs.promises.writeFile(userBooksPath, JSON.stringify(emptyBooks, null, 2) + "\n", "utf8");
+    return { user, books: emptyBooks };
+  }
+}
+
+async function saveBooksForUser(user, books) {
+  await fs.promises.mkdir(userBooksDirectory, { recursive: true });
+  await fs.promises.writeFile(
+    path.join(userBooksDirectory, `${user.id}.json`),
+    JSON.stringify(books, null, 2) + "\n",
+    "utf8"
+  );
 }
 const sessionCookie = 'bookworm_session';
 const sessionDurationMs = 7 * 24 * 60 * 60 * 1000;
@@ -207,12 +231,14 @@ function saveStreakData(data) {
 }
 
 app.get('/api/streak', (req, res) => {
+  if (!findAuthenticatedUser(req)) return res.status(401).json({ error: 'Log in to view your reading streak.' });
   const today = String(req.query.today || '');
   if (!isDate(today)) return res.status(400).json({ error: 'A valid local date is required.' });
   res.json(streakSummary(readStreakData(), today));
 });
 
 app.post('/api/streak/activity', (req, res) => {
+  if (!findAuthenticatedUser(req)) return res.status(401).json({ error: 'Log in to save reading activity.' });
   const { date } = req.body || {};
   if (!isDate(date)) return res.status(400).json({ error: 'A valid reading date is required.' });
 
@@ -234,38 +260,34 @@ app.post('/api/streak/activity', (req, res) => {
   }
 });
 
-app.get('/api/books/search', (req, res) => {
+app.get('/api/books/search', async (req, res) => {
+  if (!findAuthenticatedUser(req)) {
+    return res.status(401).json({ error: 'Log in to search your books.' });
+  }
   const query = String(req.query.q || '').trim().slice(0, 100);
 
   if (!query) {
     return res.json({ results: [] });
   }
 
-  fs.readFile(booksPath, 'utf8', (error, contents) => {
-    if (error) {
-      console.error('Could not read books data:', error);
-      return res.status(500).json({ error: 'Book search is unavailable.' });
-    }
-
-    try {
-      const books = JSON.parse(contents);
-      const needle = query.toLocaleLowerCase();
-      const results = books.filter(book =>
-        [book.title, book.author, book.genre]
-          .some(value => String(value || '').toLocaleLowerCase().includes(needle))
-      );
-
-      res.json({ results });
-    } catch (parseError) {
-      console.error('Could not parse books data:', parseError);
-      res.status(500).json({ error: 'Book search is unavailable.' });
-    }
-  });
+  try {
+    const { books } = await getBooksForRequest(req);
+    const needle = query.toLocaleLowerCase();
+    const results = deduplicateServerBooks(books).filter(book =>
+      [book.title, book.author, book.genre]
+        .some(value => String(value || '').toLocaleLowerCase().includes(needle))
+    );
+    res.json({ results });
+  } catch (error) {
+    console.error('Could not search books:', error);
+    res.status(500).json({ error: 'Book search is unavailable.' });
+  }
 });
 
 app.get("/api/books", async (req, res) => {
   try {
-    const books = deduplicateServerBooks(await readBooks());
+    const { user, books } = await getBooksForRequest(req);
+    if (!user) return res.status(401).json({ error: "Log in to view your books." });
     res.json(books);
   } catch (error) {
     console.error("Failed to read books:", error);
@@ -286,6 +308,8 @@ function deduplicateServerBooks(books) {
 // Add a new book and save it to books.json
 app.post("/api/books", async (req, res) => {
   try {
+    const { user } = await getBooksForRequest(req);
+    if (!user) return res.status(401).json({ error: "Log in to save books to your account." });
     const {
       title,
       author,
@@ -330,12 +354,13 @@ app.post("/api/books", async (req, res) => {
       });
     }
 
-    const books = deduplicateServerBooks(await readBooks());
+    const books = deduplicateServerBooks((await getBooksForRequest(req)).books);
 
     const duplicateSafeBooks = books;
 
     const newBook = {
       id: crypto.randomUUID(),
+      createdAt: new Date().toISOString(),
       title: title.trim(),
       author: author.trim(),
       genre: genre.trim(),
@@ -360,11 +385,7 @@ app.post("/api/books", async (req, res) => {
 
     duplicateSafeBooks.push(newBook);
 
-    await fs.promises.writeFile(
-      BOOKS_FILE,
-      JSON.stringify(duplicateSafeBooks, null, 2) + "\n",
-      "utf8"
-    );
+    await saveBooksForUser(user, duplicateSafeBooks);
 
     res.status(201).json(newBook);
   } catch (error) {
@@ -377,6 +398,8 @@ app.post("/api/books", async (req, res) => {
 
 app.put("/api/books/:id", async (req, res) => {
   try {
+    const { user } = await getBooksForRequest(req);
+    if (!user) return res.status(401).json({ error: "Log in to update books." });
     const input = req.body || {};
     const title = String(input.title || '').trim();
     const author = String(input.author || '').trim();
@@ -390,7 +413,7 @@ app.put("/api/books/:id", async (req, res) => {
     }
 
     const status = currentPage === 0 ? 'want' : currentPage >= pages ? 'finished' : 'current';
-    const books = deduplicateServerBooks(await readBooks());
+    const books = deduplicateServerBooks((await getBooksForRequest(req)).books);
     const requestedId = String(req.params.id);
     let index = books.findIndex(book => book.id === requestedId);
     if (index === -1 && input.previousTitle && input.previousAuthor) {
@@ -413,11 +436,27 @@ app.put("/api/books/:id", async (req, res) => {
       description: typeof input.description === 'string' ? input.description.trim() : ''
     };
     books[index] = updatedBook;
-    await fs.promises.writeFile(BOOKS_FILE, JSON.stringify(books, null, 2) + "\n", "utf8");
+    await saveBooksForUser(user, books);
     res.json(updatedBook);
   } catch (error) {
     console.error('Failed to update book:', error);
     res.status(500).json({ error: 'Could not update the book.' });
+  }
+});
+
+app.delete("/api/books/:id", async (req, res) => {
+  try {
+    const { user, books } = await getBooksForRequest(req);
+    if (!user) return res.status(401).json({ error: "Log in to remove books." });
+    const index = books.findIndex(book => String(book.id) === String(req.params.id));
+    if (index === -1) return res.status(404).json({ error: "Book was not found." });
+
+    books.splice(index, 1);
+    await saveBooksForUser(user, books);
+    res.json({ deleted: true });
+  } catch (error) {
+    console.error("Failed to delete book:", error);
+    res.status(500).json({ error: "Could not remove the book." });
   }
 });
 

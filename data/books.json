@@ -317,10 +317,10 @@
     "author": "Fredrik Backman",
     "genre": "Fiction",
     "pages": 337,
-    "currentPage": 110,
+    "currentPage": 109,
     "cover": "https://covers.openlibrary.org/b/isbn/9781476738017-L.jpg",
     "description": "A grumpy widower's life changes when a new family moves in next door.",
-    "status": "current",
+    "status": "finished",
     "default": true
   },
   {
@@ -370,17 +370,5 @@
     "description": "A reflective story about love, loss, memory, and growing up.",
     "status": "finished",
     "default": true
-  },
-  {
-    "id": "7907d169-bed2-41fe-8f7c-0ef51cbb26ea",
-    "title": "watashi wa nandesuka",
-    "author": "nathan",
-    "genre": "Biography",
-    "pages": 10,
-    "currentPage": 0,
-    "cover": "",
-    "description": "",
-    "status": "want",
-    "default": false
   }
 ]

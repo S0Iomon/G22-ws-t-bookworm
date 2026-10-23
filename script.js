@@ -46,6 +46,20 @@ function setAuthenticatedUser(user) {
   accountButton.textContent = user ? "Log out" : "Log in";
   accountButton.setAttribute("aria-label", user ? `Log out ${user.name}` : "Log in");
   accountButton.title = user ? `Signed in as ${user.email}` : "Log in or create an account";
+  document.body.classList.toggle("auth-required", !user);
+}
+
+async function loadBooksForUser() {
+  const response = await fetch("/api/books");
+  const contentType = response.headers.get("content-type") || "";
+  if (!contentType.includes("application/json")) {
+    throw new Error("The books API was not found. Restart the Express server with npm start.");
+  }
+  const serverBooks = await response.json();
+  if (!response.ok) throw new Error(serverBooks.error || "Could not load your books.");
+  books = deduplicateBooks(serverBooks.map(normalizeBookProgress));
+  saveBooks();
+  renderBooks();
 }
 
 function setAuthMode(mode) {
@@ -71,6 +85,7 @@ function openAuthDialog() {
 }
 
 function closeAuthDialog() {
+  if (!authenticatedUser) return;
   authOverlay.classList.remove("visible-page");
   authOverlay.classList.add("invisible-page");
   document.body.style.overflow = "";
@@ -80,9 +95,20 @@ function closeAuthDialog() {
 async function loadAuthState() {
   try {
     const response = await fetch("/api/auth/me");
+    if (!response.ok) throw new Error("Could not check login status.");
     const data = await response.json();
-    if (response.ok) setAuthenticatedUser(data.user);
+    if (data.user) {
+      await loadBooksForUser();
+      setAuthenticatedUser(data.user);
+      closeAuthDialog();
+      loadStreak();
+    } else {
+      setAuthenticatedUser(null);
+      clearBooks();
+    }
   } catch (error) {
+    setAuthenticatedUser(null);
+    clearBooks();
     authStatus.textContent = "Account service is unavailable.";
   }
 }
@@ -93,6 +119,8 @@ async function logOut() {
     const response = await fetch("/api/auth/logout", { method: "POST" });
     if (!response.ok) throw new Error("Logout failed");
     setAuthenticatedUser(null);
+    clearBooks();
+    openAuthDialog();
   } catch (error) {
     accountButton.title = "Could not log out. Check the server connection.";
   } finally {
@@ -146,7 +174,9 @@ authForm.addEventListener("submit", async event => {
     }
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || "Authentication failed.");
+    await loadBooksForUser();
     setAuthenticatedUser(data.user);
+    loadStreak();
     authForm.reset();
     closeAuthDialog();
   } catch (error) {
@@ -189,6 +219,27 @@ const profileAgeInput =
 const profileDescriptionInput =
   document.querySelector("#profile-description");
 
+const profilePhotoInput =
+  document.querySelector("#profile-photo-input");
+
+const profilePhotoPreview =
+  document.querySelector("#profile-photo-preview");
+
+const profilePhotoStatus =
+  document.querySelector("#profile-photo-status");
+
+const removeProfilePhotoButton =
+  document.querySelector("#remove-profile-photo");
+
+const profileAvatarImage =
+  document.querySelector(".profile-avatar img");
+
+const headerUserImage =
+  document.querySelector(".user-icon");
+
+const DEFAULT_PROFILE_PHOTO = "./resources/user.png";
+const MAX_PROFILE_PHOTO_SIZE = 2 * 1024 * 1024;
+
 const PROFILE_STORAGE_KEY =
   "myBookReaderProfile";
 
@@ -200,7 +251,8 @@ const PROFILE_STORAGE_KEY =
 const defaultProfile = {
   name: "Reader",
   age: "",
-  description: ""
+  description: "",
+  photo: ""
 };
 
 
@@ -282,6 +334,50 @@ function renderProfile() {
   profileDisplayDescription.textContent =
     profile.description ||
     "Tell us a little about yourself.";
+
+  const photo = profile.photo || DEFAULT_PROFILE_PHOTO;
+  if (profileAvatarImage) profileAvatarImage.src = photo;
+  if (headerUserImage) headerUserImage.src = photo;
+  if (profilePhotoPreview) profilePhotoPreview.src = photo;
+}
+
+if (profilePhotoInput) {
+  profilePhotoInput.addEventListener("change", () => {
+    const file = profilePhotoInput.files && profilePhotoInput.files[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      profilePhotoStatus.textContent = "Choose an image file.";
+      profilePhotoInput.value = "";
+      return;
+    }
+    if (file.size > MAX_PROFILE_PHOTO_SIZE) {
+      profilePhotoStatus.textContent = "Choose an image smaller than 2 MB.";
+      profilePhotoInput.value = "";
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      profile.photo = String(reader.result || "");
+      saveProfile();
+      renderProfile();
+      profilePhotoStatus.textContent = "Profile picture updated.";
+    });
+    reader.addEventListener("error", () => {
+      profilePhotoStatus.textContent = "Could not read that image.";
+    });
+    reader.readAsDataURL(file);
+  });
+}
+
+if (removeProfilePhotoButton) {
+  removeProfilePhotoButton.addEventListener("click", () => {
+    profile.photo = "";
+    saveProfile();
+    renderProfile();
+    if (profilePhotoInput) profilePhotoInput.value = "";
+    if (profilePhotoStatus) profilePhotoStatus.textContent = "Profile picture removed.";
+  });
 }
 
 
@@ -417,416 +513,6 @@ if (profileForm) {
 
 renderProfile();
 /* =================================
-   SAMPLE BOOKS
-================================= */
-
-const defaultBooks = [
-  {
-    id: crypto.randomUUID(),
-    title: "The Midnight Library",
-    author: "Matt Haig",
-    genre: "Fiction",
-    pages: 304,
-    currentPage: 134,
-    cover: "https://covers.openlibrary.org/b/isbn/9780525559474-L.jpg",
-    description: "A story about choices, possibilities, and the lives we might have lived.",
-    status: "current",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "Atomic Habits",
-    author: "James Clear",
-    genre: "Self-Help",
-    pages: 320,
-    currentPage: 70,
-    cover: "https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg",
-    description: "A practical guide to building good habits and breaking bad ones.",
-    status: "want",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "Dune",
-    author: "Frank Herbert",
-    genre: "Science Fiction",
-    pages: 688,
-    currentPage: 435,
-    cover: "https://covers.openlibrary.org/b/isbn/9780441172719-L.jpg",
-    description: "An epic science-fiction story about power, politics, and survival on Arrakis.",
-    status: "finished",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "The Hobbit",
-    author: "J.R.R. Tolkien",
-    genre: "Fantasy",
-    pages: 310,
-    currentPage: 201,
-    cover: "https://covers.openlibrary.org/b/isbn/9780547928227-L.jpg",
-    description: "Bilbo Baggins leaves his quiet life behind and joins an unexpected adventure.",
-    status: "current",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "1984",
-    author: "George Orwell",
-    genre: "Dystopian",
-    pages: 328,
-    currentPage: 23,
-    cover: "https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg",
-    description: "A dystopian novel exploring surveillance, control, and individual freedom.",
-    status: "want",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "The Alchemist",
-    author: "Paulo Coelho",
-    genre: "Adventure",
-    pages: 208,
-    currentPage: 57,
-    cover: "https://covers.openlibrary.org/b/isbn/9780062315007-L.jpg",
-    description: "A young shepherd travels in search of treasure while discovering his purpose.",
-    status: "finished",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "Harry Potter and the Sorcerer's Stone",
-    author: "J.K. Rowling",
-    genre: "Fantasy",
-    pages: 309,
-    currentPage: 82,
-    cover: "https://covers.openlibrary.org/b/isbn/9780590353427-L.jpg",
-    description: "A young boy discovers that he is a wizard and begins his magical education.",
-    status: "want",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "To Kill a Mockingbird",
-    author: "Harper Lee",
-    genre: "Classic",
-    pages: 281,
-    currentPage: 234,
-    cover: "https://covers.openlibrary.org/b/isbn/9780061120084-L.jpg",
-    description: "A coming-of-age story centered on justice, morality, and prejudice.",
-    status: "finished",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    genre: "Classic",
-    pages: 180,
-    currentPage: 122,
-    cover: "https://covers.openlibrary.org/b/isbn/9780743273565-L.jpg",
-    description: "A story of wealth, love, ambition, and the American Dream.",
-    status: "finished",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "Pride and Prejudice",
-    author: "Jane Austen",
-    genre: "Romance",
-    pages: 432,
-    currentPage: 372,
-    cover: "https://covers.openlibrary.org/b/isbn/9780141439518-L.jpg",
-    description: "Elizabeth Bennet navigates love, family expectations, and social class.",
-    status: "want",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "The Catcher in the Rye",
-    author: "J.D. Salinger",
-    genre: "Classic",
-    pages: 277,
-    currentPage: 100,
-    cover: "https://covers.openlibrary.org/b/isbn/9780316769488-L.jpg",
-    description: "A teenage boy struggles with identity, adulthood, and alienation.",
-    status: "current",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "The Lord of the Rings",
-    author: "J.R.R. Tolkien",
-    genre: "Fantasy",
-    pages: 1178,
-    currentPage: 10,
-    cover: "https://covers.openlibrary.org/b/isbn/9780618640157-L.jpg",
-    description: "An epic journey to destroy a powerful ring and defeat an ancient evil.",
-    status: "want",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "Fahrenheit 451",
-    author: "Ray Bradbury",
-    genre: "Dystopian",
-    pages: 249,
-    currentPage: 70,
-    cover: "https://covers.openlibrary.org/b/isbn/9781451678189-L.jpg",
-    description: "A society where books are forbidden forces one fireman to question his world.",
-    status: "finished",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "The Book Thief",
-    author: "Markus Zusak",
-    genre: "Historical Fiction",
-    pages: 584,
-    currentPage: 256,
-    cover: "https://covers.openlibrary.org/b/isbn/9780375842207-L.jpg",
-    description: "A young girl finds comfort and resistance through books during World War II.",
-    status: "current",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "The Hunger Games",
-    author: "Suzanne Collins",
-    genre: "Young Adult",
-    pages: 374,
-    currentPage: 123,
-    cover: "https://covers.openlibrary.org/b/isbn/9780439023481-L.jpg",
-    description: "Katniss Everdeen is forced to compete in a brutal televised competition.",
-    status: "finished",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "The Fault in Our Stars",
-    author: "John Green",
-    genre: "Romance",
-    pages: 313,
-    currentPage: 43,
-    cover: "https://covers.openlibrary.org/b/isbn/9780525478812-L.jpg",
-    description: "Two teenagers meet and form a deep connection while facing difficult circumstances.",
-    status: "want",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "The Road",
-    author: "Cormac McCarthy",
-    genre: "Post-Apocalyptic",
-    pages: 287,
-    currentPage: 56,
-    cover: "https://covers.openlibrary.org/b/isbn/9780307387899-L.jpg",
-    description: "A father and son travel through a devastated world searching for safety.",
-    status: "finished",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "The Kite Runner",
-    author: "Khaled Hosseini",
-    genre: "Historical Fiction",
-    pages: 371,
-    currentPage: 189,
-    cover: "https://covers.openlibrary.org/b/isbn/9781594631931-L.jpg",
-    description: "A powerful story of friendship, guilt, redemption, and family.",
-    status: "want",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "Educated",
-    author: "Tara Westover",
-    genre: "Memoir",
-    pages: 352,
-    currentPage: 245,
-    cover: "https://covers.openlibrary.org/b/isbn/9780399590504-L.jpg",
-    description: "A memoir about education, family, identity, and finding independence.",
-    status: "current",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "Becoming",
-    author: "Michelle Obama",
-    genre: "Memoir",
-    pages: 448,
-    currentPage: 300,
-    cover: "https://covers.openlibrary.org/b/isbn/9781524763138-L.jpg",
-    description: "A memoir covering childhood, career, family, and life in the public eye.",
-    status: "finished",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "The Psychology of Money",
-    author: "Morgan Housel",
-    genre: "Finance",
-    pages: 256,
-    currentPage: 35,
-    cover: "https://covers.openlibrary.org/b/isbn/9780857197689-L.jpg",
-    description: "Lessons about how behavior and psychology influence financial decisions.",
-    status: "want",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "Deep Work",
-    author: "Cal Newport",
-    genre: "Productivity",
-    pages: 296,
-    currentPage: 10,
-    cover: "https://covers.openlibrary.org/b/isbn/9781455586691-L.jpg",
-    description: "A guide to focused work and developing the ability to concentrate deeply.",
-    status: "current",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "The 7 Habits of Highly Effective People",
-    author: "Stephen R. Covey",
-    genre: "Self-Help",
-    pages: 464,
-    currentPage: 81,
-    cover: "https://covers.openlibrary.org/b/isbn/9781982137274-L.jpg",
-    description: "A framework for personal effectiveness, responsibility, and long-term growth.",
-    status: "want",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "Sapiens",
-    author: "Yuval Noah Harari",
-    genre: "History",
-    pages: 443,
-    currentPage: 96,
-    cover: "https://covers.openlibrary.org/b/isbn/9780062316097-L.jpg",
-    description: "An overview of human history from early humans to the modern world.",
-    status: "finished",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "The Martian",
-    author: "Andy Weir",
-    genre: "Science Fiction",
-    pages: 369,
-    currentPage: 367,
-    cover: "https://covers.openlibrary.org/b/isbn/9780553418026-L.jpg",
-    description: "An astronaut stranded on Mars must use science and ingenuity to survive.",
-    status: "current",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "Project Hail Mary",
-    author: "Andy Weir",
-    genre: "Science Fiction",
-    pages: 496,
-    currentPage: 293,
-    cover: "https://covers.openlibrary.org/b/isbn/9780593135204-L.jpg",
-    description: "A lone astronaut awakens with a mission to save humanity from extinction.",
-    status: "want",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "A Man Called Ove",
-    author: "Fredrik Backman",
-    genre: "Fiction",
-    pages: 337,
-    currentPage: 109,
-    cover: "https://covers.openlibrary.org/b/isbn/9781476738017-L.jpg",
-    description: "A grumpy widower's life changes when a new family moves in next door.",
-    status: "finished",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "The Silent Patient",
-    author: "Alex Michaelides",
-    genre: "Thriller",
-    pages: 336,
-    currentPage: 206,
-    cover: "https://covers.openlibrary.org/b/isbn/9781250301697-L.jpg",
-    description: "A famous painter stops speaking after a shocking crime, leaving a mystery to solve.",
-    status: "want",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "The Seven Husbands of Evelyn Hugo",
-    author: "Taylor Jenkins Reid",
-    genre: "Historical Fiction",
-    pages: 400,
-    currentPage: 190,
-    cover: "https://covers.openlibrary.org/b/isbn/9781501161933-L.jpg",
-    description: "An aging Hollywood star reveals the secrets of her extraordinary life.",
-    status: "current",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "Circe",
-    author: "Madeline Miller",
-    genre: "Fantasy",
-    pages: 393,
-    currentPage: 30,
-    cover: "https://covers.openlibrary.org/b/isbn/9780316556347-L.jpg",
-    description: "A mythological retelling following the life of the goddess Circe.",
-    status: "want",
-    default: true
-  },
-
-  {
-    id: crypto.randomUUID(),
-    title: "Norwegian Wood",
-    author: "Haruki Murakami",
-    genre: "Literary Fiction",
-    pages: 298,
-    currentPage: 100,
-    cover: "https://covers.openlibrary.org/b/isbn/9780375704024-L.jpg",
-    description: "A reflective story about love, loss, memory, and growing up.",
-    status: "finished",
-    default: true
-  }
-];
-
-
-/* =================================
    LOAD BOOKS
 ================================= */
 
@@ -835,36 +521,10 @@ const defaultBooks = [
    LOAD BOOKS
 ================================= */
 
-function loadBooks() {
-  const savedBooks = localStorage.getItem(STORAGE_KEY);
-
-  if (savedBooks) {
-    try {
-      const parsedBooks = JSON.parse(savedBooks);
-
-      // Accept all saved books, not just sample books.
-      if (Array.isArray(parsedBooks)) {
-        const normalizedBooks = deduplicateBooks(parsedBooks.map(normalizeBookProgress));
-        // Clean up duplicates created by older versions of the app.
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(normalizedBooks));
-        return normalizedBooks;
-      }
-    } catch (error) {
-      console.error("Could not load saved books:", error);
-    }
-  }
-
-  // First launch: initialize with sample books.
-  const initialBooks = deduplicateBooks(
-    structuredClone(defaultBooks).map(normalizeBookProgress)
-  );
-
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(initialBooks)
-  );
-
-  return initialBooks;
+function clearBooks() {
+  books = [];
+  localStorage.removeItem(STORAGE_KEY);
+  renderBooks();
 }
 
 function deduplicateBooks(bookList) {
@@ -906,7 +566,7 @@ function normalizeBookProgress(book) {
   return { ...book, currentPage, status };
 }
 
-let books = loadBooks();
+let books = [];
 
 /* =================================
    SAVE BOOKS
@@ -966,6 +626,69 @@ async function updateBookOnServer(book, previousBook) {
   const result = await response.json();
   if (!response.ok) throw new Error(result.error || "Could not update book on server.");
   return result;
+}
+
+async function deleteBookOnServer(bookId) {
+  const response = await fetch(`/api/books/${encodeURIComponent(bookId)}`, { method: "DELETE" });
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.error || "Could not remove book.");
+  return result;
+}
+
+async function saveBookProgress(bookId, page, slider = null) {
+  const index = books.findIndex(book => book.id === bookId);
+  if (index === -1) return;
+
+  const previousBook = { ...books[index] };
+  const nextBook = normalizeBookProgress({ ...previousBook, currentPage: Number(page) });
+  if (slider) slider.disabled = true;
+  try {
+    const savedBook = await updateBookOnServer(nextBook, previousBook);
+    books[index] = savedBook;
+    saveBooks();
+    if (savedBook.currentPage > Number(previousBook.currentPage || 0)) recordReadingActivity();
+
+    if (savedBook.status !== previousBook.status) {
+      renderBooks();
+      showSection(savedBook.status);
+      closeMobileMenu();
+      const destinationSelector = savedBook.status === "want" ? ".want-card" : ".finished-card";
+      const destinationCard = document.querySelector(
+        `${destinationSelector}[data-book-id="${CSS.escape(bookId)}"]`
+      );
+      destinationCard?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+
+    const card = readingList.querySelector(`[data-book-id="${CSS.escape(bookId)}"]`);
+    if (card) {
+      const percentage = Math.round((savedBook.currentPage / savedBook.pages) * 100);
+      card.querySelector(".progress span").style.width = `${percentage}%`;
+      const labels = card.querySelectorAll(".progress-labels span");
+      if (labels.length >= 2) {
+        labels[0].textContent = `${savedBook.currentPage} / ${savedBook.pages} pages`;
+        labels[1].textContent = `${percentage}%`;
+      }
+      const pageInput = card.querySelector(".bookmark-page-input");
+      if (pageInput) pageInput.value = savedBook.currentPage;
+      const cardSlider = card.querySelector(".progress-slider");
+      const output = card.querySelector(".progress-slider-control output");
+      if (cardSlider) cardSlider.value = savedBook.currentPage;
+      if (output) output.textContent = `${savedBook.currentPage} / ${savedBook.pages} pages`;
+    }
+
+    if (currentCard.dataset.bookId === bookId) showDashboardCurrentBook(savedBook);
+  } catch (error) {
+    console.error("Could not save reading progress:", error);
+    if (slider) {
+      slider.value = previousBook.currentPage;
+      const output = slider.parentElement.querySelector("output");
+      if (output) output.textContent = `${previousBook.currentPage} / ${previousBook.pages} pages`;
+      slider.title = `Could not save progress: ${error.message}`;
+    }
+  } finally {
+    if (slider?.isConnected) slider.disabled = false;
+  }
 }
 
 function getLocalDateString(date = new Date()) {
@@ -1371,7 +1094,7 @@ function getBookFromForm() {
     currentPage = pages;
   }
 
-
+  
   /*
      Automatically determine status
      based on reading progress.
@@ -1510,9 +1233,11 @@ function createBookCover(book, className = "") {
     cover.classList.add(className);
   }
 
-  if (book.cover) {
-    cover.style.backgroundImage =
-      `url("${book.cover}")`;
+  if (book.cover && book.cover.trim()) {
+    cover.style.backgroundImage = `url("${book.cover.trim()}")`;
+    cover.classList.add("has-cover-image");
+  } else {
+    cover.classList.add("placeholder-cover");
   }
 
   return cover;
@@ -1567,6 +1292,65 @@ function createEditButton(book) {
   return button;
 }
 
+function createProgressControl(book) {
+  const control = document.createElement("div");
+  control.className = "progress-slider-control";
+
+  const label = document.createElement("label");
+  label.textContent = "Reading progress";
+
+  const slider = document.createElement("input");
+  slider.type = "range";
+  slider.className = "progress-slider";
+  slider.min = "0";
+  slider.max = String(Math.max(1, Number(book.pages) || 1));
+  slider.value = String(Math.min(Number(book.currentPage) || 0, Number(slider.max)));
+  slider.setAttribute("aria-label", `Reading progress for ${book.title}`);
+
+  const value = document.createElement("output");
+  value.textContent = `${slider.value} / ${slider.max} pages`;
+  slider.addEventListener("input", () => {
+    value.textContent = `${slider.value} / ${slider.max} pages`;
+  });
+  slider.addEventListener("change", () => saveBookProgress(book.id, slider.value, slider));
+
+  control.append(label, slider, value);
+  return control;
+}
+
+function createBookActions(book, includeFinish = false) {
+  const actions = document.createElement("div");
+  actions.className = "book-actions";
+  actions.appendChild(createEditButton(book));
+
+  if (includeFinish) {
+    const finishButton = document.createElement("button");
+    finishButton.type = "button";
+    finishButton.className = "mark-finished-btn";
+    finishButton.textContent = "Mark as finished";
+    finishButton.addEventListener("click", () => saveBookProgress(book.id, book.pages));
+    actions.appendChild(finishButton);
+  }
+
+  const deleteButton = document.createElement("button");
+  deleteButton.type = "button";
+  deleteButton.className = "delete-book-btn";
+  deleteButton.textContent = "Delete";
+  deleteButton.addEventListener("click", async () => {
+    if (!confirm(`Delete “${book.title}” from your library?`)) return;
+    try {
+      await deleteBookOnServer(book.id);
+      books = books.filter(item => item.id !== book.id);
+      saveBooks();
+      renderBooks();
+    } catch (error) {
+      alert(`Book could not be deleted: ${error.message}`);
+    }
+  });
+  actions.appendChild(deleteButton);
+  return actions;
+}
+
 
 /* =================================
    BOOKSHELF
@@ -1587,12 +1371,11 @@ function navigateToBook(bookId) {
   showSection(destination.section);
   closeMobileMenu();
 
-  revealBookInSection(destination.section, bookId);
-
   const target = [...document.querySelectorAll(destination.selector)]
     .find(card => card.dataset.bookId === bookId);
   if (!target) return;
 
+  target.hidden = false;
   requestAnimationFrame(() => {
     target.scrollIntoView({ behavior: "smooth", block: "center" });
     target.classList.add("book-navigation-highlight");
@@ -1624,7 +1407,7 @@ function addBookToBookshelf(book) {
   });
 
   bookTile.dataset.genre =
-    book.genre;
+  book.genre;
 
   const cover =
     createBookCover(book);
@@ -1672,7 +1455,7 @@ function addBookToCurrentReads(book) {
   card.dataset.bookId = book.id;
 
   card.dataset.genre =
-    book.genre;
+  book.genre;
 
   const cover =
     createBookCover(
@@ -1746,7 +1529,7 @@ function addBookToCurrentReads(book) {
 
   const progressBar =
     document.createElement("span");
-
+  
   progressBar.style.width =
     `${percentage}%`;
 
@@ -1847,92 +1630,9 @@ function addBookToCurrentReads(book) {
 
   bookmarkButton.addEventListener(
     "click",
-    async () => {
-
-      let newPage =
-        Number(pageInput.value);
-
-      /*
-         Keep the page within
-         valid boundaries.
-      */
-
-      if (newPage < 0) {
-        newPage = 0;
-      }
-
-      if (newPage > totalPages) {
-        newPage = totalPages;
-      }
-
-
-      /*
-         Find the actual book.
-      */
-
-      const bookIndex =
-        books.findIndex(
-          item =>
-            item.id === book.id
-        );
-
-      if (bookIndex === -1) {
-        return;
-      }
-
-      const previousPage = Number(books[bookIndex].currentPage || 0);
-
-      /*
-         Update page.
-      */
-
-      books[bookIndex].currentPage =
-        newPage;
-
-
-      /*
-         Automatically determine
-         the book's status.
-      */
-
-      if (newPage >= totalPages) {
-
-        books[bookIndex].currentPage =
-          totalPages;
-
-        books[bookIndex].status =
-          "finished";
-
-      } else if (newPage === 0) {
-
-        books[bookIndex].status = "want";
-
-      } else {
-
-        books[bookIndex].status =
-          "current";
-
-      }
-
-
-      /*
-         Save and completely
-         re-render the library.
-      */
-
-      try {
-        books[bookIndex] = await updateBookOnServer(books[bookIndex], books[bookIndex]);
-      } catch (error) {
-        console.error("Could not sync reading progress:", error);
-        alert(`Book progress was not saved to books.json: ${error.message}`);
-      }
-
-      saveBooks();
-
-      if (newPage > previousPage) recordReadingActivity();
-
-      renderBooks();
-
+    () => {
+      const newPage = Math.max(0, Math.min(totalPages, Number(pageInput.value) || 0));
+      saveBookProgress(book.id, newPage);
     }
   );
 
@@ -1959,8 +1659,7 @@ function addBookToCurrentReads(book) {
      EDIT BUTTON
   ============================== */
 
-  const editButton =
-    createEditButton(book);
+  const actions = createBookActions(book, true);
 
 
   /* ==============================
@@ -1979,9 +1678,11 @@ function addBookToCurrentReads(book) {
 
   info.appendChild(progressLabels);
 
+  info.appendChild(createProgressControl(book));
+
   info.appendChild(bookmarkArea);
 
-  info.appendChild(editButton);
+  info.appendChild(actions);
 
 
   card.appendChild(cover);
@@ -2008,7 +1709,7 @@ function addBookToWantList(book) {
   card.dataset.bookId = book.id;
 
   card.dataset.genre =
-    book.genre;
+  book.genre;
 
   const cover =
     createBookCover(
@@ -2051,15 +1752,14 @@ function addBookToWantList(book) {
       "page-count"
     );
 
-  const editButton =
-    createEditButton(book);
+  const actions = createBookActions(book);
 
   info.appendChild(title);
   info.appendChild(author);
   info.appendChild(genre);
   info.appendChild(description);
   info.appendChild(pageCount);
-  info.appendChild(editButton);
+  info.appendChild(actions);
 
   card.appendChild(cover);
   card.appendChild(info);
@@ -2083,7 +1783,7 @@ function addBookToFinished(book) {
   card.dataset.bookId = book.id;
 
   card.dataset.genre =
-    book.genre;
+  book.genre;
 
   const cover =
     createBookCover(
@@ -2122,8 +1822,7 @@ function addBookToFinished(book) {
       "description"
     );
 
-  const editButton =
-    createEditButton(book);
+  const actions = createBookActions(book);
 
   card.appendChild(cover);
   card.appendChild(title);
@@ -2131,7 +1830,7 @@ function addBookToFinished(book) {
   card.appendChild(genre);
   card.appendChild(pageCount);
   card.appendChild(description);
-  card.appendChild(editButton);
+  card.appendChild(actions);
 
   finishedList.appendChild(card);
 }
@@ -2209,11 +1908,11 @@ function showDashboardCurrentBook(book) {
 
 
   if (cover) {
-
-    cover.style.backgroundImage =
-      book.cover
-        ? `url("${book.cover}")`
-        : "";
+    cover.style.backgroundImage = book.cover && book.cover.trim()
+      ? `url("${book.cover.trim()}")`
+      : "";
+    cover.classList.toggle("has-cover-image", Boolean(book.cover && book.cover.trim()));
+    cover.classList.toggle("placeholder-cover", !book.cover || !book.cover.trim());
 
   }
 
@@ -2312,33 +2011,37 @@ function updateBookCounts() {
 
   if (bookshelfCount) {
     bookshelfCount.textContent =
-      `${books.length} ${books.length === 1
-        ? "book"
-        : "books"
+      `${books.length} ${
+        books.length === 1
+          ? "book"
+          : "books"
       }`;
   }
 
   if (currentCount) {
     currentCount.textContent =
-      `${currentBooks.length} ${currentBooks.length === 1
-        ? "book"
-        : "books"
+      `${currentBooks.length} ${
+        currentBooks.length === 1
+          ? "book"
+          : "books"
       }`;
   }
 
   if (wantCount) {
     wantCount.textContent =
-      `${wantBooks.length} ${wantBooks.length === 1
-        ? "book"
-        : "books"
+      `${wantBooks.length} ${
+        wantBooks.length === 1
+          ? "book"
+          : "books"
       }`;
   }
 
   if (finishedCount) {
     finishedCount.textContent =
-      `${finishedBooks.length} ${finishedBooks.length === 1
-        ? "book"
-        : "books"
+      `${finishedBooks.length} ${
+        finishedBooks.length === 1
+          ? "book"
+          : "books"
       }`;
   }
 }
@@ -2443,11 +2146,7 @@ document.querySelectorAll(".genre-filter").forEach(filterGroup => {
   });
   sortGroup.append(label, select);
   filterGroup.parentElement.appendChild(sortGroup);
-  select.addEventListener("change", () => {
-    sortBooksInSection(section, select.value);
-    currentPages[section] = 1;
-    renderSection(section);
-  });
+  select.addEventListener("change", () => sortBooksInSection(section, select.value));
 });
 
 function getSectionContainer(section) {
@@ -2589,156 +2288,139 @@ function populateGenreFilters() {
   });
 }
 
+
 /* =================================
-   PAGINATION AND FILTER BOOKS BY GENRE
+   FILTER BOOKS BY GENRE
 ================================= */
 
-const PAGINATION_SECTIONS = {
-  bookshelf: { pageSize: 17, container: bookshelfGrid, itemSelector: ".book-tile:not(.add-tile)" },
-  current: { pageSize: 10, container: readingList, itemSelector: ".reading-card" },
-  want: { pageSize: 10, container: wantList, itemSelector: ".want-card" },
-  finished: { pageSize: 10, container: finishedList, itemSelector: ".finished-card" }
-};
+function filterBooksByGenre(
+  section,
+  genre
+) {
 
-const currentPages = { bookshelf: 1, current: 1, want: 1, finished: 1 };
+  /*
+     MY BOOKSHELF
+  */
 
-function getGenreSelect(sectionKey) {
-  return document.querySelector(`.genre-filter-select[data-section="${sectionKey}"]`);
+  if (section === "bookshelf") {
+
+    const bookTiles =
+      bookshelfGrid.querySelectorAll(
+        ".book-tile:not(.add-tile)"
+      );
+
+    bookTiles.forEach(tile => {
+
+      const bookGenre =
+        tile.dataset.genre;
+
+      tile.hidden =
+        genre !== "all" &&
+        bookGenre !== genre;
+
+    });
+
+  }
+
+
+  /*
+     CURRENT READS
+  */
+
+  if (section === "current") {
+
+    const cards =
+      readingList.querySelectorAll(
+        ".reading-card"
+      );
+
+    cards.forEach(card => {
+
+      const bookGenre =
+        card.dataset.genre;
+
+      card.hidden =
+        genre !== "all" &&
+        bookGenre !== genre;
+
+    });
+
+  }
+
+
+  /*
+     WANT TO READ
+  */
+
+  if (section === "want") {
+
+    const cards =
+      wantList.querySelectorAll(
+        ".want-card"
+      );
+
+    cards.forEach(card => {
+
+      const bookGenre =
+        card.dataset.genre;
+
+      card.hidden =
+        genre !== "all" &&
+        bookGenre !== genre;
+
+    });
+
+  }
+
+
+  /*
+     FINISHED BOOKS
+  */
+
+  if (section === "finished") {
+
+    const cards =
+      finishedList.querySelectorAll(
+        ".finished-card"
+      );
+
+    cards.forEach(card => {
+
+      const bookGenre =
+        card.dataset.genre;
+
+      card.hidden =
+        genre !== "all" &&
+        bookGenre !== genre;
+
+    });
+
+  }
 }
 
-Object.entries(PAGINATION_SECTIONS).forEach(([key, config]) => {
-  const emptyState = document.createElement("p");
-  emptyState.className = "genre-empty-state";
-  emptyState.textContent = "No books are saved in this genre yet.";
-  emptyState.hidden = true;
 
-  const footer = document.createElement("div");
-  footer.className = "pagination-footer";
-  footer.hidden = true;
-
-  const summary = document.createElement("p");
-  summary.className = "pagination-summary";
-
-  const nav = document.createElement("nav");
-  nav.className = "pagination";
-  nav.setAttribute("aria-label", "Pagination");
-
-  footer.append(summary, nav);
-  config.container.after(emptyState, footer);
-
-  Object.assign(config, { emptyState, footer, summary, nav });
-
-  nav.addEventListener("click", event => {
-    const button = event.target.closest("button[data-page]");
-    if (!button || button.disabled) return;
-    currentPages[key] = Number(button.dataset.page);
-    renderSection(key);
-    config.container.closest(".page")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  });
-});
-
-function getPageNumbers(current, totalPages) {
-  const pages = new Set([1, totalPages, current - 1, current, current + 1]);
-  if (current <= 3) [2, 3, 4].forEach(p => pages.add(p));
-  if (current >= totalPages - 2) [totalPages - 1, totalPages - 2, totalPages - 3].forEach(p => pages.add(p));
-
-  const sorted = [...pages].filter(p => p >= 1 && p <= totalPages).sort((a, b) => a - b);
-  const result = [];
-  sorted.forEach((page, index) => {
-    if (index > 0 && page - sorted[index - 1] > 1) result.push("…");
-    result.push(page);
-  });
-  return result;
-}
-
-function createPageButton(label, page, { disabled = false, active = false, ariaLabel = "" } = {}) {
-  const button = document.createElement("button");
-  button.type = "button";
-  button.className = "pagination-btn" + (active ? " active" : "");
-  button.textContent = label;
-  button.disabled = disabled;
-  if (!disabled) button.dataset.page = page;
-  if (active) button.setAttribute("aria-current", "page");
-  if (ariaLabel) button.setAttribute("aria-label", ariaLabel);
-  return button;
-}
-
-function renderPaginationControls(config, page, totalPages) {
-  config.nav.innerHTML = "";
-  config.nav.hidden = totalPages <= 1;
-  if (totalPages <= 1) return;
-
-  config.nav.appendChild(createPageButton("‹", page - 1, { disabled: page === 1, ariaLabel: "Previous page" }));
-
-  getPageNumbers(page, totalPages).forEach(item => {
-    if (item === "…") {
-      const gap = document.createElement("span");
-      gap.className = "pagination-ellipsis";
-      gap.textContent = "…";
-      config.nav.appendChild(gap);
-    } else {
-      config.nav.appendChild(createPageButton(item, item, { active: item === page, ariaLabel: `Page ${item}` }));
-    }
-  });
-
-  config.nav.appendChild(createPageButton("›", page + 1, { disabled: page === totalPages, ariaLabel: "Next page" }));
-}
-
-function renderSection(key) {
-  const config = PAGINATION_SECTIONS[key];
-  const genre = getGenreSelect(key)?.value || "all";
-
-  const items = [...config.container.querySelectorAll(config.itemSelector)];
-  const matching = items.filter(item => genre === "all" || item.dataset.genre === genre);
-
-  const total = matching.length;
-  const totalPages = Math.max(1, Math.ceil(total / config.pageSize));
-  const page = Math.min(Math.max(currentPages[key], 1), totalPages);
-  currentPages[key] = page;
-
-  const start = (page - 1) * config.pageSize;
-  const end = Math.min(start + config.pageSize, total);
-  const visibleItems = new Set(matching.slice(start, end));
-  items.forEach(item => { item.hidden = !visibleItems.has(item); });
-
-  config.emptyState.hidden = !(total === 0 && genre !== "all");
-  config.footer.hidden = total === 0;
-  if (total === 0) return;
-
-  config.summary.textContent = `Showing ${start + 1}–${end} of ${total} ${total === 1 ? "book" : "books"}`;
-  renderPaginationControls(config, page, totalPages);
-}
-
-function renderAllSections() {
-  Object.keys(PAGINATION_SECTIONS).forEach(renderSection);
-}
-
-function revealBookInSection(key, bookId) {
-  const config = PAGINATION_SECTIONS[key];
-  if (!config) return;
-
-  const select = getGenreSelect(key);
-  const items = [...config.container.querySelectorAll(config.itemSelector)];
-  const target = items.find(item => item.dataset.bookId === bookId);
-  if (!target) return;
-
-  if (select && select.value !== "all" && target.dataset.genre !== select.value) select.value = "all";
-
-  const genre = select?.value || "all";
-  const matching = items.filter(item => genre === "all" || item.dataset.genre === genre);
-  currentPages[key] = Math.floor(matching.indexOf(target) / config.pageSize) + 1;
-  renderSection(key);
-}
+/* =================================
+   FILTER CHANGE EVENT
+================================= */
 
 genreFilters.forEach(select => {
-  select.addEventListener("change", () => {
-    currentPages[select.dataset.section] = 1;
-    renderSection(select.dataset.section);
-  });
+
+  select.addEventListener(
+    "change",
+    () => {
+
+      filterBooksByGenre(
+        select.dataset.section,
+        select.value
+      );
+
+    }
+  );
+
 });
 
 /* =================================
-  RENDER ALL BOOKS
+   RENDER ALL BOOKS
 ================================= */
 
 function renderBooks() {
@@ -2750,7 +2432,7 @@ function renderBooks() {
   }
 
   /*
-    Remove generated bookshelf books
+     Remove generated bookshelf books
   */
 
   bookshelfGrid
@@ -2763,7 +2445,7 @@ function renderBooks() {
 
 
   /*
-    Clear status sections
+     Clear status sections
   */
 
   readingList.innerHTML = "";
@@ -2772,8 +2454,8 @@ function renderBooks() {
 
 
   /*
-    Render every book
-    into My Bookshelf
+     Render every book
+     into My Bookshelf
   */
 
   books.forEach(book => {
@@ -2782,8 +2464,8 @@ function renderBooks() {
 
 
   /*
-    Render books according
-    to their current status
+     Render books according
+     to their current status
   */
 
   books.forEach(book => {
@@ -2808,7 +2490,7 @@ function renderBooks() {
 
 
   /*
-    Update counts once
+     Update counts once
   */
 
   updateBookCounts();
@@ -2819,14 +2501,21 @@ function renderBooks() {
     sortBooksInSection(select.dataset.section, select.value);
   });
 
-  renderAllSections();
+  genreFilters.forEach(select => {
+
+    filterBooksByGenre(
+      select.dataset.section,
+      select.value
+    );
+
+  });
 
   /*
-    Pick a random CURRENT book
-    for the dashboard.
+     Pick a random CURRENT book
+     for the dashboard.
 
-    This does NOT change the
-    book's actual status.
+     This does NOT change the
+     book's actual status.
   */
 
   const currentBooks =
@@ -2838,16 +2527,32 @@ function renderBooks() {
 
     const randomBook =
       currentBooks[
-      Math.floor(
-        Math.random() *
-        currentBooks.length
-      )
+        Math.floor(
+          Math.random() *
+          currentBooks.length
+        )
       ];
 
     showDashboardCurrentBook(
       randomBook
     );
-
+  } else {
+    currentCard.removeAttribute("data-book-id");
+    currentCard.removeAttribute("role");
+    currentCard.removeAttribute("aria-label");
+    currentCard.tabIndex = -1;
+    currentCard.querySelector("h2").textContent = "No current book yet";
+    currentCard.querySelector(".book-author").textContent = "";
+    currentCard.querySelector(".book-genre").textContent = "";
+    currentCard.querySelector(".description").textContent = "";
+    currentCard.querySelector(".pages").textContent = "0 / 0 pages";
+    currentCard.querySelector(".cover").style.backgroundImage = "";
+    currentCard.querySelector(".progress span").style.width = "0%";
+    const labels = currentCard.querySelectorAll(".progress-labels span");
+    if (labels.length >= 2) {
+      labels[0].textContent = "0%";
+      labels[1].textContent = "0 / 0 pages";
+    }
   }
 }
 
@@ -2986,7 +2691,12 @@ function renderSearchResults(books, target = searchResults) {
 
     const cover = document.createElement("div");
     cover.className = "search-result-cover";
-    if (book.cover) cover.style.backgroundImage = `url("${book.cover}")`;
+    if (book.cover && book.cover.trim()) {
+      cover.style.backgroundImage = `url("${book.cover.trim()}")`;
+      cover.classList.add("has-cover-image");
+    } else {
+      cover.classList.add("placeholder-cover");
+    }
     cover.setAttribute("aria-hidden", "true");
 
     const details = document.createElement("div");
@@ -3112,6 +2822,29 @@ document.addEventListener("keydown", event => {
 ================================= */
 
 renderBooks();
-loadStreak();
 loadAuthState();
 
+
+
+/* DARK MODE SETTING */
+const darkModeToggle = document.getElementById("dark-mode-toggle");
+
+if (darkModeToggle) {
+  const savedTheme = localStorage.getItem("bookworm-theme");
+  if (savedTheme === "dark") document.body.classList.add("dark-mode");
+
+  function updateDarkModeButton() {
+    const isDark = document.body.classList.contains("dark-mode");
+    darkModeToggle.querySelector("span").textContent = isDark ? "\u2600" : "\u263e";
+    darkModeToggle.setAttribute("aria-label", `Switch to ${isDark ? "light" : "dark"} mode`);
+    darkModeToggle.title = `Switch to ${isDark ? "light" : "dark"} mode`;
+    darkModeToggle.setAttribute("aria-pressed", String(isDark));
+  }
+
+  updateDarkModeButton();
+  darkModeToggle.addEventListener("click", () => {
+    const isDark = document.body.classList.toggle("dark-mode");
+    localStorage.setItem("bookworm-theme", isDark ? "dark" : "light");
+    updateDarkModeButton();
+  });
+}
