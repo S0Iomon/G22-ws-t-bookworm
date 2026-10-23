@@ -661,7 +661,7 @@ const defaultBooks = [
     author: "Tara Westover",
     genre: "Memoir",
     pages: 352,
-    currentPage:245,
+    currentPage: 245,
     cover: "https://covers.openlibrary.org/b/isbn/9780399590504-L.jpg",
     description: "A memoir about education, family, identity, and finding independence.",
     status: "current",
@@ -1371,7 +1371,7 @@ function getBookFromForm() {
     currentPage = pages;
   }
 
-  
+
   /*
      Automatically determine status
      based on reading progress.
@@ -1587,11 +1587,12 @@ function navigateToBook(bookId) {
   showSection(destination.section);
   closeMobileMenu();
 
+  revealBookInSection(destination.section, bookId);
+
   const target = [...document.querySelectorAll(destination.selector)]
     .find(card => card.dataset.bookId === bookId);
   if (!target) return;
 
-  target.hidden = false;
   requestAnimationFrame(() => {
     target.scrollIntoView({ behavior: "smooth", block: "center" });
     target.classList.add("book-navigation-highlight");
@@ -1623,7 +1624,7 @@ function addBookToBookshelf(book) {
   });
 
   bookTile.dataset.genre =
-  book.genre;
+    book.genre;
 
   const cover =
     createBookCover(book);
@@ -1671,7 +1672,7 @@ function addBookToCurrentReads(book) {
   card.dataset.bookId = book.id;
 
   card.dataset.genre =
-  book.genre;
+    book.genre;
 
   const cover =
     createBookCover(
@@ -1745,7 +1746,7 @@ function addBookToCurrentReads(book) {
 
   const progressBar =
     document.createElement("span");
-  
+
   progressBar.style.width =
     `${percentage}%`;
 
@@ -2007,7 +2008,7 @@ function addBookToWantList(book) {
   card.dataset.bookId = book.id;
 
   card.dataset.genre =
-  book.genre;
+    book.genre;
 
   const cover =
     createBookCover(
@@ -2082,7 +2083,7 @@ function addBookToFinished(book) {
   card.dataset.bookId = book.id;
 
   card.dataset.genre =
-  book.genre;
+    book.genre;
 
   const cover =
     createBookCover(
@@ -2311,37 +2312,33 @@ function updateBookCounts() {
 
   if (bookshelfCount) {
     bookshelfCount.textContent =
-      `${books.length} ${
-        books.length === 1
-          ? "book"
-          : "books"
+      `${books.length} ${books.length === 1
+        ? "book"
+        : "books"
       }`;
   }
 
   if (currentCount) {
     currentCount.textContent =
-      `${currentBooks.length} ${
-        currentBooks.length === 1
-          ? "book"
-          : "books"
+      `${currentBooks.length} ${currentBooks.length === 1
+        ? "book"
+        : "books"
       }`;
   }
 
   if (wantCount) {
     wantCount.textContent =
-      `${wantBooks.length} ${
-        wantBooks.length === 1
-          ? "book"
-          : "books"
+      `${wantBooks.length} ${wantBooks.length === 1
+        ? "book"
+        : "books"
       }`;
   }
 
   if (finishedCount) {
     finishedCount.textContent =
-      `${finishedBooks.length} ${
-        finishedBooks.length === 1
-          ? "book"
-          : "books"
+      `${finishedBooks.length} ${finishedBooks.length === 1
+        ? "book"
+        : "books"
       }`;
   }
 }
@@ -2446,7 +2443,11 @@ document.querySelectorAll(".genre-filter").forEach(filterGroup => {
   });
   sortGroup.append(label, select);
   filterGroup.parentElement.appendChild(sortGroup);
-  select.addEventListener("change", () => sortBooksInSection(section, select.value));
+  select.addEventListener("change", () => {
+    sortBooksInSection(section, select.value);
+    currentPages[section] = 1;
+    renderSection(section);
+  });
 });
 
 function getSectionContainer(section) {
@@ -2588,139 +2589,156 @@ function populateGenreFilters() {
   });
 }
 
-
 /* =================================
-   FILTER BOOKS BY GENRE
+   PAGINATION AND FILTER BOOKS BY GENRE
 ================================= */
 
-function filterBooksByGenre(
-  section,
-  genre
-) {
+const PAGINATION_SECTIONS = {
+  bookshelf: { pageSize: 17, container: bookshelfGrid, itemSelector: ".book-tile:not(.add-tile)" },
+  current: { pageSize: 10, container: readingList, itemSelector: ".reading-card" },
+  want: { pageSize: 10, container: wantList, itemSelector: ".want-card" },
+  finished: { pageSize: 10, container: finishedList, itemSelector: ".finished-card" }
+};
 
-  /*
-     MY BOOKSHELF
-  */
+const currentPages = { bookshelf: 1, current: 1, want: 1, finished: 1 };
 
-  if (section === "bookshelf") {
-
-    const bookTiles =
-      bookshelfGrid.querySelectorAll(
-        ".book-tile:not(.add-tile)"
-      );
-
-    bookTiles.forEach(tile => {
-
-      const bookGenre =
-        tile.dataset.genre;
-
-      tile.hidden =
-        genre !== "all" &&
-        bookGenre !== genre;
-
-    });
-
-  }
-
-
-  /*
-     CURRENT READS
-  */
-
-  if (section === "current") {
-
-    const cards =
-      readingList.querySelectorAll(
-        ".reading-card"
-      );
-
-    cards.forEach(card => {
-
-      const bookGenre =
-        card.dataset.genre;
-
-      card.hidden =
-        genre !== "all" &&
-        bookGenre !== genre;
-
-    });
-
-  }
-
-
-  /*
-     WANT TO READ
-  */
-
-  if (section === "want") {
-
-    const cards =
-      wantList.querySelectorAll(
-        ".want-card"
-      );
-
-    cards.forEach(card => {
-
-      const bookGenre =
-        card.dataset.genre;
-
-      card.hidden =
-        genre !== "all" &&
-        bookGenre !== genre;
-
-    });
-
-  }
-
-
-  /*
-     FINISHED BOOKS
-  */
-
-  if (section === "finished") {
-
-    const cards =
-      finishedList.querySelectorAll(
-        ".finished-card"
-      );
-
-    cards.forEach(card => {
-
-      const bookGenre =
-        card.dataset.genre;
-
-      card.hidden =
-        genre !== "all" &&
-        bookGenre !== genre;
-
-    });
-
-  }
+function getGenreSelect(sectionKey) {
+  return document.querySelector(`.genre-filter-select[data-section="${sectionKey}"]`);
 }
 
+Object.entries(PAGINATION_SECTIONS).forEach(([key, config]) => {
+  const emptyState = document.createElement("p");
+  emptyState.className = "genre-empty-state";
+  emptyState.textContent = "No books are saved in this genre yet.";
+  emptyState.hidden = true;
 
-/* =================================
-   FILTER CHANGE EVENT
-================================= */
+  const footer = document.createElement("div");
+  footer.className = "pagination-footer";
+  footer.hidden = true;
+
+  const summary = document.createElement("p");
+  summary.className = "pagination-summary";
+
+  const nav = document.createElement("nav");
+  nav.className = "pagination";
+  nav.setAttribute("aria-label", "Pagination");
+
+  footer.append(summary, nav);
+  config.container.after(emptyState, footer);
+
+  Object.assign(config, { emptyState, footer, summary, nav });
+
+  nav.addEventListener("click", event => {
+    const button = event.target.closest("button[data-page]");
+    if (!button || button.disabled) return;
+    currentPages[key] = Number(button.dataset.page);
+    renderSection(key);
+    config.container.closest(".page")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+});
+
+function getPageNumbers(current, totalPages) {
+  const pages = new Set([1, totalPages, current - 1, current, current + 1]);
+  if (current <= 3) [2, 3, 4].forEach(p => pages.add(p));
+  if (current >= totalPages - 2) [totalPages - 1, totalPages - 2, totalPages - 3].forEach(p => pages.add(p));
+
+  const sorted = [...pages].filter(p => p >= 1 && p <= totalPages).sort((a, b) => a - b);
+  const result = [];
+  sorted.forEach((page, index) => {
+    if (index > 0 && page - sorted[index - 1] > 1) result.push("…");
+    result.push(page);
+  });
+  return result;
+}
+
+function createPageButton(label, page, { disabled = false, active = false, ariaLabel = "" } = {}) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "pagination-btn" + (active ? " active" : "");
+  button.textContent = label;
+  button.disabled = disabled;
+  if (!disabled) button.dataset.page = page;
+  if (active) button.setAttribute("aria-current", "page");
+  if (ariaLabel) button.setAttribute("aria-label", ariaLabel);
+  return button;
+}
+
+function renderPaginationControls(config, page, totalPages) {
+  config.nav.innerHTML = "";
+  config.nav.hidden = totalPages <= 1;
+  if (totalPages <= 1) return;
+
+  config.nav.appendChild(createPageButton("‹", page - 1, { disabled: page === 1, ariaLabel: "Previous page" }));
+
+  getPageNumbers(page, totalPages).forEach(item => {
+    if (item === "…") {
+      const gap = document.createElement("span");
+      gap.className = "pagination-ellipsis";
+      gap.textContent = "…";
+      config.nav.appendChild(gap);
+    } else {
+      config.nav.appendChild(createPageButton(item, item, { active: item === page, ariaLabel: `Page ${item}` }));
+    }
+  });
+
+  config.nav.appendChild(createPageButton("›", page + 1, { disabled: page === totalPages, ariaLabel: "Next page" }));
+}
+
+function renderSection(key) {
+  const config = PAGINATION_SECTIONS[key];
+  const genre = getGenreSelect(key)?.value || "all";
+
+  const items = [...config.container.querySelectorAll(config.itemSelector)];
+  const matching = items.filter(item => genre === "all" || item.dataset.genre === genre);
+
+  const total = matching.length;
+  const totalPages = Math.max(1, Math.ceil(total / config.pageSize));
+  const page = Math.min(Math.max(currentPages[key], 1), totalPages);
+  currentPages[key] = page;
+
+  const start = (page - 1) * config.pageSize;
+  const end = Math.min(start + config.pageSize, total);
+  const visibleItems = new Set(matching.slice(start, end));
+  items.forEach(item => { item.hidden = !visibleItems.has(item); });
+
+  config.emptyState.hidden = !(total === 0 && genre !== "all");
+  config.footer.hidden = total === 0;
+  if (total === 0) return;
+
+  config.summary.textContent = `Showing ${start + 1}–${end} of ${total} ${total === 1 ? "book" : "books"}`;
+  renderPaginationControls(config, page, totalPages);
+}
+
+function renderAllSections() {
+  Object.keys(PAGINATION_SECTIONS).forEach(renderSection);
+}
+
+function revealBookInSection(key, bookId) {
+  const config = PAGINATION_SECTIONS[key];
+  if (!config) return;
+
+  const select = getGenreSelect(key);
+  const items = [...config.container.querySelectorAll(config.itemSelector)];
+  const target = items.find(item => item.dataset.bookId === bookId);
+  if (!target) return;
+
+  if (select && select.value !== "all" && target.dataset.genre !== select.value) select.value = "all";
+
+  const genre = select?.value || "all";
+  const matching = items.filter(item => genre === "all" || item.dataset.genre === genre);
+  currentPages[key] = Math.floor(matching.indexOf(target) / config.pageSize) + 1;
+  renderSection(key);
+}
 
 genreFilters.forEach(select => {
-
-  select.addEventListener(
-    "change",
-    () => {
-
-      filterBooksByGenre(
-        select.dataset.section,
-        select.value
-      );
-
-    }
-  );
-
+  select.addEventListener("change", () => {
+    currentPages[select.dataset.section] = 1;
+    renderSection(select.dataset.section);
+  });
 });
 
 /* =================================
-   RENDER ALL BOOKS
+  RENDER ALL BOOKS
 ================================= */
 
 function renderBooks() {
@@ -2732,7 +2750,7 @@ function renderBooks() {
   }
 
   /*
-     Remove generated bookshelf books
+    Remove generated bookshelf books
   */
 
   bookshelfGrid
@@ -2745,7 +2763,7 @@ function renderBooks() {
 
 
   /*
-     Clear status sections
+    Clear status sections
   */
 
   readingList.innerHTML = "";
@@ -2754,8 +2772,8 @@ function renderBooks() {
 
 
   /*
-     Render every book
-     into My Bookshelf
+    Render every book
+    into My Bookshelf
   */
 
   books.forEach(book => {
@@ -2764,8 +2782,8 @@ function renderBooks() {
 
 
   /*
-     Render books according
-     to their current status
+    Render books according
+    to their current status
   */
 
   books.forEach(book => {
@@ -2790,7 +2808,7 @@ function renderBooks() {
 
 
   /*
-     Update counts once
+    Update counts once
   */
 
   updateBookCounts();
@@ -2801,21 +2819,14 @@ function renderBooks() {
     sortBooksInSection(select.dataset.section, select.value);
   });
 
-  genreFilters.forEach(select => {
-
-    filterBooksByGenre(
-      select.dataset.section,
-      select.value
-    );
-
-  });
+  renderAllSections();
 
   /*
-     Pick a random CURRENT book
-     for the dashboard.
+    Pick a random CURRENT book
+    for the dashboard.
 
-     This does NOT change the
-     book's actual status.
+    This does NOT change the
+    book's actual status.
   */
 
   const currentBooks =
@@ -2827,10 +2838,10 @@ function renderBooks() {
 
     const randomBook =
       currentBooks[
-        Math.floor(
-          Math.random() *
-          currentBooks.length
-        )
+      Math.floor(
+        Math.random() *
+        currentBooks.length
+      )
       ];
 
     showDashboardCurrentBook(
