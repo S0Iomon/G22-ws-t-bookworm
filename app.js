@@ -8,7 +8,7 @@ const crypto = require('crypto');
 const { promisify } = require('util');
 const scrypt = promisify(crypto.scrypt);
 const bookwormPath = path.join(__dirname, "index.html");
-const streakPath = path.join(__dirname, "data", "streak.json");
+const userStreaksDirectory = path.join(__dirname, "data", ".auth", "streaks");
 const authDirectory = path.join(__dirname, "data", ".auth");
 const usersPath = path.join(authDirectory, "users.json");
 const sessionsPath = path.join(authDirectory, "sessions.json");
@@ -178,9 +178,13 @@ app.post('/api/auth/logout', (req, res) => {
   }
 });
 
-function readStreakData() {
+function getUserStreakPath(user) {
+  return path.join(userStreaksDirectory, `${user.id}.json`);
+}
+
+function readStreakData(user) {
   try {
-    const data = JSON.parse(fs.readFileSync(streakPath, 'utf8'));
+    const data = JSON.parse(fs.readFileSync(getUserStreakPath(user), 'utf8'));
     return {
       activityDates: Array.isArray(data.activityDates) ? data.activityDates : [],
       longestStreak: Number(data.longestStreak) || 0
@@ -226,24 +230,27 @@ function isDate(value) {
     new Date(`${value}T00:00:00Z`).toISOString().slice(0, 10) === value;
 }
 
-function saveStreakData(data) {
-  fs.writeFileSync(streakPath, JSON.stringify(data, null, 2));
+function saveStreakData(user, data) {
+  fs.mkdirSync(userStreaksDirectory, { recursive: true });
+  fs.writeFileSync(getUserStreakPath(user), JSON.stringify(data, null, 2), { mode: 0o600 });
 }
 
 app.get('/api/streak', (req, res) => {
-  if (!findAuthenticatedUser(req)) return res.status(401).json({ error: 'Log in to view your reading streak.' });
+  const user = findAuthenticatedUser(req);
+  if (!user) return res.status(401).json({ error: 'Log in to view your reading streak.' });
   const today = String(req.query.today || '');
   if (!isDate(today)) return res.status(400).json({ error: 'A valid local date is required.' });
-  res.json(streakSummary(readStreakData(), today));
+  res.json(streakSummary(readStreakData(user), today));
 });
 
 app.post('/api/streak/activity', (req, res) => {
-  if (!findAuthenticatedUser(req)) return res.status(401).json({ error: 'Log in to save reading activity.' });
+  const user = findAuthenticatedUser(req);
+  if (!user) return res.status(401).json({ error: 'Log in to save reading activity.' });
   const { date } = req.body || {};
   if (!isDate(date)) return res.status(400).json({ error: 'A valid reading date is required.' });
 
   try {
-    const data = readStreakData();
+    const data = readStreakData(user);
     data.activityDates = [...new Set([...data.activityDates, date])].sort();
     let run = 0;
     for (let index = 0; index < data.activityDates.length; index += 1) {
@@ -252,7 +259,7 @@ app.post('/api/streak/activity', (req, res) => {
         : 1;
       data.longestStreak = Math.max(data.longestStreak, run);
     }
-    saveStreakData(data);
+    saveStreakData(user, data);
     res.json(streakSummary(data, date));
   } catch (error) {
     console.error('Could not save reading activity:', error);

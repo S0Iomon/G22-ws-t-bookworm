@@ -1,0 +1,28 @@
+[
+  {
+    "id": "17797ff2-48a4-4d23-b269-a7aad62a90f4",
+    "createdAt": "2026-11-11T11:33:08.948Z",
+    "title": "watashi wa",
+    "author": "sdlkas",
+    "genre": "Memoir",
+    "pages": 10,
+    "currentPage": 0,
+    "cover": "",
+    "description": "",
+    "status": "want",
+    "default": false
+  },
+  {
+    "id": "bf8f3764-1631-4da3-add0-2f248fe483c9",
+    "createdAt": "2026-11-11T11:33:55.847Z",
+    "title": "again second",
+    "author": "spakdla",
+    "genre": "Mystery",
+    "pages": 14,
+    "currentPage": 3,
+    "cover": "",
+    "description": "",
+    "status": "current",
+    "default": false
+  }
+]

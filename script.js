@@ -635,7 +635,7 @@ async function deleteBookOnServer(bookId) {
   return result;
 }
 
-async function saveBookProgress(bookId, page, slider = null) {
+async function saveBookProgress(bookId, page, slider = null, countBookmark = false) {
   const index = books.findIndex(book => book.id === bookId);
   if (index === -1) return;
 
@@ -646,7 +646,8 @@ async function saveBookProgress(bookId, page, slider = null) {
     const savedBook = await updateBookOnServer(nextBook, previousBook);
     books[index] = savedBook;
     saveBooks();
-    if (savedBook.currentPage > Number(previousBook.currentPage || 0)) recordReadingActivity();
+    const pageAdvanced = savedBook.currentPage > Number(previousBook.currentPage || 0);
+    if (savedBook.currentPage > 0 && (pageAdvanced || countBookmark)) await recordReadingActivity();
 
     if (savedBook.status !== previousBook.status) {
       renderBooks();
@@ -1632,7 +1633,7 @@ function addBookToCurrentReads(book) {
     "click",
     () => {
       const newPage = Math.max(0, Math.min(totalPages, Number(pageInput.value) || 0));
-      saveBookProgress(book.id, newPage);
+      saveBookProgress(book.id, newPage, null, true);
     }
   );
 
@@ -2580,6 +2581,9 @@ addBookForm.addEventListener("submit", async event => {
           ...formBook
         };
         books[bookIndex] = await updateBookOnServer(books[bookIndex], previousBook);
+        if (Number(books[bookIndex].currentPage) > Number(previousBook.currentPage || 0)) {
+          await recordReadingActivity();
+        }
       }
     }
 
@@ -2596,6 +2600,7 @@ addBookForm.addEventListener("submit", async event => {
 
       // Use the book returned by the server.
       books.push(savedBook);
+      if (Number(savedBook.currentPage) > 0) await recordReadingActivity();
     }
 
     saveBooks();

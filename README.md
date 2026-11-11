@@ -38,9 +38,9 @@ Open [http://localhost:3000](http://localhost:3000). Use the **Log in** button t
 
 - Books and profile edits are stored in the browser with `localStorage`.
 - Search reads the server-side catalogue in `data/books.json`; books added only in the browser are not included in server search.
-- Reading activity is stored by the server in `data/streak.json`.
+- Reading activity is stored by the server in `data/.auth/streaks/<user-id>.json`, so each account has its own streak.
 - Account records and sessions are stored under `data/.auth/`. Passwords are stored as scrypt hashes. Keep this runtime data private and out of public repositories.
-- Accounts currently provide login/logout, but book collections, profiles, and streaks are not separated by account or synchronized across devices.
+- Accounts provide login/logout, and each account’s streak is separated on the server. Book collections and profile edits remain browser-local.
 
 ## Project Structure
 
@@ -52,8 +52,7 @@ Bookworm/
 ├── styles.css         # Styling and responsive layout
 ├── data/
 │   ├── books.json     # Server-side search catalogue
-│   ├── streak.json    # Created by the server for reading activity
-│   └── .auth/         # Created by the server for account/session data
+│   └── .auth/         # Created by the server for account, session, and per-user streak data
 ├── resources/         # Images and other static assets
 ├── package.json
 └── package-lock.json
@@ -89,7 +88,7 @@ Bookworm/
 
 ## Possible Future Improvements
 
-- Store each reader’s books, profile, and streak under their account.
+- Store each reader’s books and profile under their account.
 - Synchronize reading data across devices.
 - Include browser-added books in backend search.
 - Add reading notes, ratings, and more detailed goal controls.
